@@ -4,6 +4,7 @@ class Kiosk::DrinksController < ApplicationController
   def index
     @members = Member.order(:display_name)
     @products = Product.active.order(:name)
+    @selected_member = Member.find_by(id: params[:member_id])
   end
 
   def create
