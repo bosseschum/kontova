@@ -1,4 +1,5 @@
 class Treasurer::BaseController < ApplicationController
+  layout "treasurer"
   before_action :require_treasurer!
 
   private
