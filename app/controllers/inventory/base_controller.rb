@@ -1,4 +1,5 @@
 class Inventory::BaseController < ApplicationController
+  layout "inventory"
   before_action :require_inventory_manager!
 
   private
