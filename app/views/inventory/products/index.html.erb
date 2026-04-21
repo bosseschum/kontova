@@ -1,0 +1,29 @@
+<div class="flex justify-between items-center mb-6">
+  <h1 class="text-2xl font-bold">Produkte</h1>
+  <%= link_to "Neues Produkt", new_inventory_product_path,
+    class: "bg-emerald-600 hover:bg-emerald-500 px-4 py-2 rounded-lg text-sm font-semibold" %>
+</div>
+
+<div class="bg-gray-900 rounded-xl overflow-hidden">
+  <table class="w-full">
+    <thead class="bg-gray-800 text-gray-400 text-sm">
+      <tr>
+        <th class="text-left px-4 py-3">Name</th>
+        <th class="text-right px-4 py-3">Preis</th>
+        <th class="text-center px-4 py-3">Aktiv</th>
+        <th class="text-right px-4 py-3">Aktionen</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @product.each do |product| %>  
+        <tr class="border-t border-gray-800 hover:bg-gray-800/50">
+          <td class="px-4 py-3"><%= product.name %></td>
+          <td class="px-4 py-3 text-right font-mono"><%= format("%.2f", product.price) %>€</td>
+          <td class="px-4 py-3 text-center"><%= product.active? "" : " " %></td>
+          <td class="px-4 py-3 text-right"><%= link_to "Bearbeiten", edit_inventory_product_path(product),
+          class: "text-blue-400 hover:text-blue-300 text-sm %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
