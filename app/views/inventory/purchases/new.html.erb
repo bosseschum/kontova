@@ -1,0 +1,40 @@
+<h1 class="text-2xl font-bold mb-6">Einkauf erfassen</h1>
+
+<div class="bg-gray-900 rounded-xl p-6 max-w-lg">
+  <%= form_with model: @purchase, url: inventory_purchases_path do |f| %>
+
+    <div class="mb-4">
+      <%= f.label :product_id, "Produkt", class: "block text-gray-400 text-sm mb-1" %>
+      <%= f.select :product_id, @products.map { |p| [p.name, p.id] }, {},
+        class: "w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2" %>
+    </div>
+
+    <div class="mb-4">
+      <%= f.label :quantity, "Menge", class: "block text-gray-400 text-sm mb-1" %>
+      <%= f.number_field :quantity, min: 1, placeholder: "z.B. 24",
+        class: "w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2" %>
+    </div>
+
+    <div class="mb-4">
+      <%= f.label :price_per_unit_cents, "Einkaufspreis pro Stück (Cent)",
+        class: "block text-gray-400 text-sm mb-1" %>
+      <%= f.number_field :price_per_unit_cents, placeholder: "z.B. 90 für 0,90€",
+        class: "w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2" %>
+    </div>
+
+    <div class="mb-4">
+      <%= f.label :purchased_on, "Datum", class: "block text-gray-400 text-sm mb-1" %>
+      <%= f.date_field :purchased_on, value: Date.today,
+        class: "w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2" %>
+    </div>
+
+    <div class="mb-6">
+      <%= f.label :note, "Notiz", class: "block text-gray-400 text-sm mb-1" %>
+      <%= f.text_field :note, placeholder: "Optional",
+        class: "w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2" %>
+    </div>
+
+    <%= f.submit "Speichern",
+      class: "w-full bg-emerald-600 hover:bg-emerald-500 py-3 rounded-lg font-semibold cursor-pointer" %>
+  <% end %>
+</div>
