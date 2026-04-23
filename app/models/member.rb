@@ -11,7 +11,7 @@ class Member < ApplicationRecord
   has_many :inventory_counts
 
   def balance_cents
-    transcations.sum(:amount_cents)
+    transactions.sum(:amount_cents)
   end
 
   def balance

@@ -5,12 +5,12 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <%= csrf_meta_tags %>
         <%= csp_meta_tag %>
-        <%= stylesheet_link_tag :app "data-turbo-track": "reload" %>
+        <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
         <%= javascript_importmap_tags %>
     </head>
     <body class="min-h-screen bg-gray-950 text-white ">
 
-      <nav class="bg-gray-900 border-b border-gray-800 px-6 py-4 flex gap-6 itmes-center">
+      <nav class="bg-gray-900 border-b border-gray-800 px-6 py-4 flex gap-6 items-center">
         <span class="font-bold text-lg text-blue-400 ">Vereinskasse</span>
         <%= link_to "Dashboard", treasurer_root_path, class: "text-gray-300 hover:text-white" %>
         <%= link_to "Mitglieder", treasurer_members_path, class: "text-gray-300 hover:text-white" %>
