@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_04_15_130857) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_23_114407) do
   create_table "inventory_counts", force: :cascade do |t|
     t.integer "actual_quantity", null: false
     t.date "counted_on", null: false
@@ -24,6 +24,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_15_130857) do
   end
 
   create_table "members", force: :cascade do |t|
+    t.boolean "admin"
     t.datetime "created_at", null: false
     t.string "display_name", null: false
     t.string "email", default: "", null: false

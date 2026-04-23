@@ -21,4 +21,12 @@ class Member < ApplicationRecord
   def can_purchase?
     balance_cents - amount_cents >= -5000
   end
+
+  def treasurer?
+    admin? || role == "treasurer"
+  end
+
+  def inventory_manager?
+    admin? || role == "inventory_manager"
+  end
 end
