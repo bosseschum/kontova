@@ -3,6 +3,7 @@ class Member < ApplicationRecord
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
+  validates :pin, length: { is: 4 }, allow_nil: true, format: { with: /\A\d+\z/ }
 
   enum :role, { member: 0, treasurer: 1, inventory_manager: 2 }
 

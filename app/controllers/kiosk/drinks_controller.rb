@@ -5,6 +5,15 @@ class Kiosk::DrinksController < ApplicationController
     @members = Member.order(:display_name)
     @products = Product.active.order(:name)
     @selected_member = Member.find_by(id: params[:member_id])
+
+    if @selected_member
+      if params[:pin].present?
+        @pin_verified = @selected_member.pin == params[:pin]
+        flash.now[:alert] = "Falsche PIN" unless @pin_verified
+      else
+        @pin_verified = false
+      end
+    end
   end
 
   def create
