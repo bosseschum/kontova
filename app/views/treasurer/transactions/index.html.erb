@@ -1,0 +1,39 @@
+<div class="flex justify-between items-center mb-6">
+  <h1 class="text-2xl font-bold">Transaktionen</h1>
+  <%= link_to "Neue Transaktionen", new_treasurer_transaction_path,
+    class: "bg-blue-600 hover:bg-blue-500 px-4 py-2 rounded-lg text-sm font-semibold" %>
+</div>
+
+<div class="bg-gray-900 rounded-xl overflow-hidden">
+  <table class="w-full">
+    <thead class="bg-gray-800 text-gray-400 text-sm">
+      <tr>
+        <th class="text-left px-4 py-3">Datum</th>
+        <th class="text-left px-4 py-3">Mitglied</th>
+        <th class="text-left px-4 py-3">Typ</th>
+        <th class="text-left px-4 py-3">Notiz</th>
+        <th class="text-right px-4 py-3">Betrag</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @transactions.each do |tx| %>
+        <tr class="border-t border-gray-800 hover:border-gray-800/50">
+          <td class="px-4 py-3 text-gray-400 text-sm">
+            <%= tx.created_at.strftime(%d.%m.%Y %H:%M) %>
+          </td>
+          <td class="px-4 py-3"><%= tx.member.display_name %></td>
+          <td class="px-4 py-3 text-gray-400 text-sm">
+            <%= { "drink_purchase" => "Getränk", "deposit" => "Einzahlung",
+                  "expense_reimbursement" => "Auslage", "membership_fee" => "Beitrag" 
+                }[tx.kind] %>
+          </td>
+          <td class="px-4 py-3 text-gray-400 text-sm"><%= tx.note %></td>
+          <td class="px-4 py-3 text-right font-mono
+            <%= tx.amount_cents >= 0 ? 'text-green-400' : 'text-red-400' %>">
+            <%= format("%+.2f", tx.amount_cents / 100.0) %>€
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

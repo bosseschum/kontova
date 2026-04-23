@@ -1,0 +1,37 @@
+<div class="flex justify-between items-center mb-6">
+  <h1 class="text-2xl font-bold">Mitglieder</h1>
+  <%= link_to "Neues Mitglied", new_treasurer_member_path,
+    class: "bg-blue-600 hover:bg-blue-500 px-4 py-2 rounded-lg text-sm font-semibold" %>
+</div>
+
+<div class="bg-gray-900 rounded-xl overflow-hidden">
+  <table class="w-full">
+    <thead class="bg-gray-800 text-gray-400 text-sm">
+      <tr>
+        <th class="text-left px-4 py-3">Name</th>
+        <th class="text-left px-4 py-3">E-Mail</th>
+        <th class="text-left px-4 py-3">Rolle</th>
+        <th class="text-right px-4 py-3">Saldo</th>
+        <th class="text-right px-4 py-3">Aktionen</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @members.each do |member| %>
+        <tr class="border-t border-gray-800 hover:border-gray-800/50">
+          <td class="px-4 py-3 font-medium"><%= member.display_name %></td>
+          <td class="px-4 py-3 text-gray-400"><%= member.email %></td>
+          <td class="px-4 py-3 text-gray-400 capitalize"><%= member.role %></td>
+          <td class="px-4 py-3 text-right font-mono
+            <%= member.balance >= 0 ? 'text-green-400' : 'text-red-400' %>">
+            <%= format("%.2f", member.balance) %>€
+          </td>
+          <td class="px-4 py-3 text-right flex justify-end gap-3">
+            <%= link_to "Bearbeiten", edit_treasurer_member_path(member),
+              class: "text-blue-400 hover:text-blue-300 text-sm" %>
+            <%= link_to "Transaktion", new_treasurer_transaction_path(member_id: member.id),
+            class: "text-emerald-400 hover:text-emerald-300 text-sm" %>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+</div>
