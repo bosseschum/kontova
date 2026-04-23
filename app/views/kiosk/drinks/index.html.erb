@@ -1,58 +1,84 @@
 <div class="min-h-screen bg-gray-950 text-white p-6">
 
-    <%# Flash Messages %>
-    <% if notice %>
-        <div class="mb-4 p-4 bg-green-700 rounded-xl text-lg text-center font-semibold">
-            <%= notice %>
-        </div>
-    <% end %>
-    <% if alert %>
-        <div class="mb-4 p-4 bg-red-700 rounded-xl text-lg text-center font-semibold">
-            <%= alert %>
-        </div>
-    <% end %>
+  <%# Flash Messages %>
+  <% if notice %>
+    <div class="mb-4 p-4 bg-green-700 rounded-xl text-lg text-center font-semibold">
+      <%= notice %>
+    </div>
+  <% end %>
+  <% if alert %>
+    <div class="mb-4 p-4 bg-red-700 rounded-xl text-lg text-center font-semibold">
+      <%= alert %>
+    </div>
+  <% end %>
 
-    <% if @selected_member %>
-        <div class="mb-6 flex items-center justify-between">
-            <div>
-                <p class="text-gray-400 text-sm">Eingeloggt als</p>
-                <p class="text-2xl font-bold"><%= @selected_member.display_name %></p>
-                <p class="text-lg <%= @selected_member.balance >= 0 ? 'text-green-400' : 'text-red-400' %>">
-                    Saldo: <%= format("%.2f", @selected_member.balance) %> €
-                </p>
-            </div>
-            <%= link_to "Abbrechen", kiosk_root_path, class: "bg-gray-700 hover:bg-gray-600 px-6 py-3 rounded-xl text-lg" %>
-        </div>
+  <% if @selected_member && @pin_verified %>
+    <%# Schritt 3: Getränk wählen %>
+    <div class="mb-6 flex items-center justify-between">
+      <div>
+        <p class="text-gray-400 text-sm">Eingeloggt als</p>
+        <p class="text-2xl font-bold"><%= @selected_member.display_name %></p>
+        <p class="text-lg <%= @selected_member.balance >= 0 ? 'text-green-400' : 'text-red-400' %>">
+          Saldo: <%= format("%.2f", @selected_member.balance) %> €
+        </p>
+      </div>
+      <%= link_to "Abbrechen", kiosk_root_path,
+            class: "bg-gray-700 hover:bg-gray-600 px-6 py-3 rounded-xl text-lg" %>
+    </div>
 
-        <h2 class="text-xl font-semibold mb-4 text-gray-300">Getränk wählen</h2>
-        <div class="grid grid-cols-2 gap-4">
-            <% @products.each do |product| %>
-            <%= button_to kiosk_drinks_path,
-                params: { member_id: @selected_member.id, product_id: product.id },
-                class: "bg-blue-700 hover:bg-blue-600 active:scale-95 transition
-                        rounded-2xl p-6 text-left" do %>
-                <p class="text-xl font-bold"><%= product.name %></p>
-                <p class="text-gray-300 text-lg"><%= format("%.2f", product.price) %></p>
-            <% end %>
-            <% end %>
-        </div>
-
-        <% else %>
-        <h1 class="text-3xl font-bold mb-2 text-center">Getränkekasse</h1>
-        <p class="text-gray-400 text-center mb-8">Wer bist du?</p>
-
-        <div class="grid grid-cols-2 gap-4">
-            <% @members.each do |member| %>
-            <%= link_to kiosk_root_path(member_id: member.id),
-                class: "bg-gray-800 hover:bg-gray-700 active:scale-95 transition
-                        rounded-2xl p-6 text-center" do %>
-            <p class="text-xl font-bold"><%= member.display_name %></p>
-            <p class="text-sm <%= member.balance >= 0 ? 'text-green-400' : 'text-red-400' %>">
-                <%= format("%.2f", member.balance) %> €
-            </p>
-            <% end %>
+    <h2 class="text-xl font-semibold mb-4 text-gray-300">Getränk wählen</h2>
+    <div class="grid grid-cols-2 gap-4">
+      <% @products.each do |product| %>
+        <%= button_to kiosk_drinks_path,
+              params: { member_id: @selected_member.id, product_id: product.id },
+              class: "bg-blue-700 hover:bg-blue-600 active:scale-95 transition rounded-2xl p-6 text-left" do %>
+          <p class="text-xl font-bold"><%= product.name %></p>
+          <p class="text-gray-300 text-lg"><%= format("%.2f", product.price) %> €</p>
         <% end %>
-        </div>
+      <% end %>
+    </div>
+
+  <% elsif @selected_member %>
+    <%# Schritt 2: PIN eingeben %>
+    <div class="max-w-sm mx-auto mt-20 text-center">
+      <p class="text-2xl font-bold mb-2">Hallo, <%= @selected_member.display_name %>!</p>
+      <p class="text-gray-400 mb-8">Bitte PIN eingeben</p>
+
+      <%= form_with url: kiosk_root_path, method: :get do |f| %>
+        <%= hidden_field_tag :member_id, @selected_member.id %>
+        <%= f.password_field :pin,
+              maxlength: 4,
+              autofocus: true,
+              class: "w-full text-center text-3xl tracking-widest bg-gray-800
+                      border border-gray-700 rounded-xl px-4 py-4 mb-4",
+              placeholder: "····" %>
+        <%= f.submit "Weiter",
+              class: "w-full bg-blue-600 hover:bg-blue-500 py-3 rounded-xl
+                      font-semibold cursor-pointer text-lg" %>
+      <% end %>
+
+      <%= link_to "Abbrechen", kiosk_root_path,
+            class: "text-gray-500 text-sm mt-4 block" %>
+    </div>
+
+  <% else %>
+    <%# Schritt 1: Mitglied wählen %>
+    <h1 class="text-3xl font-bold mb-2 text-center">🍺 Getränkekasse</h1>
+    <p class="text-gray-400 text-center mb-8">Wer bist du?</p>
+
+    <div class="grid grid-cols-2 gap-4">
+      <% @members.each do |member| %>
+        <%= link_to kiosk_root_path(member_id: member.id),
+              class: "bg-gray-800 hover:bg-gray-700 active:scale-95 transition
+                      rounded-2xl p-6 text-center" do %>
+          <p class="text-xl font-bold"><%= member.display_name %></p>
+          <p class="text-sm <%= member.balance >= 0 ? 'text-green-400' : 'text-red-400' %>">
+            <%= format("%.2f", member.balance) %> €
+          </p>
         <% end %>
+      <% end %>
+    </div>
+
+  <% end %>
 
 </div>
