@@ -27,13 +27,42 @@
     </div>
 
     <h2 class="text-xl font-semibold mb-4 text-gray-300">Getränk wählen</h2>
-    <div class="grid grid-cols-2 gap-4">
+    <div class="grid grid-cols-4 gap-4">
       <% @products.each do |product| %>
-        <%= button_to kiosk_drinks_path,
-              params: { member_id: @selected_member.id, product_id: product.id },
-              class: "bg-blue-700 hover:bg-blue-600 active:scale-95 transition rounded-2xl p-6 text-left" do %>
-          <p class="text-xl font-bold"><%= product.name %></p>
-          <p class="text-gray-300 text-lg"><%= format("%.2f", product.price) %> €</p>
+
+        <%# Einzelflasche %>
+        <%= form_tag kiosk_drinks_path, method: :post, style: "display:contents" do %>
+          <%= hidden_field_tag :member_id, @selected_member.id %>
+          <%= hidden_field_tag :product_id, product.id %>
+          <%= hidden_field_tag :quantity, 1 %>
+          <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+          <button type="submit"
+            class="bg-blue-700 hover:bg-blue-600 active:scale-95 transition
+                   rounded-2xl p-5 text-center h-28 flex flex-col
+                   items-center justify-center gap-1">
+            <p class="text-base font-bold leading-tight"><%= product.name %></p>
+            <p class="text-gray-300 text-sm"><%= format("%.2f", product.price) %> €</p>
+          </button>
+        <% end %>
+
+        <%# Kasten %>
+        <% if product.has_crate? %>
+          <%= form_tag kiosk_drinks_path, method: :post, style: "display:contents" do %>
+            <%= hidden_field_tag :member_id, @selected_member.id %>
+            <%= hidden_field_tag :product_id, product.id %>
+            <%= hidden_field_tag :quantity, product.crate_size %>
+            <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+            <button type="submit"
+              class="bg-gray-600 hover:bg-gray-500 active:scale-95 transition
+                     rounded-2xl p-5 text-center h-28 flex flex-col
+                     items-center justify-center gap-1">
+              <p class="text-base font-bold leading-tight">📦 <%= product.name %></p>
+              <p class="text-gray-400 text-xs"><%= product.crate_size %> Stk.</p>
+              <p class="text-gray-300 text-sm"><%= format("%.2f", product.crate_price) %> €</p>
+            </button>
+          <% end %>
+        <% else %>
+          <div class="h-28"></div>
         <% end %>
       <% end %>
     </div>
@@ -68,9 +97,9 @@
 
     <div class="grid grid-cols-2 gap-4">
       <% @members.each do |member| %>
-        <%= link_to kiosk_root_path(member_id: member.id),
+        <%= link_to(kiosk_root_path(member_id: member.id),
               class: "bg-gray-800 hover:bg-gray-700 active:scale-95 transition
-                      rounded-2xl p-6 text-center" do %>
+                     rounded-2xl p-6 text-center") do %>
           <p class="text-xl font-bold"><%= member.display_name %></p>
           <p class="text-sm <%= member.balance >= 0 ? 'text-green-400' : 'text-red-400' %>">
             <%= format("%.2f", member.balance) %> €

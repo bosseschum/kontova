@@ -6,4 +6,20 @@ class ApplicationController < ActionController::Base
 
   # Changes to the importmap will invalidate the etag for HTML responses
   stale_when_importmap_changes
+
+  def after_sign_in_path_for(resource)
+    if resource.treasurer?
+      treasurer_root_path
+    elsif resource.inventory_manager?
+      inventory_root_path
+    else
+      kiosk_root_path
+    end
+  end
+
+  def current_member
+    @current_member ||= warden.authenticate(scope: :member)
+  end
+  helper_method :current_member
+
 end
