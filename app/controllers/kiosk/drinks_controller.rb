@@ -19,7 +19,12 @@ class Kiosk::DrinksController < ApplicationController
   def create
     @member = Member.find(params[:member_id])
     @product = Product.find(params[:product_id])
-    amount_cents = @product.price_cents
+    quantity = (params[:quantity] || 1).to_i
+    amount_cents = if quantity > 1 && @product.has_crate?
+                     @product.crate_price_cents
+                   else
+                     @product.price_cents * quantity
+                   end
 
     unless @member.can_purchase?(amount_cents)
       redirect_to kiosk_root_path, alert: "Saldo zu niedrig (Limit: -50€)" and return
@@ -30,9 +35,9 @@ class Kiosk::DrinksController < ApplicationController
       product: @product,
       amount_cents: -amount_cents,
       kind: :drink_purchase,
-      quantity: 1
+      quantity: quantity
     )
 
-    redirect_to kiosk_root_path, notice: "#{@product.name} für #{@member.display_name} gebucht"
+    redirect_to kiosk_root_path, notice: "#{quantity} x #{@product.name} für #{@member.display_name} gebucht"
   end
 end

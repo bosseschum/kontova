@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_04_23_131002) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_27_115843) do
   create_table "inventory_counts", force: :cascade do |t|
     t.integer "actual_quantity", null: false
     t.date "counted_on", null: false
@@ -41,6 +41,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_23_131002) do
 
   create_table "products", force: :cascade do |t|
     t.boolean "active", default: true, null: false
+    t.integer "crate_price_cents"
+    t.integer "crate_size"
     t.datetime "created_at", null: false
     t.string "name", null: false
     t.integer "price_cents", null: false

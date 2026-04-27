@@ -19,7 +19,7 @@ class Member < ApplicationRecord
     balance_cents / 100.0
   end
 
-  def can_purchase?
+  def can_purchase?(amount_cents)
     balance_cents - amount_cents >= -5000
   end
 

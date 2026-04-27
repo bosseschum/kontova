@@ -9,6 +9,14 @@ class Product < ApplicationRecord
     price_cents / 100.0
   end
 
+  def has_crate?
+    crate_size.present? && crate_size > 1 && crate_price_cents.present?
+  end
+
+  def crate_price
+    crate_price_cents / 100.0
+  end
+
   def total_purchased
     purchases.sum(:quantity)
   end
