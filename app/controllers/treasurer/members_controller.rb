@@ -22,7 +22,12 @@ class Treasurer::MembersController < Treasurer::BaseController
 
   def update
     @member = Member.find(params[:id])
-    if @member.update(member_params)
+
+    update_params = member_params
+    update_params = update_params.except(:password) if update_params[:password].blank?
+    update_params = update_params.except(:pin) if update_params[:pin].blank?
+
+    if @member.update(update_params)
       redirect_to treasurer_members_path, notice: "Mitglied aktualisiert"
     else
       render :edit, status: :unprocessable_entity
