@@ -32,6 +32,6 @@ class Treasurer::MembersController < Treasurer::BaseController
   private
 
   def member_params
-    params.require(:member).permit(:display_name, :email, :role)
+    params.require(:member).permit(:display_name, :email, :password, :pin, :role)
   end
 end

@@ -22,6 +22,13 @@
     </div>
 
     <div class="mb-6">
+      <%= f.label :pin, "PIN (4 Ziffern)", class: "block text-gray-400 text-sm mb-1" %>
+      <%= f.password_field :pin, maxlength: 4, placeholder: "****",
+        class: "w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2
+                tracking-widest text-center text-lg" %>
+    </div>
+
+    <div class="mb-6">
       <%= f.label :role, "Rolle", class: "block text-gray-400 text-sm mb-1" %>
       <%= f.select :role,
         [["Mitglied", "member"],
