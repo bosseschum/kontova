@@ -12,7 +12,7 @@ class Inventory::InventoryCountsController < Inventory::BaseController
     @inventory_count = InventoryCount.new(
       count_params.merge(member: current_member, counted_on: Date.today)
     )
-    if inventory_count.save
+    if @inventory_count.save
       redirect_to inventory_inventory_counts_path, notice: "Inventur gespeichert"
     else
       @products = Product.active.order(:name)
