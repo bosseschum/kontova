@@ -11,12 +11,12 @@
     </div>
 
     <div class="mb-4">
-      <%= f.label :kind "Typ", class: "block text-gray-400 text-sm mb-1" %>
+      <%= f.label :kind, "Typ", class: "block text-gray-400 text-sm mb-1" %>
       <%= f.select :kind,
     [["Einzahlung", "deposit"],
      ["Auslage (Erstattung)", "expense_reimbursement"], 
      ["Mitgliedsbeitrag", "membership_fee"]],
-      {}, class: "w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2%>
+      {}, class: "w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2"%>
     </div>
 
     <div class="mb-4">
@@ -29,9 +29,9 @@
     </div>
 
     <div class="mb-6">
-      <%= f.label :note "Notiz", class: "block text-gray-400 text-sm mb-1" %>
+      <%= f.label :note, "Notiz", class: "block text-gray-400 text-sm mb-1" %>
       <%= f.text_field :note, placeholder: "Optional",
-        class: "w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 %>
+        class: "w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2" %>
     </div>
 
     <%= f.submit "Buchen",

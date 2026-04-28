@@ -19,7 +19,7 @@
       <% @transactions.each do |tx| %>
         <tr class="border-t border-gray-800 hover:border-gray-800/50">
           <td class="px-4 py-3 text-gray-400 text-sm">
-            <%= tx.created_at.strftime(%d.%m.%Y %H:%M) %>
+            <%= tx.created_at.strftime("%d.%m.%Y %H:%M") %>
           </td>
           <td class="px-4 py-3"><%= tx.member.display_name %></td>
           <td class="px-4 py-3 text-gray-400 text-sm">
