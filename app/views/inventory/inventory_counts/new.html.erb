@@ -6,22 +6,23 @@
     <div class="mb-4">
       <%= f.label :product_id, "Produkt", class: "block text-gray-400 text-sm mb-1" %>
       <%= f.select :product_id, @products.map { |p|
-        ["#{p.name} (erwartet: #{p.expected_stock})", p.id] }, {},
-      class: "w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2" %>
+            ["#{p.name} (erwartet: #{p.expected_stock})", p.id] }, {},
+            class: "w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2" %>
     </div>
 
     <div class="mb-4">
-      <%= f.label :acutal_quantity, "Gezhählte Menge", class: "block text-gray-400 text-sm mb-1" %>
-      <%= f.number_quantity :actual_quantity, min: 0,
-        class: "w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2" %>
+      <%= f.label :actual_quantity, "Gezählte Menge", class: "block text-gray-400 text-sm mb-1" %>
+      <%= f.number_field :actual_quantity, min: 0,
+            class: "w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2" %>
     </div>
 
     <div class="mb-6">
       <%= f.label :note, "Notiz", class: "block text-gray-400 text-sm mb-1" %>
-      <%= f.text_label :note, placeholder: "Optional",
-        class: "w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2" %>
+      <%= f.text_field :note, placeholder: "Optional",
+            class: "w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2" %>
     </div>
 
     <%= f.submit "Speichern",
-      class: "w-full bg-emerald-600 hover:bg-emerald-500 py-3 rounded-ls font-semibold cursor-pointer" %>
+          class: "w-full bg-emerald-600 hover:bg-emerald-500 py-3 rounded-lg font-semibold cursor-pointer" %>
+  <% end %>
 </div>
