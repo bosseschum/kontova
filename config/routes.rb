@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
-  devise_for :members
+  devise_for :members, controllers: {
+    sessions: "members/sessions"
+  }
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Kiosk - no login
