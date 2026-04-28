@@ -18,7 +18,6 @@
       <div>
         <p class="text-gray-400 text-sm">Eingeloggt als</p>
         <p class="text-2xl font-bold"><%= @selected_member.display_name %></p>
-
         <% if @selected_member.role == "treasurer" %>
           <p class="text-xl font-semibold">(Hauptkassenwart)</p>
         <% elsif @selected_member.role == "inventory_manager" %>
@@ -33,42 +32,48 @@
     </div>
 
     <h2 class="text-xl font-semibold mb-4 text-gray-300">Getränk wählen</h2>
-    <div class="grid grid-cols-4 gap-4">
+    <div class="grid grid-cols-2 gap-4">
       <% @products.each do |product| %>
-
-        <%# Einzelflasche %>
-        <%= form_tag kiosk_drinks_path, method: :post, style: "display:contents" do %>
-          <%= hidden_field_tag :member_id, @selected_member.id %>
-          <%= hidden_field_tag :product_id, product.id %>
-          <%= hidden_field_tag :quantity, 1 %>
-          <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
-          <button type="submit"
-            class="bg-blue-700 hover:bg-blue-600 active:scale-95 transition
-                   rounded-2xl p-5 text-center h-28 flex flex-col
-                   items-center justify-center gap-1">
-            <p class="text-base font-bold leading-tight"><%= product.name %></p>
-            <p class="text-gray-300 text-sm"><%= format("%.2f", product.price) %> €</p>
-          </button>
-        <% end %>
-
-        <%# Kasten %>
         <% if product.has_crate? %>
-          <%= form_tag kiosk_drinks_path, method: :post, style: "display:contents" do %>
+          <%# Mit Kasten: beide Buttons teilen sich eine Spalte %>
+          <div class="grid grid-cols-2 gap-2">
+            <%= form_tag kiosk_drinks_path, method: :post do %>
+              <%= hidden_field_tag :member_id, @selected_member.id %>
+              <%= hidden_field_tag :product_id, product.id %>
+              <%= hidden_field_tag :quantity, 1 %>
+              <button type="submit" class="bg-blue-700 hover:bg-blue-600 active:scale-95
+                      transition rounded-2xl p-5 text-center w-full h-28
+                      flex flex-col items-center justify-center gap-1">
+                <p class="text-base font-bold leading-tight"><%= product.name %></p>
+                <p class="text-gray-300 text-sm"><%= format("%.2f", product.price) %> €</p>
+              </button>
+            <% end %>
+            <%= form_tag kiosk_drinks_path, method: :post do %>
+              <%= hidden_field_tag :member_id, @selected_member.id %>
+              <%= hidden_field_tag :product_id, product.id %>
+              <%= hidden_field_tag :quantity, product.crate_size %>
+              <button type="submit" class="bg-gray-600 hover:bg-gray-500 active:scale-95
+                      transition rounded-2xl p-5 text-center w-full h-28
+                      flex flex-col items-center justify-center gap-1">
+                <p class="text-base font-bold leading-tight">📦 <%= product.name %></p>
+                <p class="text-gray-400 text-xs"><%= product.crate_size %> Stk.</p>
+                <p class="text-gray-300 text-sm"><%= format("%.2f", product.crate_price) %> €</p>
+              </button>
+            <% end %>
+          </div>
+        <% else %>
+          <%# Ohne Kasten: volle Spalte %>
+          <%= form_tag kiosk_drinks_path, method: :post do %>
             <%= hidden_field_tag :member_id, @selected_member.id %>
             <%= hidden_field_tag :product_id, product.id %>
-            <%= hidden_field_tag :quantity, product.crate_size %>
-            <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
-            <button type="submit"
-              class="bg-gray-600 hover:bg-gray-500 active:scale-95 transition
-                     rounded-2xl p-5 text-center h-28 flex flex-col
-                     items-center justify-center gap-1">
-              <p class="text-base font-bold leading-tight">📦 <%= product.name %></p>
-              <p class="text-gray-400 text-xs"><%= product.crate_size %> Stk.</p>
-              <p class="text-gray-300 text-sm"><%= format("%.2f", product.crate_price) %> €</p>
+            <%= hidden_field_tag :quantity, 1 %>
+            <button type="submit" class="bg-blue-700 hover:bg-blue-600 active:scale-95
+                    transition rounded-2xl p-5 text-center w-full h-28
+                    flex flex-col items-center justify-center gap-1">
+              <p class="text-base font-bold leading-tight"><%= product.name %></p>
+              <p class="text-gray-300 text-sm"><%= format("%.2f", product.price) %> €</p>
             </button>
           <% end %>
-        <% else %>
-          <div class="h-28"></div>
         <% end %>
       <% end %>
     </div>
@@ -117,12 +122,10 @@
 
 </div>
 
-<div class="bg-grey-950 fixed bottom-6 right-6">
+<div class="bottom-6 right-6">
   <%= link_to new_member_session_path,
-    class: "bg-gray-800 hover:bg-gray-700 transition px-5 py-3
-            text-gray-500 hover:text-gray-300 text-sm flex items-center gap-2" do %>
-  Admin
+        class: "bg-gray-800 hover:bg-gray-700 transition px-5 py-3
+                text-gray-500 hover:text-gray-300 text-sm flex items-center gap-2" do %>
+    Log-in als Admin
   <% end %>
 </div>
-
-
