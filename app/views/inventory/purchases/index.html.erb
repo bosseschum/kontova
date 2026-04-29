@@ -1,0 +1,40 @@
+<div class="flex justify-between items-center mb-6">
+  <h1 class="text-2xl font-bold">Einkäufe</h1>
+  <%= link_to "Neuer Einkauf", new_inventory_purchase_path,
+        class: "bg-emerald-600 hover:bg-emerald-500 px-4 py-2 rounded-lg text-sm font-semibold" %>
+</div>
+
+<div class="bg-gray-900 rounded-xl overflow-hidden">
+  <table class="w-full">
+    <thead class="bg-gray-800 text-gray-400 text-sm">
+      <tr>
+        <th class="text-left px-4 py-3">Datum</th>
+        <th class="text-left px-4 py-3">Produkt</th>
+        <th class="text-right px-4 py-3">Menge</th>
+        <th class="text-right px-4 py-3">Preis/Stk.</th>
+        <th class="text-right px-4 py-3">Gesamt</th>
+        <th class="text-left px-4 py-3">Notiz</th>
+        <th class="text-left px-4 py-3">Erfasst von</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @purchases.each do |purchase| %>
+        <tr class="border-t border-gray-800 hover:bg-gray-800/50">
+          <td class="px-4 py-3 text-gray-400 text-sm">
+            <%= purchase.purchased_on.strftime("%d.%m.%Y") %>
+          </td>
+          <td class="px-4 py-3 font-medium"><%= purchase.product.name %></td>
+          <td class="px-4 py-3 text-right"><%= purchase.quantity %></td>
+          <td class="px-4 py-3 text-right font-mono">
+            <%= format("%.2f", purchase.price_per_unit_cents / 100.0) %> €
+          </td>
+          <td class="px-4 py-3 text-right font-mono">
+            <%= format("%.2f", purchase.quantity * purchase.price_per_unit_cents / 100.0) %> €
+          </td>
+          <td class="px-4 py-3 text-gray-400 text-sm"><%= purchase.note %></td>
+          <td class="px-4 py-3 text-gray-400 text-sm"><%= purchase.member.display_name %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

@@ -35,7 +35,8 @@ class Kiosk::DrinksController < ApplicationController
       product: @product,
       amount_cents: -amount_cents,
       kind: :drink_purchase,
-      quantity: quantity
+      quantity: quantity,
+      note: quantity > 1 ? "#{quantity} x #{@product.name} (Kasten)" : @product.name
     )
 
     redirect_to kiosk_root_path, notice: "#{quantity} x #{@product.name} für #{@member.display_name} gebucht"

@@ -12,7 +12,7 @@ class Treasurer::TransactionsController < Treasurer::BaseController
     @transaction = Transaction.new
     @members = Member.order(:display_name)
   end
-
+  
   def create
     @transaction = Transaction.new(transaction_params)
     # Einzahlungen/Erstattungen positiv, Beitrag negativ
@@ -22,6 +22,27 @@ class Treasurer::TransactionsController < Treasurer::BaseController
       @members = Member.order(:display_name)
       render :new, status: :unprocessable_entity
     end
+  end
+
+  def edit
+    @transaction = Transaction.find(params[:id])
+    @members = Member.order(:display_name)
+  end
+
+  def update
+    @transaction = Transaction.find(params[:id])
+    if @transaction.update(transaction_params)
+      redirect_to treasurer_transactions_path, notice: "Transaktion aktualisiert"
+    else
+      @members = Member.order(:display_name)
+      render :edit, status: :unprocessable_entity
+    end
+  end
+
+  def destroy
+    @transaction = Transaction.find(params[:id])
+    @transaction.destroy
+    redirect_to treasurer_transactions_path, notice: "Transaktion gelöscht"
   end
 
   private
