@@ -15,20 +15,29 @@
   <% if @selected_member && @pin_verified %>
     <%# Schritt 3: Getränk wählen %>
     <div class="mb-6 flex items-center justify-between">
-      <div>
-        <p class="text-gray-400 text-sm">Eingeloggt als</p>
-        <p class="text-2xl font-bold"><%= @selected_member.display_name %></p>
-        <% if @selected_member.role == "treasurer" %>
-          <p class="text-xl font-semibold">(Hauptkassenwart)</p>
-        <% elsif @selected_member.role == "inventory_manager" %>
-          <p class="text-xl font-semibold">(Bierkassenwart)</p>
-        <% end %>
-        <p class="text-lg <%= @selected_member.balance >= 0 ? 'text-green-400' : 'text-red-400' %>">
-          Saldo: <%= format("%.2f", @selected_member.balance) %> €
-        </p>
+      <div class="flex items-start gap-6">
+        <div>
+          <p class="text-gray-400 text-sm">Eingeloggt als</p>
+          <p class="text-2xl font-bold"><%= @selected_member.display_name %></p>
+          <% if @selected_member.role == "treasurer" %>
+            <p class="text-xl font-semibold">(Hauptkassenwart)</p>
+          <% elsif @selected_member.role == "inventory_manager" %>
+            <p class="text-xl font-semibold">(Bierkassenwart)</p>
+          <% end %>
+          <p class="text-lg <%= @selected_member.balance >= 0 ? 'text-green-400' : 'text-red-400' %>">
+            Saldo: <%= format("%.2f", @selected_member.balance) %> €
+          </p>
+          <% if @selected_member.balance < 0 %>
+            <div class="mt-4">
+              <%= link_to "Jetzt bezahlen", kiosk_payment_path(@selected_member), 
+              class: "bg-emerald-600 hover:bg-emerald-500
+                      px-4 py-2 rounded-xl text-sm font-semibold" %>
+            </div>
+          <% end %>
+        </div>
       </div>
-      <%= link_to "Abbrechen", kiosk_root_path,
-            class: "bg-gray-700 hover:bg-gray-600 px-6 py-3 rounded-xl text-lg" %>
+        <%= link_to "Abbrechen", kiosk_root_path,
+              class: "bg-gray-700 hover:bg-gray-600 px-6 py-3 rounded-xl text-lg" %>
     </div>
 
     <h2 class="text-xl font-semibold mb-4 text-gray-300">Getränk wählen</h2>

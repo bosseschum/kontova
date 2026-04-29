@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   namespace :kiosk do
     root "drinks#index"
     resources :drinks, only: [ :index, :create ]
+    resources :payments, only: [:show]
   end
 
   # Kassenwart
