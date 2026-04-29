@@ -1,6 +1,9 @@
 class Member < ApplicationRecord
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
+  before_create :generate_pin
+  before_create :generate_password_if_member
+
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
   validates :pin, length: { is: 4 }, allow_nil: true, format: { with: /\A\d+\z/ }
@@ -34,5 +37,17 @@ class Member < ApplicationRecord
 
   def inventory_manager?
     admin? || role == "inventory_manager"
+  end
+
+  private
+
+  def generate_pin
+    self.pin = rand(1000..9999).to_s
+  end
+
+  def generate_password_if_member
+    if role == "member"
+      self.password = SecureRandom.hex(16)
+    end
   end
 end
