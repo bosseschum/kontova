@@ -27,8 +27,11 @@
       <% @members.each do |member| %>
         <tr class="border-t border-gray-800 hover:bg-gray-800/50">
           <td class="px-4 py-3"><%= member.display_name %></td>
-          <td class="px-4 py-3 text-right font-mono <%= member.balance >= 0 ? 'text-green-400' : 'text-red-400' %>"><%= format("%.2f", member.balance) %>€</td>
-          <td class="px-4 py-3 text-right"><%= link_to "Transaktionen", new_treasurer_transaction_path(member_id: member.id), class: "text-blue-400 hover:text-blue-300 text-sm" %></td>
+          <td class="px-4 py-3 text-right font-mono <%= member.balance >= 0 ? 'text-green-400' : 'text-red-400' %>">
+            <%= format("%.2f", member.balance) %>€
+          </td>
+          <td class="px-4 py-3 text-right"><%= link_to "Transaktionen", treasurer_transactions_path(member_id: member.id), 
+            class: "text-blue-400 hover:text-blue-300 text-sm" %></td>
         </tr>
       <% end %>
     </tbody>
