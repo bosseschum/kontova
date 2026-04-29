@@ -1,0 +1,54 @@
+<%# app/views/member_mailer/invoice.html.erb %>
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { font-family: Arial, sans-serif; color: #333; max-width: 600px; margin: 0 auto; }
+    h1 { color: #1e40af; }
+    table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+    th { background: #f3f4f6; text-align: left; padding: 8px 12px; }
+    td { padding: 8px 12px; border-bottom: 1px solid #e5e7eb; }
+    .balance-positive { color: #16a34a; font-weight: bold; }
+    .balance-negative { color: #dc2626; font-weight: bold; }
+    .footer { color: #9ca3af; font-size: 12px; margin-top: 30px; }
+  </style>
+</head>
+<body>
+  <h1>Vereinskasse – Kontoauszug</h1>
+  <p>Hallo <%= @member.display_name %>,</p>
+  <p>hier ist dein aktueller Kontoauszug:</p>
+
+  <p>Aktueller Saldo:
+    <span class="<%= @balance >= 0 ? 'balance-positive' : 'balance-negative' %>">
+      <%= format("%.2f", @balance).gsub(".", ",") %> €
+    </span>
+  </p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Datum</th>
+        <th>Beschreibung</th>
+        <th style="text-align:right">Betrag</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @transactions.each do |tx| %>
+        <tr>
+          <td><%= tx.created_at.strftime("%d.%m.%Y") %></td>
+          <td><%= tx.note.presence || { "drink_purchase" => "Getränkekauf", "deposit" => "Einzahlung", "expense_reimbursement" => "Auslage", "membership_fee" => "Mitgliedsbeitrag" }[tx.kind] %></td>
+          <td style="text-align:right; color: <%= tx.amount_cents >= 0 ? '#16a34a' : '#dc2626' %>">
+            <%= format("%+.2f", tx.amount_cents / 100.0).gsub(".", ",") %> €
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+
+  <% if @balance < 0 %>
+    <p>Bitte überweise den offenen Betrag auf unser Vereinskonto.</p>
+  <% end %>
+
+  <p class="footer">Diese E-Mail wurde automatisch generiert.</p>
+</body>
+</html>
