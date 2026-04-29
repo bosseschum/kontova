@@ -37,6 +37,17 @@
       class: "w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2" %>
     </div>
 
+    <div class="mb-4 flex-col gap-2">
+      <div class="flex items-center gap-3">
+        <%= f.check_box :pays_fee, class: "w-4 h-4" %>
+        <%= f.label :pays_fee, "Zahlt Aktivenbeitrag", class: "text-gray-300" %>
+      </div>
+      <div class="flex items-center gap-3">
+        <%= f.check_box :lives_on_site, class: "w-4 h-4" %>
+        <%= f.label :lives_on_site, "Zahlt Hausbewohnerbeitrag", class: "text-gray-300" %>
+      </div>
+    </div>
+
     <%= f.submit "Speichern",
       class: "w-full bg-blue-600 hover:bg-blue-500 py-3 rounded-lg font-semibold cursor-pointer" %>
   <% end %>

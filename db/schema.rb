@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_04_27_115843) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_29_080112) do
   create_table "inventory_counts", force: :cascade do |t|
     t.integer "actual_quantity", null: false
     t.date "counted_on", null: false
@@ -29,6 +29,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_27_115843) do
     t.string "display_name", null: false
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
+    t.boolean "lives_on_site"
+    t.boolean "pays_fee"
     t.string "pin"
     t.datetime "remember_created_at"
     t.datetime "reset_password_sent_at"

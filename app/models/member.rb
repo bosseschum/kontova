@@ -23,6 +23,11 @@ class Member < ApplicationRecord
     balance_cents - amount_cents >= -5000
   end
 
+  def fee_amount_cents
+    return 0 unless pays_fee?
+    lives_on_site? ? 3000 : 2500
+  end
+
   def treasurer?
     admin? || role == "treasurer"
   end
