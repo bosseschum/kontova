@@ -13,4 +13,14 @@ namespace :members do
 
     puts "Fertig – #{Member.where(role: :member).count} Mitglieder belastet"
   end
+
+  desc "Kontoauszug per E-Mail versenden"
+  task send_invoices: :environment do
+    Member.all.each do |member|
+      next if member.email.blank?
+      MemberMailer.invoice(member).deliver_now
+      puts "E-Mail gesendet an #{member.display_name} (#{member.email})"
+    end
+    puts "Fertig"
+  end
 end

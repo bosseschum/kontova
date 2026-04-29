@@ -1,0 +1,15 @@
+<%# app/views/member_mailer/invoice.text.erb %>
+Vereinskasse – Kontoauszug <%= Date.today.strftime("%B %Y") %>
+
+Hallo <%= @member.display_name %>,
+
+Aktueller Saldo: <%= format("%.2f", @balance).gsub(".", ",") %> €
+
+Letzte Transaktionen:
+<% @transactions.each do |tx| %>
+<%= tx.created_at.strftime("%d.%m.%Y") %> | <%= tx.note.presence || tx.kind %> | <%= format("%+.2f", tx.amount_cents / 100.0).gsub(".", ",") %> €
+<% end %>
+
+<% if @balance < 0 %>
+Bitte überweise den offenen Betrag auf unser Vereinskonto.
+<% end %>
