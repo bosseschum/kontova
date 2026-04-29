@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_04_29_080112) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_29_085849) do
   create_table "inventory_counts", force: :cascade do |t|
     t.integer "actual_quantity", null: false
     t.date "counted_on", null: false
@@ -70,7 +70,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_29_080112) do
     t.integer "kind", null: false
     t.integer "member_id", null: false
     t.string "note"
-    t.integer "product_id", null: false
+    t.integer "product_id"
     t.integer "quantity", default: 1
     t.datetime "updated_at", null: false
     t.index ["member_id"], name: "index_transactions_on_member_id"

@@ -1,6 +1,11 @@
 class Treasurer::TransactionsController < Treasurer::BaseController
   def index
     @transactions = Transaction.includes(:member, :product).order(created_at: :desc).limit(100)
+
+    if params[:member_id].present?
+      @transactions = @transactions.where(member_id: params[:member_id])
+      @member = Member.find(params[:member_id])
+    end
   end
 
   def new
