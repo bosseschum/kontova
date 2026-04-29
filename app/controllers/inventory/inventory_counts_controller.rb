@@ -1,5 +1,6 @@
 class Inventory::InventoryCountsController < Inventory::BaseController
   def index
+    @inventory_counts = InventoryCount.includes(:product, :member).order(counted_on: :desc)
     @products = Product.active.order(:name)
   end
 

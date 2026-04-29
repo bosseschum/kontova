@@ -15,7 +15,7 @@ Rails.application.routes.draw do
   namespace :treasurer do
     root "dashboard#index"
     resources :members
-    resources :transactions, only: [ :index, :new, :create ]
+    resources :transactions, only: [ :index, :new, :create, :edit, :update, :destroy ]
   end
 
   # Bierkassenwart

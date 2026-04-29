@@ -25,6 +25,7 @@
         <th class="text-left px-4 py-3">Typ</th>
         <th class="text-left px-4 py-3">Notiz</th>
         <th class="text-right px-4 py-3">Betrag</th>
+        <th class="text-right px-4 py-3">Aktionen</th>
       </tr>
     </thead>
     <tbody>
@@ -43,6 +44,13 @@
           <td class="px-4 py-3 text-right font-mono
             <%= tx.amount_cents >= 0 ? 'text-green-400' : 'text-red-400' %>">
             <%= format("%+.2f", tx.amount_cents / 100.0) %>€
+          </td>
+          <td class="px-4 py-3 text-right flex justify-end gap-3">
+            <%= link_to "Bearbeiten", edit_treasurer_transaction_path(tx),
+                  class: "text-blue-400 hover:text-blue-300 text-sm" %>
+            <%= button_to "Löschen", treasurer_transaction_path(tx), method: :delete,
+                  data: { turbo_confirm: "Transaktion wirklich löschen?" },
+                  class: "text-red-400 hover:text-red-300 text-sm bg-transparent border-0 cursor-pointer p-0" %>
           </td>
         </tr>
       <% end %>

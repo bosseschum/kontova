@@ -20,7 +20,9 @@
         <tr class="border-t border-gray-800 hover:border-gray-800/50">
           <td class="px-4 py-3 font-medium"><%= member.display_name %></td>
           <td class="px-4 py-3 text-gray-400"><%= member.email %></td>
-          <td class="px-4 py-3 text-gray-400 capitalize"><%= member.role %></td>
+          <td class="px-4 py-3 text-gray-400 capitalize">
+            <%= { "member" => "Mitglied", "treasurer" => "Kassenwart", "inventory_manager" => "Getränkewart" }[member.role] %>
+          </td>
           <td class="px-4 py-3 text-right font-mono
             <%= member.balance >= 0 ? 'text-green-400' : 'text-red-400' %>">
             <%= format("%.2f", member.balance) %>€

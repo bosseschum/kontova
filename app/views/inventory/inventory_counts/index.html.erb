@@ -1,0 +1,37 @@
+<div class="flex justify-between items-center mb-6">
+  <h1 class="text-2xl font-bold">Inventuren</h1>
+  <%= link_to "Neue Inventur", new_inventory_inventory_count_path,
+        class: "bg-emerald-600 hover:bg-emerald-500 px-4 py-2 rounded-lg text-sm font-semibold" %>
+</div>
+
+<div class="bg-gray-900 rounded-xl overflow-hidden">
+  <table class="w-full">
+    <thead class="bg-gray-800 text-gray-400 text-sm">
+      <tr>
+        <th class="text-left px-4 py-3">Datum</th>
+        <th class="text-left px-4 py-3">Produkt</th>
+        <th class="text-right px-4 py-3">Erwartet</th>
+        <th class="text-right px-4 py-3">Gezählt</th>
+        <th class="text-right px-4 py-3">Differenz</th>
+        <th class="text-left px-4 py-3">Erfasst von</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @inventory_counts.each do |count| %>
+        <tr class="border-t border-gray-800 hover:bg-gray-800/50">
+          <td class="px-4 py-3 text-gray-400 text-sm">
+            <%= count.counted_on.strftime("%d.%m.%Y") %>
+          </td>
+          <td class="px-4 py-3 font-medium"><%= count.product.name %></td>
+          <td class="px-4 py-3 text-right"><%= count.product.expected_stock %></td>
+          <td class="px-4 py-3 text-right"><%= count.actual_quantity %></td>
+          <td class="px-4 py-3 text-right font-mono font-semibold
+            <%= count.actual_quantity - count.product.expected_stock == 0 ? 'text-green-400' : 'text-red-400' %>">
+            <%= "%+d" % (count.actual_quantity - count.product.expected_stock) %>
+          </td>
+          <td class="px-4 py-3 text-gray-400 text-sm"><%= count.member.display_name %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
