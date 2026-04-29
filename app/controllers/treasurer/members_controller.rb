@@ -9,8 +9,14 @@ class Treasurer::MembersController < Treasurer::BaseController
 
   def create
     @member = Member.new(member_params)
+
+    if @member.role == "member" && member_params[:password].blank?
+      @member.password = SecureRandom.hex(16)
+    end
+
     if @member.save
-      redirect_to treasurer_members_, notice: "Mitglied angelegt"
+      MemberMailer.welcome(@member, @member.pin).deliver_later
+      redirect_to treasurer_members_path, notice: "Mitglied angelegt - PIN wurde verschickt"
     else
       render :new, status: :unprocessable_entity
     end
