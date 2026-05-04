@@ -1,0 +1,36 @@
+<div class="flex justify-between items-center mb-6">
+  <h1 class="text-2xl font-bold">Gemischte Kästen</h1>
+  <%= link_to "Neuer Kasten", new_inventory_mixed_crate_path,
+              class: "bg-emerald-600 hover:bg-emerald-500 px-4 py-2 rounded-lg text-sm font-semibold" %>
+</div>
+
+<div class="bg-gray-900 rounded-xl overflow-hidden">
+  <table class="w-full">
+    <thead class="bg-gray-800 text-gray-400 text-sm">
+    <tr>
+      <th class="text-left px-4 py-3">Name</th>
+      <th class="text-left px-4 py-3">Inhalt</th>
+      <th class="text-right px-4 py-3">Stück</th>
+      <th class="text-right px-4 py-3">Preis</th>
+      <th class="text-center px-4 py-3">Aktiv</th>
+    </tr>
+    </thead>
+    <tbody>
+    <% @mixed_crates.each do |crate| %>
+      <tr class="border-t border-gray-800 hover:bg-gray-800/50">
+        <td class="px-4 py-3 font-medium"><%= crate.name %></td>
+        <td class="px-4 py-3 text-gray-400 text-sm">
+          <%= crate.mixed_crate_items.map { |i| "#{i.quantity}x #{i.product.name}" }.join(", ") %>
+        </td>
+        <td class="px-4 py-3 text-right"><%= crate.total_quantity %></td>
+        <td class="px-4 py-3 text-right font-mono">
+          <%= format("%.2f", crate.price) %> €
+        </td>
+        <td class="px-4 py-3 text-center">
+          <%= crate.active? ? "✅" : "❌" %>
+        </td>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
+</div>

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_04_29_085849) do
+ActiveRecord::Schema[8.1].define(version: 2026_05_03_073632) do
   create_table "inventory_counts", force: :cascade do |t|
     t.integer "actual_quantity", null: false
     t.date "counted_on", null: false
@@ -39,6 +39,24 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_29_085849) do
     t.datetime "updated_at", null: false
     t.index ["email"], name: "index_members_on_email", unique: true
     t.index ["reset_password_token"], name: "index_members_on_reset_password_token", unique: true
+  end
+
+  create_table "mixed_crate_items", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.integer "mixed_crate_id", null: false
+    t.integer "product_id", null: false
+    t.integer "quantity"
+    t.datetime "updated_at", null: false
+    t.index ["mixed_crate_id"], name: "index_mixed_crate_items_on_mixed_crate_id"
+    t.index ["product_id"], name: "index_mixed_crate_items_on_product_id"
+  end
+
+  create_table "mixed_crates", force: :cascade do |t|
+    t.boolean "active"
+    t.datetime "created_at", null: false
+    t.string "name"
+    t.integer "price_cents"
+    t.datetime "updated_at", null: false
   end
 
   create_table "products", force: :cascade do |t|
@@ -79,6 +97,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_29_085849) do
 
   add_foreign_key "inventory_counts", "members"
   add_foreign_key "inventory_counts", "products"
+  add_foreign_key "mixed_crate_items", "mixed_crates"
+  add_foreign_key "mixed_crate_items", "products"
   add_foreign_key "purchases", "members"
   add_foreign_key "purchases", "products"
   add_foreign_key "transactions", "members"
