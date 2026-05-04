@@ -9,6 +9,7 @@ Rails.application.routes.draw do
     root "drinks#index"
     resources :drinks, only: [ :index, :create ]
     resources :payments, only: [:show]
+    resources :mixed_crates, only: [:create]
   end
 
   # Kassenwart
@@ -24,6 +25,7 @@ Rails.application.routes.draw do
     resources :products
     resources :purchases, only: [ :index, :new, :create ]
     resources :inventory_counts, only: [ :index, :new, :create ]
+    resources :mixed_crates
   end
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.

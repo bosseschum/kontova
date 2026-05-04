@@ -129,6 +129,25 @@
     </div>
   <% end %>
 
+  <% if @mixed_crates.any? %>
+    <h2 class="text-xl font-semibold mb-4 mt-8 text-gray-300">Gemischte Kästen</h2>
+    <div class="grid grid-cols-2 gap-4">
+      <% @mixed_crates.each do |crate| %>
+        <%= form_tag kiosk_mixed_crates_path, method: :post do %>
+          <%= hidden_field_tag :member_id, @selected_member.id %>
+          <%= hidden_field_tag :mixed_crate_id, crate.id %>
+          <button type="submit" class="bg-emerald-700 hover:bg-emerald-600 active:scale-95
+                                       transition rounded-2xl p-5 text-center w-full h-28
+                                       flex flex-col items-center justify-center gap-1">
+            <p class="text_base font-bold leading-tight"><%= crate.name %></p>
+            <p class="text-gray-300 text-xs"><%= crate.total_quantity %> Stk. gemischt</p>
+            <p class="text-gray-300 text-sm"><%= format("%.2f", crate.price) %>€</p>
+          </button>
+        <% end %>
+      <% end %>
+    </div>
+  <% end %>
+
 </div>
 
 <div class="bottom-6 right-6">

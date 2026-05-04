@@ -4,6 +4,7 @@ class Kiosk::DrinksController < ApplicationController
   def index
     @members = Member.order(:display_name)
     @products = Product.active.order(:name)
+    @mixed_crates = MixedCrate.active.includes(:mixed_crate_items)
     @selected_member = Member.find_by(id: params[:member_id])
 
     if @selected_member
@@ -22,9 +23,9 @@ class Kiosk::DrinksController < ApplicationController
     quantity = (params[:quantity] || 1).to_i
     amount_cents = if quantity > 1 && @product.has_crate?
                      @product.crate_price_cents
-                   else
+    else
                      @product.price_cents * quantity
-                   end
+    end
 
     unless @member.can_purchase?(amount_cents)
       redirect_to kiosk_root_path, alert: "Saldo zu niedrig (Limit: -50€)" and return
