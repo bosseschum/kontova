@@ -1,27 +1,38 @@
 <div class="bg-gray-900 rounded-xl p-6 max-w-lg">
   <%= form_with model: @product, url: @product.new_record? ?
-    inventory_product_path : inventory_product_path(@product) do |f| %>
+                                        inventory_products_path : inventory_product_path(@product) do |f| %>
 
-  <div class="mb-4">
-    <%= f.label :name, "Name", class: "block text-gray-400 text-sm mb-1" %>
-    <%= f.text_field :name, placeholder: "z.B. Flasche Oe",
-  class: "w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2" %>
-  </div>
+    <div class="mb-4">
+      <%= f.label :name, "Name", class: "block text-gray-400 text-sm mb-1" %>
+      <%= f.text_field :name, placeholder: "z.B. Club Mate",
+                       class: "w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2" %>
+    </div>
 
-  <div class="mb-4">
-    <%= f.label :price_cents, "Preis (in Cent)",
-      class: "block text-gray-400 text-sm mb-1" %>
-    <%= f.number_field :price_cents, placeholer: "z.B. 80 für 0,80€",
-      class: "w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2" %>
-  </div>
+    <div class="mb-4">
+      <%= f.label :price_cents, "Preis (in Cent)", class: "block text-gray-400 text-sm mb-1" %>
+      <%= f.number_field :price_cents, placeholder: "z.B. 80 für 0,80 €",
+                         class: "w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2" %>
+    </div>
 
-  <div class="mb-6 flex items-center gap-3">
-    <%= f.check_box :active, class: "w-4 h-4" %>
-    <%= f.label :active, "Aktiv (im Kiosk sichtbar)",
-      class: "text-gray-300" %>
-  </div>
+    <div class="mb-4">
+      <%= f.label :crate_size, "Kastengröße", class: "block text-gray-400 text-sm mb-1" %>
+      <%= f.number_field :crate_size, min: 0, placeholder: "z.B. 20",
+                         class: "w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2" %>
+      <p class="text-gray-500 text-xs mt-1">Leer lassen wenn kein Kasten verfügbar</p>
+    </div>
 
-  <%= f.submit @product.new_record? ? "Anlegen" : "Speichern",
-    class: "w-full bg-emerald-600 hover:bg-emerald-500 py-3 rounded-lg font-semibold cursor-pointer %>
+    <div class="mb-4">
+      <%= f.label :crate_price_cents, "Kastenpreis (in Cent)", class: "block text-gray-400 text-sm mb-1" %>
+      <%= f.number_field :crate_price_cents, min: 0, placeholder: "z.B. 1000 für 10,00 €",
+                         class: "w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2" %>
+    </div>
+
+    <div class="mb-6 flex items-center gap-3">
+      <%= f.check_box :active, class: "w-4 h-4" %>
+      <%= f.label :active, "Aktiv (im Kiosk sichtbar)", class: "text-gray-300" %>
+    </div>
+
+    <%= f.submit @product.new_record? ? "Anlegen" : "Speichern",
+                 class: "w-full bg-emerald-600 hover:bg-emerald-500 py-3 rounded-lg font-semibold cursor-pointer" %>
   <% end %>
 </div>

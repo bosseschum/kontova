@@ -7,7 +7,14 @@ Rails.application.routes.draw do
   # Kiosk - no login
   namespace :kiosk do
     root "drinks#index"
-    resources :drinks, only: [ :index, :create ]
+    resources :drinks, only: [ :index] do
+      collection do
+        post :add_to_cart
+        post :checkout
+        post :remove_from_cart
+        delete :clear_cart
+      end
+    end
     resources :payments, only: [:show]
     resources :mixed_crates, only: [:create]
   end
