@@ -4,7 +4,6 @@ class Kiosk::DrinksController < ApplicationController
   def index
     @members = Member.order(:display_name)
     @products = Product.active.order(:name)
-    @mixed_crates = MixedCrate.active.includes(:mixed_crate_items)
     @selected_member = Member.find_by(id: params[:member_id])
 
     if @selected_member
@@ -15,6 +14,82 @@ class Kiosk::DrinksController < ApplicationController
         @pin_verified = false
       end
     end
+
+    if @selected_member && @pin_verified
+      @cart  = session[:cart] ||= {}
+      @cart_items = @cart.map do |product_id, quantity|
+        { product: Product.find(product_id), quantity: quantity }
+      end
+      @cart_total = @cart_items.sum do |i|
+        is_crate = i[:product].has_crate? && i[:quantity] == i[:product].crate_size
+        is_crate ? i[:product].crate_price_cents : i[:product].price_cents * i[:quantity]
+      end
+    end
+  end
+
+  def add_to_cart
+    session[:cart] ||= {}
+    product_id = params[:product_id].to_s
+    quantity = params[:quantity].to_i
+    session[:cart][product_id] = (session[:cart][product_id] || 0) + quantity
+    redirect_to kiosk_root_path(member_id: params[:member_id], pin: params[:pin])
+  end
+
+  def remove_from_cart
+    session[:cart] ||= {}
+    session[:cart].delete(params[:product_id]).to_s
+    redirect_to kiosk_root_path(member_id: params[:member_id], pin: params[:pin])
+  end
+
+  def checkout
+    @member = Member.find(params[:member_id])
+    cart    = session[:cart] || {}
+
+    if cart.empty?
+      redirect_to kiosk_root_path(member_id: @member.id, pin: params[:pin]),
+                  alert: "Warenkorb ist leer" and return
+    end
+
+    total = 0
+
+    cart.each do |product_id, quantity|
+      product = Product.find(product_id)
+      amount = if product.has_crate? && quantity == product.crate_size
+                 product.crate_price_cents
+               else
+                 product.price_cents * quantity
+               end
+      total += amount
+    end
+
+    unless @member.can_purchase?(total)
+      redirect_to kiosk_root_path(member_id: @member.id, pin: params[:pin]),
+                  alert: "Saldo zu niedrig (Limit: -50€)" and return
+    end
+
+    cart.each do |product_id, quantity|
+      product = Product.find(product_id)
+      is_crate = product.has_crate? && quantity == product.crate_size
+      amount = is_crate ? product.crate_price_cents : product.price_cents * quantity
+
+      Transaction.create!(
+        member:       @member,
+        product:      product,
+        amount_cents: -amount,
+        kind:         :drink_purchase,
+        quantity:     quantity,
+        note:         is_crate ? "#{quantity}x #{product.name} (Kasten)" : "#{quantity}x #{product.name}"
+      )
+    end
+
+    session[:cart] = {}
+    redirect_to kiosk_root_path,
+                notice: "Einkauf abgeschlossen – #{format("%.2f", total / 100.0)} € gebucht!"
+  end
+
+  def clear_cart
+    session[:cart] = {}
+    redirect_to kiosk_root_path(member_id: params[:member_id], pin: params[:pin])
   end
 
   def create

@@ -32,6 +32,6 @@ class Inventory::ProductsController < Inventory::BaseController
   private
 
   def product_params
-    params.require(:product).permit(:name, :price_cents, :active)
+    params.require(:product).permit(:name, :price_cents, :active, :crate_size, :crate_price_cents)
   end
 end
