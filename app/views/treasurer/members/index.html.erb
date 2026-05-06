@@ -28,10 +28,12 @@
             <%= format("%.2f", member.balance) %>€
           </td>
           <td class="px-4 py-3 text-right flex justify-end gap-3">
+            <%= link_to "Transaktion", new_treasurer_transaction_path(member_id: member.id),
+              class: "text-emerald-400 hover:text-emerald-300 text-sm" %>
             <%= link_to "Bearbeiten", edit_treasurer_member_path(member),
               class: "text-blue-400 hover:text-blue-300 text-sm" %>
-            <%= link_to "Transaktion", new_treasurer_transaction_path(member_id: member.id),
-            class: "text-emerald-400 hover:text-emerald-300 text-sm" %>
+            <%= link_to "Löschen", treasurer_member_path(member),
+              class: "text-red-400 hover:text-red-300 text-sm", method: :delete, data: { confirm: "Sind Sie sicher, dass Sie dieses Mitglied löschen möchten?" } %>
           </td>
         </tr>
       <% end %>
