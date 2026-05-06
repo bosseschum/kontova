@@ -42,7 +42,7 @@
 
     <%# Produkte %>
     <h2 class="text-xl font-semibold mb-4 text-gray-300">Getränk wählen</h2>
-    <div class="grid grid-cols-2 gap-4">
+    <div class="mb-4 grid grid-cols-2 gap-4">
       <% @products.each do |product| %>
         <% if product.has_crate? %>
           <div class="grid grid-cols-2 gap-2">
@@ -136,7 +136,7 @@
             </span>
           <% end %>
         </div>
-        
+
         <% if @total_quantity > 0 %>
           <p class="text-gray-500 text-sm mb-2">
             <%= @total_quantity %> / <%= CRATE_SIZE %> Flaschen -
@@ -208,10 +208,10 @@
 
 </div>
 
-<div class="fixed bottom-6 right-6">
+<div class="bottom-6 right-6">
   <%= link_to new_member_session_path,
-              class: "bg-gray-800 hover:bg-gray-700 transition rounded-xl px-5 py-3
+              class: "bg-gray-800 hover:bg-gray-700 transition px-5 py-3
                 text-gray-500 hover:text-gray-300 text-sm flex items-center gap-2" do %>
-    Admin
+    Login als Admin
   <% end %>
 </div>
