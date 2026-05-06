@@ -40,6 +40,12 @@ class Treasurer::MembersController < Treasurer::BaseController
     end
   end
 
+  def destroy
+    @member = Member.find(params[:id])
+    @member.destroy
+    redirect_to treasurer_members_path, notice: "Mitglied gelöscht"
+  end
+
   private
 
   def member_params

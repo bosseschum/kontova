@@ -28,7 +28,7 @@ class Member < ApplicationRecord
 
   def fee_amount_cents
     return 0 unless pays_fee?
-    lives_on_site? ? 3000 : 2500
+    lives_on_site? ? 5000 : 2500
   end
 
   def treasurer?
