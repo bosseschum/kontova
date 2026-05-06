@@ -20,6 +20,13 @@ class Kiosk::DrinksController < ApplicationController
       @cart_items = @cart.map do |product_id, quantity|
         { product: Product.find(product_id), quantity: quantity }
       end
+      @total_quantity = @cart_items.sum { |i| i[:quantity] }
+      @is_mixed_crate = @total_quantity == CRATE_SIZE
+      @cart_total = if @is_mixed_crate
+                      CRATE_PRICE_CENTS
+                    else
+                      @cart_items.sum { |i| i[:product].price_cents * i[:quantity] }
+                    end
       @cart_total = @cart_items.sum do |i|
         is_crate = i[:product].has_crate? && i[:quantity] == i[:product].crate_size
         is_crate ? i[:product].crate_price_cents : i[:product].price_cents * i[:quantity]
@@ -50,41 +57,47 @@ class Kiosk::DrinksController < ApplicationController
                   alert: "Warenkorb ist leer" and return
     end
 
-    total = 0
+    total_quantity = cart.values.sum
+    is_mixed_crate = total_quantity == CRATE_SIZE
 
-    cart.each do |product_id, quantity|
-      product = Product.find(product_id)
-      amount = if product.has_crate? && quantity == product.crate_size
-                 product.crate_price_cents
-               else
-                 product.price_cents * quantity
-               end
-      total += amount
-    end
+    total = if is_mixed_crate
+              CRATE_PRICE_CENTS
+            else
+              cart.sum { |pid, qty| Product.find(pid).price_cents * qty }
+            end
 
     unless @member.can_purchase?(total)
       redirect_to kiosk_root_path(member_id: @member.id, pin: params[:pin]),
                   alert: "Saldo zu niedrig (Limit: -50€)" and return
     end
 
+    single_purchase = cart.sum { |pid, qty| Product.find(pid).price_cents * qty }
+
     cart.each do |product_id, quantity|
       product = Product.find(product_id)
-      is_crate = product.has_crate? && quantity == product.crate_size
-      amount = is_crate ? product.crate_price_cents : product.price_cents * quantity
-
       Transaction.create!(
-        member:       @member,
-        product:      product,
-        amount_cents: -amount,
-        kind:         :drink_purchase,
-        quantity:     quantity,
-        note:         is_crate ? "#{quantity}x #{product.name} (Kasten)" : "#{quantity}x #{product.name}"
+        member: @member,
+        product: product,
+        amount_cents: -(product.price_cents * quantity),
+        kind: :drink_purchase,
+        quantity: quantity,
+        note: "#{quantity} x #{product.name}#{is_mixed_crate ? " (Mischkasten)" : ""}"
+      )
+    end
+
+    if is_mixed_crate && single_purchase > CRATE_PRICE_CENTS
+      discount = single_purchase - CRATE_PRICE_CENTS
+      Transaction.create!(
+        member: @member,
+        amount_cents: discount,
+        kind: :expense_reimbursement,
+        note: "Kastenrabatt (#{total_quantity} Flaschen)"
       )
     end
 
     session[:cart] = {}
     redirect_to kiosk_root_path,
-                notice: "Einkauf abgeschlossen – #{format("%.2f", total / 100.0)} € gebucht!"
+                notice: "Einkauf abgeschlossen - #{format("%.2f", total / 100.0)}€ gebucht!"
   end
 
   def clear_cart
