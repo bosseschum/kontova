@@ -24,9 +24,9 @@ class Kiosk::DrinksController < ApplicationController
       @is_mixed_crate = @total_quantity == CRATE_SIZE
       @cart_total = if @is_mixed_crate
                       CRATE_PRICE_CENTS
-                    else
+      else
                       @cart_items.sum { |i| i[:product].price_cents * i[:quantity] }
-                    end
+      end
       @cart_total = @cart_items.sum do |i|
         is_crate = i[:product].has_crate? && i[:quantity] == i[:product].crate_size
         is_crate ? i[:product].crate_price_cents : i[:product].price_cents * i[:quantity]
@@ -62,9 +62,9 @@ class Kiosk::DrinksController < ApplicationController
 
     total = if is_mixed_crate
               CRATE_PRICE_CENTS
-            else
+    else
               cart.sum { |pid, qty| Product.find(pid).price_cents * qty }
-            end
+    end
 
     unless @member.can_purchase?(total)
       redirect_to kiosk_root_path(member_id: @member.id, pin: params[:pin]),
