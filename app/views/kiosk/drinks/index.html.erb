@@ -32,6 +32,7 @@
           <% if @selected_member.balance < 0 %>
             <div class="mt-4">
               <%= link_to "💳 Jetzt bezahlen", kiosk_payment_path(@selected_member),
+                        data: { turbo_frame: "_top" },
                         class: "bg-emerald-600 hover:bg-emerald-500 px-4 py-2
                           rounded-xl text-sm font-semibold" %>
             </div>
