@@ -32,8 +32,9 @@
               class: "text-emerald-400 hover:text-emerald-300 text-sm" %>
             <%= link_to "Bearbeiten", edit_treasurer_member_path(member),
               class: "text-blue-400 hover:text-blue-300 text-sm" %>
-            <%= link_to "Löschen", treasurer_member_path(member),
-              class: "text-red-400 hover:text-red-300 text-sm", method: :delete, data: { confirm: "Sind Sie sicher, dass Sie dieses Mitglied löschen möchten?" } %>
+            <%= button_to "Löschen", treasurer_member_path(member), method: :delete,
+                          data: { turbo_confirm: "Mitglied wirklich löschen?" },
+                          class: "text-red-400 hover:text-red-300 text-sm bg-transparent border-0 cursor-pointer p-0" %>
           </td>
         </tr>
       <% end %>

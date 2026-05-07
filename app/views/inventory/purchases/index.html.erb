@@ -32,7 +32,7 @@
             <%= format("%.2f", purchase.quantity * purchase.price_per_unit_cents / 100.0) %> €
           </td>
           <td class="px-4 py-3 text-gray-400 text-sm"><%= purchase.note %></td>
-          <td class="px-4 py-3 text-gray-400 text-sm"><%= purchase.member.display_name %></td>
+          <td class="px-4 py-3 text-gray-400 text-sm"><%= purchase.member&.display_name || "Gelöschtes Mitglied" %></td>
         </tr>
       <% end %>
     </tbody>

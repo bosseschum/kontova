@@ -10,9 +10,9 @@ class Member < ApplicationRecord
 
   enum :role, { member: 0, treasurer: 1, inventory_manager: 2 }
 
-  has_many :transactions
-  has_many :purchases
-  has_many :inventory_counts
+  has_many :transactions, dependent: :nullify
+  has_many :purchases, dependent: :nullify
+  has_many :inventory_counts, dependent: :nullify
 
   def balance_cents
     transactions.sum(:amount_cents)
