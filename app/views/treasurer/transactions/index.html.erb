@@ -34,10 +34,10 @@
           <td class="px-4 py-3 text-gray-400 text-sm">
             <%= tx.created_at.strftime("%d.%m.%Y %H:%M") %>
           </td>
-          <td class="px-4 py-3"><%= tx.member.display_name %></td>
+          <td class="px-4 py-3"><%= tx.member&.display_name || "Gelöschtes Mitglied" %></td>
           <td class="px-4 py-3 text-gray-400 text-sm">
             <%= { "drink_purchase" => "Getränk", "deposit" => "Einzahlung",
-                  "expense_reimbursement" => "Auslage", "membership_fee" => "Beitrag" 
+                  "expense_reimbursement" => "Auslage", "membership_fee" => "Beitrag"
                 }[tx.kind] %>
           </td>
           <td class="px-4 py-3 text-gray-400 text-sm"><%= tx.note %></td>

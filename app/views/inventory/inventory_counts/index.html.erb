@@ -29,7 +29,7 @@
             <%= count.actual_quantity - count.product.expected_stock == 0 ? 'text-green-400' : 'text-red-400' %>">
             <%= "%+d" % (count.actual_quantity - count.product.expected_stock) %>
           </td>
-          <td class="px-4 py-3 text-gray-400 text-sm"><%= count.member.display_name %></td>
+          <td class="px-4 py-3 text-gray-400 text-sm"><%= count.member&.display_name || "Gelöschtes Mitglied" %></td>
         </tr>
       <% end %>
     </tbody>
