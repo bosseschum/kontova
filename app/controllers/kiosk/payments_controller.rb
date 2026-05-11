@@ -9,9 +9,9 @@ class Kiosk::PaymentsController < ApplicationController
       "002",
       "1",
       "SCT",
-      "XXXXDEYYZZZ", # BIC der Bankverbindung
-      "Tübinger Wingolf",
-      "DE0000000000000000", # IBAN
+      Setting.get("bank_bic", ""),
+      Setting.get("bank_name", ""),
+      Setting.get("bank_iban", ""),
       "EUR#{format("%.2f", amount / 100.0)}",
       "",
       "Rechnung #{@member.display_name}", # Verwendungszweck

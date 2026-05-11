@@ -1,0 +1,67 @@
+<h1 class="text-2xl font-bold mb-6">Einstellungen</h1>
+
+<div class="bg-gray-900 rounded-xl p-6 max-w-lg">
+  <%= form_with url: treasurer_settings_path, method: :patch do |f| %>
+
+    <h2 class="text-lg font-semibold mb-4 text-gray-300">Mitgliedsbeiträge</h2>
+
+    <div class="mb-4">
+      <%= label_tag "settings[fee_standard_cents]", "Standardbeitrag (Cent)",
+            class: "block text-gray-400 text-sm mb-1" %>
+      <%= number_field_tag "settings[fee_standard_cents]",
+            Setting.get("fee_standard_cents", 2500),
+            class: "w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2" %>
+      <p class="text-gray-500 text-xs mt-1">Aktuell: <%= format("%.2f", Setting.get("fee_standard_cents", "2500").to_i / 100.0) %> €</p>
+    </div>
+
+    <div class="mb-6">
+      <%= label_tag "settings[fee_resident_cents]", "Beitrag Vereinsheim (Cent)",
+            class: "block text-gray-400 text-sm mb-1" %>
+      <%= number_field_tag "settings[fee_resident_cents]",
+            Setting.get("fee_resident_cents", 3000),
+            class: "w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2" %>
+      <p class="text-gray-500 text-xs mt-1">Aktuell: <%= format("%.2f", Setting.get("fee_resident_cents", "3000").to_i / 100.0) %> €</p>
+    </div>
+
+    <h2 class="text-lg font-semibold mb-4 text-gray-300">Bankverbindung (QR-Code)</h2>
+
+    <div class="mb-4">
+      <%= label_tag "settings[bank_name]", "Vereinsname",
+            class: "block text-gray-400 text-sm mb-1" %>
+      <%= text_field_tag "settings[bank_name]",
+            Setting.get("bank_name", ""),
+            class: "w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2" %>
+    </div>
+
+    <div class="mb-4">
+      <%= label_tag "settings[bank_iban]", "IBAN",
+            class: "block text-gray-400 text-sm mb-1" %>
+      <%= text_field_tag "settings[bank_iban]",
+            Setting.get("bank_iban", ""),
+            placeholder: "DE00000000000000000000",
+            class: "w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2" %>
+    </div>
+
+    <div class="mb-6">
+      <%= label_tag "settings[bank_bic]", "BIC",
+            class: "block text-gray-400 text-sm mb-1" %>
+      <%= text_field_tag "settings[bank_bic]",
+            Setting.get("bank_bic", ""),
+            placeholder: "XXXXXXXX",
+            class: "w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2" %>
+    </div>
+
+    <h2 class="text-lg font-semibold mb-4 text-gray-300">E-Mail</h2>
+
+    <div class="mb-6">
+      <%= label_tag "settings[invoice_day]", "Kontoauszug – Tag im Monat",
+            class: "block text-gray-400 text-sm mb-1" %>
+      <%= number_field_tag "settings[invoice_day]",
+            Setting.get("invoice_day", 1), min: 1, max: 28,
+            class: "w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2" %>
+    </div>
+
+    <%= submit_tag "Speichern",
+          class: "w-full bg-blue-600 hover:bg-blue-500 py-3 rounded-lg font-semibold cursor-pointer" %>
+  <% end %>
+</div>

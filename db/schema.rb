@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_05_03_073632) do
+ActiveRecord::Schema[8.1].define(version: 2026_05_11_080536) do
   create_table "inventory_counts", force: :cascade do |t|
     t.integer "actual_quantity", null: false
     t.date "counted_on", null: false
@@ -80,6 +80,13 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_03_073632) do
     t.datetime "updated_at", null: false
     t.index ["member_id"], name: "index_purchases_on_member_id"
     t.index ["product_id"], name: "index_purchases_on_product_id"
+  end
+
+  create_table "settings", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "key"
+    t.datetime "updated_at", null: false
+    t.string "value"
   end
 
   create_table "transactions", force: :cascade do |t|

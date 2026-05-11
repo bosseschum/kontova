@@ -24,6 +24,7 @@ Rails.application.routes.draw do
     root "dashboard#index"
     resources :members, only: [ :index, :new, :create, :edit, :update, :destroy ]
     resources :transactions, only: [ :index, :new, :create, :edit, :update, :destroy ]
+    resource :settings, only: [ :show, :update ]
   end
 
   # Bierkassenwart
