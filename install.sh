@@ -63,6 +63,9 @@ chmod 600 .env
 # Gems installieren
 bundle install
 
+source ~/.bashrc
+gem install rails
+
 # CSS bauen
 RAILS_ENV=production rails tailwindcss:build
 
