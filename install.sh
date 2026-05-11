@@ -66,6 +66,9 @@ bundle install
 source ~/.bashrc
 gem install rails
 
+SECRET=$(cd vereinskasse && RAILS_ENV=production rails secret)
+echo "SECRET_KEY_BASE=$SECRET" >> .env
+
 # CSS bauen
 RAILS_ENV=production rails tailwindcss:build
 
