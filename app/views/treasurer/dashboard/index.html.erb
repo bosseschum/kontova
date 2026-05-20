@@ -1,6 +1,6 @@
 <h1 class="text-2xl font-bold mb-6">Übersicht</h1>
 
-<div class="grid grid-cols-3 gap-4 mb-8">
+<div class="grid grid-cols-3 sm:grid-cols-3 gap-4 mb-8">
   <div class="bg-gray-800 rounded-xl p-5">
     <p class="text-gray-400 text-sm">Mitglieder</p>
     <p class="text-3xl font-bold"><%= @members.count %></p>
@@ -30,7 +30,7 @@
           <td class="px-4 py-3 text-right font-mono <%= member.balance >= 0 ? 'text-green-400' : 'text-red-400' %>">
             <%= format("%.2f", member.balance) %>€
           </td>
-          <td class="px-4 py-3 text-right"><%= link_to "Transaktionen", treasurer_transactions_path(member_id: member.id), 
+          <td class="px-4 py-3 text-right"><%= link_to "Transaktionen", treasurer_transactions_path(member_id: member.id),
             class: "text-blue-400 hover:text-blue-300 text-sm" %></td>
         </tr>
       <% end %>
