@@ -13,6 +13,7 @@ class Member < ApplicationRecord
   has_many :transactions, dependent: :nullify
   has_many :purchases, dependent: :nullify
   has_many :inventory_counts, dependent: :nullify
+  has_many :requests, dependent: :nullify
 
   def balance_cents
     transactions.sum(:amount_cents)

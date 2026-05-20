@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { font-family: Arial, sans-serif; color: #333; max-width: 600px; margin: 0 auto; }
+    h1 { color: #16a34a; }
+    table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+    th { background: #f3f4f6; text-align: left; padding: 8px 12px; }
+    td { padding: 8px 12px; border-bottom: 1px solid #e5e7eb; }
+    .amount { color: #16a34a; font-weight: bold; font-size: 20px; }
+  </style>
+</head>
+<body>
+  <h1>✓ Antrag genehmigt</h1>
+  <p>Hallo <%= @member.display_name %>,</p>
+  <p>dein Antrag wurde genehmigt und der Betrag wurde deinem Konto gutgeschrieben.</p>
+
+  <table>
+    <tr>
+      <th>Beschreibung</th>
+      <td><%= @request.description %></td>
+    </tr>
+    <tr>
+      <th>Betrag</th>
+      <td class="amount">
+        +<%= format("%.2f", @request.amount_cents / 100.0) %> €
+      </td>
+    </tr>
+    <tr>
+      <th>Genehmigt am</th>
+      <td><%= Time.now.strftime("%d.%m.%Y") %></td>
+    </tr>
+  </table>
+
+  <p style="color: #9ca3af; font-size: 12px; margin-top: 30px;">
+    Diese E-Mail wurde automatisch generiert.
+  </p>
+</body>
+</html>

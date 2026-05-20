@@ -13,7 +13,7 @@ class ApplicationController < ActionController::Base
     elsif resource.inventory_manager?
       inventory_root_path
     else
-      kiosk_root_path
+      member_area_root_path
     end
   end
 
@@ -33,5 +33,4 @@ class ApplicationController < ActionController::Base
     @current_member ||= warden.authenticate(scope: :member)
   end
   helper_method :current_member
-
 end

@@ -1,0 +1,13 @@
+Hallo <%= @member.display_name %>,
+
+dein Antrag wurde leider abgelehnt.
+
+Beschreibung: <%= @request.description %>
+Betrag:       <%= @request.amount_cents ? format("%.2f", @request.amount_cents / 100.0) + " €" : "–" %>
+Abgelehnt am: <%= Time.now.strftime("%d.%m.%Y") %>
+<% if @request.note.present? %>
+
+Begründung: <%= @request.note %>
+<% end %>
+
+Bei Fragen wende dich bitte an den Kassenwart.

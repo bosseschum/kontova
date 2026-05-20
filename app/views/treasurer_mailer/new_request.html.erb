@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body { font-family: Arial, sans-serif; color: #333; max-width: 600px; margin: 0 auto; }
+    h1 { color: #1e40af; }
+    table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+    th { background: #f3f4f6; text-align: left; padding: 8px 12px; }
+    td { padding: 8px 12px; border-bottom: 1px solid #e5e7eb; }
+    .button { display: inline-block; background: #1e40af; color: white;
+              padding: 12px 24px; border-radius: 8px; text-decoration: none;
+              font-weight: bold; margin-top: 16px; }
+  </style>
+</head>
+<body>
+  <h1>Neuer Antrag eingereicht</h1>
+  <p><strong><%= @member.display_name %></strong> hat einen neuen Antrag gestellt:</p>
+
+  <table>
+    <tr>
+      <th>Art</th>
+      <td><%= { "expense" => "Auslagenerstattung", "other" => "Sonstiges" }[@request.kind] %></td>
+    </tr>
+    <tr>
+      <th>Beschreibung</th>
+      <td><%= @request.description %></td>
+    </tr>
+    <tr>
+      <th>Betrag</th>
+      <td><%= @request.amount_cents ? format("%.2f", @request.amount_cents / 100.0) + " €" : "–" %></td>
+    </tr>
+    <tr>
+      <th>Eingereicht am</th>
+      <td><%= @request.created_at.strftime("%d.%m.%Y %H:%M") %></td>
+    </tr>
+    <% if @request.receipt.attached? %>
+      <tr>
+        <th>Beleg</th>
+        <td>Beleg wurde hochgeladen</td>
+      </tr>
+    <% end %>
+  </table>
+
+  <p>Bitte prüfe den Antrag im Kassenwart-Bereich.</p>
+  <p class="footer" style="color: #9ca3af; font-size: 12px; margin-top: 30px;">
+    Diese E-Mail wurde automatisch generiert.
+  </p>
+</body>
+</html>

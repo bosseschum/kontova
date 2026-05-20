@@ -25,6 +25,12 @@ Rails.application.routes.draw do
     resources :members, only: [ :index, :new, :create, :edit, :update, :destroy ]
     resources :transactions, only: [ :index, :new, :create, :edit, :update, :destroy ]
     resource :settings, only: [ :show, :update ]
+    resources :requests, only: [ :index, :show ] do
+      member do
+        post :approve
+        post :reject
+      end
+    end
   end
 
   # Bierkassenwart

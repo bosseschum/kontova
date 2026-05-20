@@ -1,0 +1,44 @@
+<div class="flex justify-between items-center mb-6">
+  <h1 class="text-2xl font-bold">Meine Anträge</h1>
+  <%= link_to "Neuer Antrag", new_member_area_request_path,
+        class: "bg-purple-600 hover:bg-purple-500 px-4 py-2 rounded-lg text-sm font-semibold" %>
+</div>
+
+<div class="bg-gray-900 rounded-xl overflow-hidden">
+  <table class="w-full">
+    <thead class="bg-gray-800 text-gray-400 text-sm">
+      <tr>
+        <th class="text-left px-4 py-3">Datum</th>
+        <th class="text-left px-4 py-3">Art</th>
+        <th class="text-left px-4 py-3">Beschreibung</th>
+        <th class="text-right px-4 py-3">Betrag</th>
+        <th class="text-center px-4 py-3">Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @requests.each do |req| %>
+        <tr class="border-t border-gray-800 hover:bg-gray-800/50">
+          <td class="px-4 py-3 text-gray-400 text-sm">
+            <%= req.created_at.strftime("%d.%m.%Y") %>
+          </td>
+          <td class="px-4 py-3">
+            <%= { "expense" => "Auslage", "other" => "Sonstiges" }[req.kind] %>
+          </td>
+          <td class="px-4 py-3 text-gray-300"><%= req.description %></td>
+          <td class="px-4 py-3 text-right font-mono">
+            <%= req.amount_cents ? format("%.2f", req.amount_cents / 100.0) + " €" : "–" %>
+          </td>
+          <td class="px-4 py-3 text-center">
+            <span class="px-2 py-1 rounded-lg text-xs font-semibold
+              <%= req.pending? ? 'bg-yellow-700 text-yellow-200' :
+                  req.approved? ? 'bg-green-700 text-green-200' :
+                  'bg-red-700 text-red-200' %>">
+              <%= { "pending" => "Ausstehend", "approved" => "Genehmigt",
+                    "rejected" => "Abgelehnt" }[req.status] %>
+            </span>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
