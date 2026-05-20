@@ -1,0 +1,72 @@
+<div class="flex justify-between items-center mb-6">
+  <h1 class="text-2xl font-bold">Antrag</h1>
+  <%= link_to "Zurück", member_area_requests_path,
+        class: "bg-gray-700 hover:bg-gray-600 px-4 py-2 rounded-lg text-sm" %>
+</div>
+
+<div class="bg-gray-900 rounded-xl p-6 max-w-lg">
+  <dl class="space-y-4">
+    <div>
+      <dt class="text-gray-500 text-sm">Art</dt>
+      <dd class="text-white mt-1">
+        <%= { "expense" => "Auslagenerstattung", "other" => "Sonstiges" }[@request.kind] %>
+      </dd>
+    </div>
+
+    <div>
+      <dt class="text-gray-500 text-sm">Beschreibung</dt>
+      <dd class="text-white mt-1"><%= @request.description %></dd>
+    </div>
+
+    <% if @request.amount_cents %>
+      <div>
+        <dt class="text-gray-500 text-sm">Betrag</dt>
+        <dd class="text-white font-mono mt-1">
+          <%= format("%.2f", @request.amount_cents / 100.0) %> €
+        </dd>
+      </div>
+    <% end %>
+
+    <div>
+      <dt class="text-gray-500 text-sm">Eingereicht am</dt>
+      <dd class="text-white mt-1">
+        <%= @request.created_at.strftime("%d.%m.%Y %H:%M") %>
+      </dd>
+    </div>
+
+    <div>
+      <dt class="text-gray-500 text-sm">Status</dt>
+      <dd class="mt-1">
+        <span class="px-3 py-1 rounded-lg text-sm font-semibold
+          <%= @request.pending?  ? 'bg-yellow-700 text-yellow-200' :
+              @request.approved? ? 'bg-green-700 text-green-200' :
+                                   'bg-red-700 text-red-200' %>">
+          <%= { "pending"  => "Ausstehend",
+                "approved" => "Genehmigt",
+                "rejected" => "Abgelehnt" }[@request.status] %>
+        </span>
+      </dd>
+    </div>
+
+    <% if @request.note.present? %>
+      <div>
+        <dt class="text-gray-500 text-sm">Begründung des Kassenwarts</dt>
+        <dd class="text-white mt-1 bg-gray-800 rounded-lg p-3">
+          <%= @request.note %>
+        </dd>
+      </div>
+    <% end %>
+
+    <% if @request.receipt.attached? %>
+      <div>
+        <dt class="text-gray-500 text-sm">Beleg</dt>
+        <dd class="mt-1">
+          <%= link_to "Beleg anzeigen",
+                rails_blob_path(@request.receipt, disposition: "inline"),
+                target: "_blank",
+                class: "text-blue-400 hover:text-blue-300 text-sm" %>
+        </dd>
+      </div>
+    <% end %>
+  </dl>
+</div>
