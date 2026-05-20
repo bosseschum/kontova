@@ -5,7 +5,7 @@ class MemberMailer < ApplicationMailer
   #   en.member_mailer.invoice.subject
   #
 
-  def welcome(member,plain_pin)
+  def welcome(member, plain_pin)
     @member = member
     @pin = plain_pin
     mail(
@@ -22,6 +22,24 @@ class MemberMailer < ApplicationMailer
     mail(
       to: member.email,
       subject: "Hauptkasse des Tübinger Wingolfs - Kontoauszug #{Date.today.strftime("%B %Y")}"
+    )
+  end
+
+  def request_approved(request)
+    @request = request
+    @member = request.member
+    mail(
+      to: @member.email,
+      subject: "Antrag auf Auslagenerstattung genehmigt"
+    )
+  end
+
+  def request_rejected(request)
+    @request = request
+    @member = request.member
+    mail(
+      to: @member.email,
+      subject: "Antrag auf Auslagenerstattung abgelehnt"
     )
   end
 end

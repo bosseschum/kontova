@@ -1,0 +1,40 @@
+<h1 class="text-2xl font-bold mb-6">Antrag stellen</h1>
+
+<div class="bg-gray-900 rounded-xl p-6 max-w-lg">
+  <%= form_with model: @request, url: member_area_requests_path do |f| %>
+
+    <div class="mb-4">
+      <%= f.label :kind, "Art des Antrags", class: "block text-gray-400 text-sm mb-1" %>
+      <%= f.select :kind,
+            [["Auslagenerstattung", "expense"],
+             ["Sonstiges", "other"]],
+            {},
+            class: "w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2" %>
+    </div>
+
+    <div class="mb-4">
+      <%= f.label :description, "Beschreibung", class: "block text-gray-400 text-sm mb-1" %>
+      <%= f.text_area :description, rows: 3, placeholder: "Was soll erstattet werden?",
+            class: "w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2" %>
+    </div>
+
+    <div class="mb-4">
+      <%= f.label :amount_cents, "Betrag (in Cent)", class: "block text-gray-400 text-sm mb-1" %>
+      <%= f.number_field :amount_cents, placeholder: "z.B. 1500 für 15,00 €",
+            class: "w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2" %>
+    </div>
+
+    <div class="mb-6">
+      <%= f.label :receipt, "Beleg (Foto/PDF)", class: "block text-gray-400 text-sm mb-1" %>
+      <%= f.file_field :receipt,
+            accept: "image/*,application/pdf",
+            class: "w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2
+                    text-gray-300 file:mr-4 file:py-2 file:px-4 file:rounded-lg
+                    file:border-0 file:bg-purple-600 file:text-white" %>
+    </div>
+
+    <%= f.submit "Antrag einreichen",
+          class: "w-full bg-purple-600 hover:bg-purple-500 py-3 rounded-lg
+                  font-semibold cursor-pointer" %>
+  <% end %>
+</div>

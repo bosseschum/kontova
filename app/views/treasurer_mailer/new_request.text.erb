@@ -1,0 +1,9 @@
+Neuer Antrag von <%= @member.display_name %>
+
+Art:          <%= { "expense" => "Auslagenerstattung", "other" => "Sonstiges" }[@request.kind] %>
+Beschreibung: <%= @request.description %>
+Betrag:       <%= @request.amount_cents ? format("%.2f", @request.amount_cents / 100.0) + " €" : "–" %>
+Datum:        <%= @request.created_at.strftime("%d.%m.%Y %H:%M") %>
+Beleg:        <%= @request.receipt.attached? ? "Ja" : "Nein" %>
+
+Bitte prüfe den Antrag im Kassenwart-Bereich.

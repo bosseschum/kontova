@@ -1,0 +1,9 @@
+Hallo <%= @member.display_name %>,
+
+dein Antrag wurde genehmigt!
+
+Beschreibung: <%= @request.description %>
+Betrag:       +<%= format("%.2f", @request.amount_cents / 100.0) %> €
+Genehmigt am: <%= Time.now.strftime("%d.%m.%Y") %>
+
+Der Betrag wurde deinem Konto gutgeschrieben.

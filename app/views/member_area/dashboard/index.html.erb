@@ -1,0 +1,54 @@
+<h1 class="text-2xl font-bold mb-6">Mein Konto</h1>
+
+<div class="grid grid-cols-2 gap-4 mb-8">
+  <div class="bg-gray-800 rounded-xl p-5">
+    <p class="text-gray-400 text-sm">Saldo</p>
+    <p class="text-3xl font-bold <%= @member.balance >= 0 ? 'text-green-400' : 'text-red-400' %>">
+      <%= format("%.2f", @member.balance) %> €
+    </p>
+  </div>
+  <div class="bg-gray-800 rounded-xl p-5">
+    <p class="text-gray-400 text-sm">Offene Anträge</p>
+    <p class="text-3xl font-bold">
+      <%= @member.requests.pending.count %>
+    </p>
+  </div>
+</div>
+
+<div class="flex justify-between items-center mb-4">
+  <h2 class="text-xl font-semibold">Letzte Transaktionen</h2>
+</div>
+
+<div class="bg-gray-900 rounded-xl overflow-hidden mb-8">
+  <table class="w-full">
+    <thead class="bg-gray-800 text-gray-400 text-sm">
+      <tr>
+        <th class="text-left px-4 py-3">Datum</th>
+        <th class="text-left px-4 py-3">Beschreibung</th>
+        <th class="text-right px-4 py-3">Betrag</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @transactions.each do |tx| %>
+        <tr class="border-t border-gray-800">
+          <td class="px-4 py-3 text-gray-400 text-sm">
+            <%= tx.created_at.strftime("%d.%m.%Y") %>
+          </td>
+          <td class="px-4 py-3">
+            <%= tx.note.presence || { "drink_purchase" => "Getränkekauf",
+                "deposit" => "Einzahlung",
+                "expense_reimbursement" => "Erstattung",
+                "membership_fee" => "Mitgliedsbeitrag" }[tx.kind] %>
+          </td>
+          <td class="px-4 py-3 text-right font-mono
+            <%= tx.amount_cents >= 0 ? 'text-green-400' : 'text-red-400' %>">
+            <%= format("%+.2f", tx.amount_cents / 100.0) %> €
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<%= link_to "Neuen Antrag stellen", new_member_area_request_path,
+      class: "bg-purple-600 hover:bg-purple-500 px-6 py-3 rounded-xl font-semibold" %>
