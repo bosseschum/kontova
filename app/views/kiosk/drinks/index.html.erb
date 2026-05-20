@@ -44,10 +44,10 @@
 
       <%# Produkte %>
       <h2 class="text-xl font-semibold mb-4 text-gray-300">Getränk wählen</h2>
-      <div class="mb-4 grid grid-cols-2 gap-4">
+      <div class="mb-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
         <% @products.each do |product| %>
           <% if product.has_crate? %>
-            <div class="grid grid-cols-2 gap-2">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <%= form_tag add_to_cart_kiosk_drinks_path, method: :post do %>
                 <%= hidden_field_tag :member_id, @selected_member.id %>
                 <%= hidden_field_tag :pin, params[:pin] %>
