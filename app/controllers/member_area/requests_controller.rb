@@ -8,7 +8,7 @@ class MemberArea::RequestsController < MemberArea::BaseController
   end
 
   def new
-    @request = current_member.requests.new
+    @request = current_organization.requests.new
   end
 
   def create

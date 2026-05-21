@@ -23,6 +23,8 @@ class ApplicationController < ActionController::Base
   private
 
   def set_organization
+    return if current_member&.super_admin?
+
     subdomain = request.subdomain
     if subdomain.present? && subdomain != "www"
       @current_organization = Organization.active.find_by(subdomain: subdomain)

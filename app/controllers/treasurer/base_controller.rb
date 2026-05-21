@@ -6,6 +6,8 @@ class Treasurer::BaseController < ApplicationController
   private
 
   def require_treasurer!
-    redirect_to root_path, alert: "Kein Zugriff" unless current_member.treasurer?
+    unless current_member.treasurer? && current_member.organization == current_organization
+      redirect_to root_path, alert: "Kein Zugriff"
+    end
   end
 end
