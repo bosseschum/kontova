@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_05_21_112049) do
+ActiveRecord::Schema[8.1].define(version: 2026_05_21_112641) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
@@ -45,9 +45,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_21_112049) do
     t.datetime "created_at", null: false
     t.integer "member_id", null: false
     t.string "note"
+    t.integer "organization_id"
     t.integer "product_id", null: false
     t.datetime "updated_at", null: false
     t.index ["member_id"], name: "index_inventory_counts_on_member_id"
+    t.index ["organization_id"], name: "index_inventory_counts_on_organization_id"
     t.index ["product_id"], name: "index_inventory_counts_on_product_id"
   end
 
@@ -58,6 +60,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_21_112049) do
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
     t.boolean "lives_on_site"
+    t.integer "organization_id"
     t.boolean "pays_fee"
     t.string "pin"
     t.datetime "remember_created_at"
@@ -66,6 +69,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_21_112049) do
     t.integer "role", default: 0, null: false
     t.datetime "updated_at", null: false
     t.index ["email"], name: "index_members_on_email", unique: true
+    t.index ["organization_id"], name: "index_members_on_organization_id"
     t.index ["reset_password_token"], name: "index_members_on_reset_password_token", unique: true
   end
 
@@ -101,20 +105,24 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_21_112049) do
     t.integer "crate_size"
     t.datetime "created_at", null: false
     t.string "name", null: false
+    t.integer "organization_id"
     t.integer "price_cents", null: false
     t.datetime "updated_at", null: false
+    t.index ["organization_id"], name: "index_products_on_organization_id"
   end
 
   create_table "purchases", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.integer "member_id", null: false
     t.string "note"
+    t.integer "organization_id"
     t.integer "price_per_unit_cents", null: false
     t.integer "product_id", null: false
     t.date "purchased_on", null: false
     t.integer "quantity", null: false
     t.datetime "updated_at", null: false
     t.index ["member_id"], name: "index_purchases_on_member_id"
+    t.index ["organization_id"], name: "index_purchases_on_organization_id"
     t.index ["product_id"], name: "index_purchases_on_product_id"
   end
 
@@ -133,8 +141,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_21_112049) do
   create_table "settings", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "key"
+    t.integer "organization_id"
     t.datetime "updated_at", null: false
     t.string "value"
+    t.index ["organization_id"], name: "index_settings_on_organization_id"
   end
 
   create_table "transactions", force: :cascade do |t|
@@ -153,12 +163,17 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_21_112049) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "inventory_counts", "members"
+  add_foreign_key "inventory_counts", "organizations"
   add_foreign_key "inventory_counts", "products"
+  add_foreign_key "members", "organizations"
   add_foreign_key "mixed_crate_items", "mixed_crates"
   add_foreign_key "mixed_crate_items", "products"
+  add_foreign_key "products", "organizations"
   add_foreign_key "purchases", "members"
+  add_foreign_key "purchases", "organizations"
   add_foreign_key "purchases", "products"
   add_foreign_key "requests", "members"
+  add_foreign_key "settings", "organizations"
   add_foreign_key "transactions", "members"
   add_foreign_key "transactions", "products"
 end

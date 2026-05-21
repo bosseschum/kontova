@@ -1,4 +1,5 @@
 class Product < ApplicationRecord
+  belongs_to :organization
   has_many :transactions
   has_many :purchases
   has_many :inventory_counts
