@@ -3,6 +3,11 @@ Rails.application.routes.draw do
     sessions: "members/sessions"
   }
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
+  # Super Admin
+  namespace :super_admin do
+    root "dashboard#index"
+    resources :organizations
+  end
 
   # Kiosk - no login
   namespace :kiosk do
