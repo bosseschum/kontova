@@ -1,4 +1,5 @@
 class Transaction < ApplicationRecord
+  belongs_to :organization
   belongs_to :member
   belongs_to :product, optional: true
 

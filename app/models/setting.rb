@@ -1,10 +1,12 @@
 class Setting < ApplicationRecord
-  def self.get(key, default = nil)
-    find_by(key: key)&.value || default
+  belongs_to :organization
+
+  def self.get(key, default = nil, organization:)
+    find_by(key: key, organization: organization)&.value || default
   end
 
-  def self.set(key, value)
-    find_or_initialize_by(key: key).tap do |setting|
+  def self.set(key, value, organization:)
+    find_or_initialize_by(key: key, organization: organization).tap do |setting|
       setting.value = value
       setting.save
     end

@@ -1,4 +1,5 @@
 class Request < ApplicationRecord
+  belongs_to :organization
   belongs_to :member
   has_one_attached :receipt
 

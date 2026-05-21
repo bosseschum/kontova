@@ -1,0 +1,15 @@
+class Organization < ApplicationRecord
+  has_many :members
+  has_many :products
+  has_many :transactions, through: :members
+  has_many :purchases
+  has_many :inventory_counts
+  has_many :requests, through: :members
+  has_many :settings
+
+  validates :name, presence: true
+  validates :subdomain, presence: true, uniqueness: true,
+    format: { with: /\A[a-z0-9-]+\z/, message: "nur Kleinbuchstaben, Zahlen und Bindestriche sind erlaubt" }
+
+  scope :active, -> { where(active: true) }
+end
