@@ -1,0 +1,40 @@
+<div class="flex justify-between items-center mb-6">
+  <h1 class="text-2xl font-bold">Organisationen</h1>
+  <%= link_to "Neue Organisation", new_super_admin_organization_path,
+        class: "bg-red-600 hover:bg-red-500 px-4 py-2 rounded-lg text-sm font-semibold" %>
+</div>
+
+<div class="bg-gray-900 rounded-xl overflow-hidden">
+  <table class="w-full">
+    <thead class="bg-gray-800 text-gray-400 text-sm">
+      <tr>
+        <th class="text-left px-4 py-3">Name</th>
+        <th class="text-left px-4 py-3">Subdomain</th>
+        <th class="text-right px-4 py-3">Mitglieder</th>
+        <th class="text-center px-4 py-3">Aktiv</th>
+        <th class="text-right px-4 py-3">Aktionen</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @organizations.each do |org| %>
+        <tr class="border-t border-gray-800 hover:bg-gray-800/50">
+          <td class="px-4 py-3 font-medium"><%= org.name %></td>
+          <td class="px-4 py-3 text-gray-400 font-mono text-sm">
+            <%= org.subdomain %>.vereinskasse.de
+          </td>
+          <td class="px-4 py-3 text-right"><%= org.members.count %></td>
+          <td class="px-4 py-3 text-center"><%= org.active? ? "✅" : "❌" %></td>
+          <td class="px-4 py-3 text-right flex justify-end gap-3">
+            <%= link_to "Bearbeiten", edit_super_admin_organization_path(org),
+                  class: "text-blue-400 hover:text-blue-300 text-sm" %>
+            <%= button_to "Löschen", super_admin_organization_path(org),
+                  method: :delete,
+                  data: { turbo_confirm: "Wirklich löschen?" },
+                  class: "text-red-400 hover:text-red-300 text-sm
+                          bg-transparent border-0 cursor-pointer p-0" %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

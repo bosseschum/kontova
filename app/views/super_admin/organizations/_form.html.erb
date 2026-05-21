@@ -1,0 +1,29 @@
+<div class="bg-gray-900 rounded-xl p-6 max-w-lg">
+  <%= form_with model: [:super_admin, @organization] do |f| %>
+
+    <div class="mb-4">
+      <%= f.label :name, "Vereinsname", class: "block text-gray-400 text-sm mb-1" %>
+      <%= f.text_field :name, placeholder: "z.B. Tübinger Wingolf",
+            class: "w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2" %>
+    </div>
+
+    <div class="mb-4">
+      <%= f.label :subdomain, "Subdomain", class: "block text-gray-400 text-sm mb-1" %>
+      <div class="flex items-center gap-2">
+        <%= f.text_field :subdomain, placeholder: "z.B. wingolf",
+              class: "flex-1 bg-gray-800 border border-gray-700 rounded-lg px-3 py-2" %>
+        <span class="text-gray-500">.vereinskasse.de</span>
+      </div>
+      <p class="text-gray-500 text-xs mt-1">Nur Kleinbuchstaben, Zahlen und Bindestriche</p>
+    </div>
+
+    <div class="mb-6 flex items-center gap-3">
+      <%= f.check_box :active, class: "w-4 h-4" %>
+      <%= f.label :active, "Aktiv", class: "text-gray-300" %>
+    </div>
+
+    <%= f.submit @organization.new_record? ? "Anlegen" : "Speichern",
+          class: "w-full bg-red-600 hover:bg-red-500 py-3 rounded-lg
+                  font-semibold cursor-pointer" %>
+  <% end %>
+</div>
