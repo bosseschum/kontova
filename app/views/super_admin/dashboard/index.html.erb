@@ -1,0 +1,43 @@
+<h1 class="text-2xl font-bold mb-6">Super Admin Dashboard</h1>
+
+<div class="grid grid-cols-3 gap-4 mb-8">
+  <div class="bg-gray-800 rounded-xl p-5">
+    <p class="text-gray-400 text-sm">Organisationen</p>
+    <p class="text-3xl font-bold"><%= @organizations.count %></p>
+  </div>
+  <div class="bg-gray-800 rounded-xl p-5">
+    <p class="text-gray-400 text-sm">Aktiv</p>
+    <p class="text-3xl font-bold text-green-400"><%= @organizations.active.count %></p>
+  </div>
+  <div class="bg-gray-800 rounded-xl p-5">
+    <p class="text-gray-400 text-sm">Mitglieder gesamt</p>
+    <p class="text-3xl font-bold"><%= Member.count %></p>
+  </div>
+</div>
+
+<div class="bg-gray-900 rounded-xl overflow-hidden">
+  <table class="w-full">
+    <thead class="bg-gray-800 text-gray-400 text-sm">
+      <tr>
+        <th class="text-left px-4 py-3">Organisation</th>
+        <th class="text-left px-4 py-3">Subdomain</th>
+        <th class="text-right px-4 py-3">Mitglieder</th>
+        <th class="text-center px-4 py-3">Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @organizations.each do |org| %>
+        <tr class="border-t border-gray-800 hover:bg-gray-800/50">
+          <td class="px-4 py-3 font-medium"><%= org.name %></td>
+          <td class="px-4 py-3 text-gray-400">
+            <%= org.subdomain %>.vereinskasse.de
+          </td>
+          <td class="px-4 py-3 text-right"><%= org.members.count %></td>
+          <td class="px-4 py-3 text-center">
+            <%= org.active? ? "✅" : "❌" %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
