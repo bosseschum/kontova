@@ -5,7 +5,7 @@ class MemberArea::BaseController < ApplicationController
   private
 
   def require_member!
-    unless current_member!
+    unless current_member
       redirect_to new_member_session_path, alert: "Bitte einloggen."
     end
   end

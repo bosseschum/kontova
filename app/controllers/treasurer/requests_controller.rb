@@ -1,4 +1,4 @@
-class Treasurer::RequestsController < ApplicationController
+class Treasurer::RequestsController < Treasurer::BaseController
   def index
     @requests = Request.includes(:member).order(created_at: :desc)
   end
