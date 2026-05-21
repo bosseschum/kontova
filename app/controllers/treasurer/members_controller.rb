@@ -1,14 +1,14 @@
 class Treasurer::MembersController < Treasurer::BaseController
   def index
-    @members = Member.order(:display_name)
+    @members = current_organization.members.order(:display_name)
   end
 
   def new
-    @member = Member.new
+    @member = current_organization.members.new
   end
 
   def create
-    @member = Member.new(member_params)
+    @member = current_organization.members.new(member_params)
 
     if @member.role == "member" && member_params[:password].blank?
       @member.password = SecureRandom.hex(16)
@@ -23,11 +23,11 @@ class Treasurer::MembersController < Treasurer::BaseController
   end
 
   def edit
-    @member = Member.find(params[:id])
+    @member = current_organization.members.find(params[:id])
   end
 
   def update
-    @member = Member.find(params[:id])
+    @member = current_organization.members.find(params[:id])
 
     update_params = member_params
     update_params = update_params.except(:password) if update_params[:password].blank?
@@ -41,7 +41,7 @@ class Treasurer::MembersController < Treasurer::BaseController
   end
 
   def destroy
-    @member = Member.find(params[:id])
+    @member = current_organization.members.find(params[:id])
     @member.destroy
     redirect_to treasurer_members_path, notice: "Mitglied gelöscht"
   end

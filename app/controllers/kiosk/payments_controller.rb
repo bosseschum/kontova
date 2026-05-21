@@ -1,7 +1,7 @@
 class Kiosk::PaymentsController < ApplicationController
   skip_before_action :authenticate_member!
   def show
-    @member = Member.find(params[:id])
+    @member = current_organization.members.find(params[:id])
     amount = @member.balance_cents.abs
 
     girocode_data = [

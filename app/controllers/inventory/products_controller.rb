@@ -1,14 +1,14 @@
 class Inventory::ProductsController < Inventory::BaseController
   def index
-    @products = Product.order(:name)
+    @products = current_organization.products.order(:name)
   end
 
   def new
-    @product = Product.new
+    @product = current_organization.products.new
   end
 
   def create
-    @product = Product.new(product_params)
+    @product = current_organization.products.new(product_params)
     if @product.save
       redirect_to inventory_products_path, notice: "Produkt angelegt"
     else
@@ -17,11 +17,11 @@ class Inventory::ProductsController < Inventory::BaseController
   end
 
   def edit
-    @product = Product.find(params[:id])
+    @product = current_organization.products.find(params[:id])
   end
 
   def update
-    @product = Product.find(params[:id])
+    @product = current_organization.products.find(params[:id])
     if @product.update(product_params)
       redirect_to inventory_products_path, notice: "Produkt aktualisiert"
     else

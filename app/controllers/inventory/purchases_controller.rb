@@ -1,15 +1,15 @@
 class Inventory::PurchasesController < Inventory::BaseController
   def index
-    @purchases = Purchase.includes(:product, :member).order(purchased_on: :desc)
+    @purchases = current_organization.purchases.includes(:product, :member).order(purchased_on: :desc)
   end
 
   def new
-    @purchase = Purchase.new
-    @products = Product.active.order(:name)
+    @purchase = current_organization.purchases.new
+    @products = current_organization.products.active.order(:name)
   end
 
   def create
-    @purchase = Purchase.new(purchase_params.merge(member: current_member))
+    @purchase = current_organization.purchases.new(purchase_params.merge(member: current_member))
     if @purchase.save
       redirect_to inventory_purchases_path, notice: "Einkauf erfasst"
     else
