@@ -10,7 +10,7 @@ class Member < ApplicationRecord
 
   enum :role, { member: 0, treasurer: 1, inventory_manager: 2 }
 
-  belongs_to :organization
+  belongs_to :organization, optional: true
   has_many :transactions, dependent: :nullify
   has_many :purchases, dependent: :nullify
   has_many :inventory_counts, dependent: :nullify
