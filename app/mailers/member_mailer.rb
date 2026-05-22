@@ -8,9 +8,11 @@ class MemberMailer < ApplicationMailer
   def welcome(member, plain_pin)
     @member = member
     @pin = plain_pin
+    @organization = member.organization
+
     mail(
       to: member.email,
-      subject: "Willkommen bei der digitalen Kasse!"
+      subject: "Willkommen bei #{@organization.name}!"
     )
   end
 
@@ -18,28 +20,33 @@ class MemberMailer < ApplicationMailer
     @member = member
     @transactions = member.transactions.order(created_at: :desc).limit(50)
     @balance = member.balance
+    @organization = member.organization
 
     mail(
       to: member.email,
-      subject: "Hauptkasse des Tübinger Wingolfs - Kontoauszug #{Date.today.strftime("%B %Y")}"
+      subject: "Hauptkasse des #{@organization.name} - Kontoauszug #{Date.today.strftime("%B %Y")}"
     )
   end
 
   def request_approved(request)
     @request = request
     @member = request.member
+    @organization = @member.organization
+
     mail(
       to: @member.email,
-      subject: "Antrag auf Auslagenerstattung genehmigt"
+      subject: "#{@organization.name} – Dein Antrag wurde genehmigt"
     )
   end
 
   def request_rejected(request)
     @request = request
     @member = request.member
+    @organization = @member.organization
+
     mail(
       to: @member.email,
-      subject: "Antrag auf Auslagenerstattung abgelehnt"
+      subject: "#{@organization.name} – Dein Antrag wurde abgelehnt"
     )
   end
 end
