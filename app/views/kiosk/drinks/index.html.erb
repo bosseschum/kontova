@@ -181,6 +181,8 @@
           <%= f.password_field :pin,
                              maxlength: 4,
                              autofocus: true,
+                             input_mode: "numeric",
+                             pattern: "[0-9]{4}",
                              class: "w-full text-center text-3xl tracking-widest bg-gray-800
                       border border-gray-700 rounded-xl px-4 py-4 mb-4",
                              placeholder: "····" %>
