@@ -1,4 +1,4 @@
-# Vereinskasse
+# KONTOVA
 
 Eine webbasierte Kassenverwaltung für Vereine – gebaut mit Ruby on Rails.
 
@@ -8,7 +8,6 @@ Eine webbasierte Kassenverwaltung für Vereine – gebaut mit Ruby on Rails.
 - Selbstbedienung am Terminal oder Smartphone
 - Mitglieder buchen Getränke per PIN
 - Warenkorb mit automatischem Kastenpreis
-- Mischkästen konfigurierbar
 - GiroCode QR-Code für Überweisungen per Banking-App
 
 ### 💰 Kassenwart
@@ -23,7 +22,6 @@ Eine webbasierte Kassenverwaltung für Vereine – gebaut mit Ruby on Rails.
 - Produktverwaltung mit Einzel- und Kastenpreisen
 - Einkäufe erfassen
 - Inventur mit Soll/Ist-Vergleich und Schwundanalyse
-- Mischkästen konfigurieren
 
 ### 👤 Mitgliederbereich
 - Eigener Saldo und Transaktionshistorie
@@ -72,8 +70,8 @@ Eine webbasierte Kassenverwaltung für Vereine – gebaut mit Ruby on Rails.
 Jeder Verein erhält eine eigene Subdomain:
 
 ```
-vereina.vereinskasse.de
-vereinb.vereinskasse.de
+vereina.kontova.de
+vereinb.kontova.de
 ```
 
 Daten sind vollständig getrennt – Mitglieder, Produkte, Transaktionen
@@ -93,8 +91,8 @@ und Einstellungen gehören immer zu einer Organisation.
 
 ```bash
 # Repository klonen
-git clone https://github.com/deinname/vereinskasse.git
-cd vereinskasse
+git clone https://github.com/deinname/kontova.git
+cd kontova
 
 # Abhängigkeiten
 bundle install
@@ -176,9 +174,9 @@ rails members:send_invoices
 Crontab-Beispiel:
 
 ```
-0 8 31 3 * cd /var/www/vereinskasse && rails members:charge_fees
-0 8 30 9 * cd /var/www/vereinskasse && rails members:charge_fees
-0 9 1  * * cd /var/www/vereinskasse && rails members:send_invoices
+0 8 31 3 * cd /var/www/kontova && rails members:charge_fees
+0 8 30 9 * cd /var/www/kontova && rails members:charge_fees
+0 9 1  * * cd /var/www/kontova && rails members:send_invoices
 ```
 
 ---
@@ -188,7 +186,7 @@ Crontab-Beispiel:
 ### Voraussetzungen
 
 - VPS (z.B. Hetzner CX22)
-- Domain mit Wildcard-DNS (`*.vereinskasse.de`)
+- Domain mit Wildcard-DNS (`*.kontova.de`)
 - Docker auf dem VPS
 - Kamal (`gem install kamal`)
 
@@ -197,10 +195,10 @@ Crontab-Beispiel:
 ```bash
 # .env (nicht ins Git!)
 RAILS_ENV=production
-DATABASE_URL=postgresql://user:password@localhost/vereinskasse_production
+DATABASE_URL=postgresql://user:password@localhost/kontova_production
 MAIL_USERNAME=kasse@mailbox.org
 MAIL_PASSWORD=apppasswort
-APP_HOST=vereinskasse.de
+APP_HOST=kontova.de
 ```
 
 ### Deployment

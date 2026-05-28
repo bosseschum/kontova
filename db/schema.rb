@@ -154,10 +154,12 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_21_113347) do
     t.integer "kind", null: false
     t.integer "member_id", null: false
     t.string "note"
+    t.integer "organization_id"
     t.integer "product_id"
     t.integer "quantity", default: 1
     t.datetime "updated_at", null: false
     t.index ["member_id"], name: "index_transactions_on_member_id"
+    t.index ["organization_id"], name: "index_transactions_on_organization_id"
     t.index ["product_id"], name: "index_transactions_on_product_id"
   end
 
@@ -176,5 +178,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_21_113347) do
   add_foreign_key "requests", "members"
   add_foreign_key "settings", "organizations"
   add_foreign_key "transactions", "members"
+  add_foreign_key "transactions", "organizations"
   add_foreign_key "transactions", "products"
 end

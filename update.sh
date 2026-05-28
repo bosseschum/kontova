@@ -3,7 +3,7 @@
 
 set -e
 
-echo "=== Vereinskasse Update ==="
+echo "=== KONTOVA Update ==="
 
 cd ~/vereinskasse
 
