@@ -30,8 +30,8 @@ env:
     - MAIL_PASSWORD
 
 accessories:
-  db:
-    image: postgres:16
+  postgres:
+    image: postgres:17
     host: 62.238.45.187
     port: 5432
     env:
