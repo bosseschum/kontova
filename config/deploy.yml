@@ -16,8 +16,8 @@ registry:
 
 builder:
   arch: amd64
-  args:
-    RAILS_MASTER_KEY: ${RAILS_MASTER_KEY}
+  secrets:
+    - RAILS_MASTER_KEY
 
 env:
   clear:
