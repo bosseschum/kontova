@@ -1,16 +1,25 @@
 default: &default
+  adapter: postgresql
+  encoding: unicode
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-  timeout: 5000
 
 development:
-  <<: *default
-  adapter: sqlite3
-  database: db/development.sqlite3
+  primary:
+    <<: *default
+    database: kontova_development
+  cable:
+    <<: *default
+    database: kontova_development_cable
+    migrations_paths: db/cable_migrate
 
 test:
-  <<: *default
-  adapter: sqlite3
-  database: db/test.sqlite3
+  primary:
+    <<: *default
+    database: kontova_test
+  cable:
+    <<: *default
+    database: kontova_test_cable
+    migrations_paths: db/cable_migrate
 
 production:
   primary:
@@ -19,4 +28,4 @@ production:
   cable:
     <<: *default
     url: <%= ENV["DATABASE_URL"] %>
-    migrations_paths: db/cable_migrations
+    migrations_paths: db/cable_migrate
