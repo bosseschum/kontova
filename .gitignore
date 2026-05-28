@@ -39,4 +39,3 @@
 .env
 config/master.key
 .kamal/secrets
-.kamal/secrets
