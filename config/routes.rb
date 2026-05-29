@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  root "landing#index", constraints: ->(req) { req.subdomain.blank? || req.subdomain == "www" }
+
   get "landing/index"
   devise_for :members, controllers: {
     sessions: "members/sessions"
@@ -62,5 +64,4 @@ Rails.application.routes.draw do
   # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
 
   # Defines the root path route ("/")
-  root "landing#index", constraints: ->(req) { req.subdomain.blank? || req.subdomain == "www" }
 end
