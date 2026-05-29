@@ -46,6 +46,6 @@ Rails.application.configure do
   config.require_master_key = true
 
   # Host-Validierung – alle Subdomains erlauben
-  config.hosts << /.*\.vereinskasse\.de/
-  config.hosts << "vereinskasse.de"
+  config.hosts << /.*\.kontova\.de/
+  config.hosts << "kontova.de"
 end
