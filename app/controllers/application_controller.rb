@@ -31,8 +31,8 @@ class ApplicationController < ActionController::Base
       unless @current_organization
         render plain: "Verein nicht gefunden", status: :not_found
       end
-    elsif Rails.env.development?
-      @current_organization = Organization.active.first
+    else
+      # Root domain
     end
   end
 
