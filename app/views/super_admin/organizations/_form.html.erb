@@ -1,5 +1,5 @@
 <div class="bg-gray-900 rounded-xl p-6 max-w-lg">
-  <%= form_with model: [:super_admin, @organization] do |f| %>
+  <%= form_with model: [:super_admin, @organization], data: { turbo: false } do |f| %>
 
     <div class="mb-4">
       <%= f.label :name, "Vereinsname", class: "block text-gray-400 text-sm mb-1" %>
