@@ -13,14 +13,16 @@ Rails.application.routes.draw do
   end
 
   # Kiosk - no login
-  namespace :kiosk do
-    root "drinks#index"
-    resources :drinks, only: [ :index ] do
-      collection do
-        post :add_to_cart
-        post :checkout
-        post :remove_from_cart
-        delete :clear_cart
+  constraints subdomain: /\A(?!www|super_admin)\w[\w-]*\z/ do
+    namespace :kiosk do
+      root "drinks#index"
+      resources :drinks, only: [ :index ] do
+        collection do
+          post :add_to_cart
+          post :checkout
+          post :remove_from_cart
+          delete :clear_cart
+        end
       end
     end
     resources :payments, only: [ :show ]
