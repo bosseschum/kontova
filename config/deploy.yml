@@ -25,6 +25,7 @@ env:
   clear:
     RAILS_ENV: production
     APP_HOST: kontova.de
+    SOLID_QUEUE_IN_PUMA: "true"
   secret:
     - RAILS_MASTER_KEY
     - DATABASE_URL
