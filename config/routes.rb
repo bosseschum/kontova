@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
   root "landing#index", constraints: ->(req) { req.subdomain.blank? || req.subdomain == "www" }
+  root "kiosk/drinks#index", constraints: ->(req) { req.subdomain.present? && req.subdomain != "www" && req.subdomain != "super_admin" }
 
   get "landing/index"
   devise_for :members, controllers: {
