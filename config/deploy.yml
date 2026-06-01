@@ -9,7 +9,7 @@ proxy:
   ssl: true
   hosts:
     - kontova.de
-    - "*.kontova.de"
+    - tuebingerwingolf.kontova.de
 
 registry:
   username: bosseschumacher
