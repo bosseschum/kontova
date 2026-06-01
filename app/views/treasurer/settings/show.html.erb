@@ -20,7 +20,7 @@
       <%= number_field_tag "settings[fee_resident_cents]",
             Setting.get("fee_resident_cents", 3000),
             class: "w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2" %>
-      <p class="text-gray-500 text-xs mt-1">Aktuell: <%= format("%.2f", Setting.get("fee_resident_cents", "3000").to_i / 100.0) %> €</p>
+      <p class="text-gray-500 text-xs mt-1">Aktuell: <%= format("%.2f", Setting.get("fee_resident_cents", "2500").to_i / 100.0) %> €</p>
     </div>
 
     <h2 class="text-lg font-semibold mb-4 text-gray-300">Bankverbindung (QR-Code)</h2>
