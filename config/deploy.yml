@@ -7,7 +7,9 @@ servers:
 
 proxy:
   ssl: true
-  host: kontova.de
+  hosts:
+    - kontova.de
+    - "*.kontova.de"
 
 registry:
   username: bosseschumacher
