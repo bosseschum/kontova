@@ -48,8 +48,13 @@ class Member < ApplicationRecord
   end
 
   def generate_password_if_member
-    if role == "member"
-      self.password = SecureRandom.hex(16)
+    if role == "member" && password.blank?
+      @generated_password = SecureRandom.hex(16)
+      self.password = @generated_password
     end
+  end
+
+  def generated_password
+    @generated_password
   end
 end

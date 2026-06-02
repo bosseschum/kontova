@@ -1,4 +1,22 @@
 <h1>Willkommen, <%= @member.display_name %>!</h1>
-<p>Dein Account wurde angelegt.</p>
-<p>Dein PIN für den Kiosk: <strong style="font-size: 24px; letter-spacing: 4px;"><%= @pin %></strong></p>
-<p>Du kannst deinen PIN jederzeit beim Kassenwart ändern lassen.</p>
+<p>Dein Account bei <%= @org.name %> wurde angelegt.</p>
+
+<table>
+  <tr>
+    <th>E-Mail</th>
+    <td><%= @member.email %></td>
+  </tr>
+  <% if @password %>
+    <tr>
+      <th>Passwort</th>
+      <td><%= @password %></td>
+    </tr>
+  <% end %>
+  <tr>
+    <th>Kiosk-PIN</th>
+    <td style="font-size: 24px; letter-spacing: 4px;"><strong><%= @pin %></strong></td>
+  </tr>
+</table>
+
+<p>Bitte ändere dein Passwort nach dem ersten Login.</p>
+<p style="color: #9ca3af; font-size: 12px;">Diese E-Mail wurde automatisch generiert.</p>

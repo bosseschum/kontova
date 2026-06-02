@@ -3,9 +3,10 @@
   <h1 class="text-2xl font-bold mb-2">Guthaben aufladen</h1>
   <p class="text-gray-400 mb-2"><%= @member.display_name %></p>
   <p class="text-3xl font-bold mb-8 text-red-400">
-    <%= format("%.2f", @amount / 100.0).gsub(".", ",") %> offen
+    <%= format("%.2f", @amount / 100.0).gsub(".", ",") %> € offen
   </p>
 
+  <%# QR-Code %>
   <div class="bg-white p-6 rounded-2xl mb-6" style="background-color: white !important;">
     <%= @qr.as_png(
         bit_depth: 1,
@@ -19,14 +20,90 @@
         resize_oir_less: false
     ).to_data_url.then { |url| image_tag url, class: "w-64 h-64" } %>
   </div>
-
-  <p class="text-gray-400 text-sm text-center mb-2">
+  <p class="text-gray-400 text-sm text-center mb-8">
     Mit Banking-App scannen für automatische Überweisung
   </p>
-  <p class="text-gray-500 text-xs text-center mb-8">
-    Sparkasse, DKB, N26, ING und weitere
-  </p>
+
+  <%# Zahlungsdaten %>
+  <div class="bg-gray-900 rounded-xl p-6 w-full max-w-sm mb-6">
+    <h2 class="text-lg font-semibold mb-4 text-gray-300">Zahlungsdaten</h2>
+    <div class="space-y-3">
+
+      <div class="flex justify-between items-center">
+        <div>
+          <p class="text-gray-500 text-xs">Empfänger</p>
+          <p class="text-white" id="bank-name">
+            <%= Setting.get("bank_name", "", organization: @member.organization) %>
+          </p>
+        </div>
+        <button onclick="copyToClipboard('bank-name')"
+          class="text-blue-400 hover:text-blue-300 text-sm px-3 py-1
+                 bg-gray-800 rounded-lg">
+          Kopieren
+        </button>
+      </div>
+
+      <div class="flex justify-between items-center">
+        <div>
+          <p class="text-gray-500 text-xs">IBAN</p>
+          <p class="text-white font-mono text-sm" id="bank-iban">
+            <%= Setting.get("bank_iban", "", organization: @member.organization) %>
+          </p>
+        </div>
+        <button onclick="copyToClipboard('bank-iban')"
+          class="text-blue-400 hover:text-blue-300 text-sm px-3 py-1
+                 bg-gray-800 rounded-lg">
+          Kopieren
+        </button>
+      </div>
+
+      <div class="flex justify-between items-center">
+        <div>
+          <p class="text-gray-500 text-xs">Betrag</p>
+          <p class="text-white font-mono" id="bank-amount">
+            <%= format("%.2f", @amount / 100.0).gsub(".", ",") %> €
+          </p>
+        </div>
+        <button onclick="copyToClipboard('bank-amount')"
+          class="text-blue-400 hover:text-blue-300 text-sm px-3 py-1
+                 bg-gray-800 rounded-lg">
+          Kopieren
+        </button>
+      </div>
+
+      <div class="flex justify-between items-center">
+        <div>
+          <p class="text-gray-500 text-xs">Verwendungszweck</p>
+          <p class="text-white text-sm" id="bank-reference">
+            Vereinskasse <%= @member.display_name %>
+          </p>
+        </div>
+        <button onclick="copyToClipboard('bank-reference')"
+          class="text-blue-400 hover:text-blue-300 text-sm px-3 py-1
+                 bg-gray-800 rounded-lg">
+          Kopieren
+        </button>
+      </div>
+
+    </div>
+  </div>
 
   <%= link_to "Zurück", kiosk_root_path,
-    class: "bg-gray-700 hover:bg-gray-600 px-6 py-3 rounded-xl" %>
+        class: "bg-gray-700 hover:bg-gray-600 px-6 py-3 rounded-xl" %>
+
 </div>
+
+<script>
+function copyToClipboard(elementId) {
+  const text = document.getElementById(elementId).innerText;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = event.target;
+    btn.innerText = "✓ Kopiert";
+    btn.classList.add("text-green-400");
+    setTimeout(() => {
+      btn.innerText = "Kopieren";
+      btn.classList.remove("text-green-400");
+    }, 2000);
+  });
+}
+</script>

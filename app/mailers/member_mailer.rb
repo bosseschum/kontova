@@ -8,6 +8,7 @@ class MemberMailer < ApplicationMailer
   def welcome(member, plain_pin)
     @member = member
     @pin = plain_pin
+    @password = plain_password
     @organization = member.organization
 
     mail(

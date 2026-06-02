@@ -1,0 +1,36 @@
+<h1 class="text-2xl font-bold mb-6">Profil bearbeiten</h1>
+
+<div class="bg-gray-900 rounded-xl p-6 max-w-lg">
+  <%= form_with model: current_member,
+        url: member_area_profile_path, method: :patch do |f| %>
+
+    <h2 class="text-lg font-semibold mb-4 text-gray-300">Kiosk-PIN ändern</h2>
+    <div class="mb-6">
+      <%= f.label :pin, "Neuer PIN (4 Ziffern)",
+            class: "block text-gray-400 text-sm mb-1" %>
+      <%= f.password_field :pin, maxlength: 4,
+            class: "w-full bg-gray-800 border border-gray-700 rounded-lg
+                    px-3 py-2 tracking-widest text-center text-lg",
+            placeholder: "····" %>
+    </div>
+
+    <h2 class="text-lg font-semibold mb-4 text-gray-300">Passwort ändern</h2>
+    <div class="mb-4">
+      <%= f.label :password, "Neues Passwort",
+            class: "block text-gray-400 text-sm mb-1" %>
+      <%= f.password_field :password,
+            class: "w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2",
+            placeholder: "Leer lassen um nicht zu ändern" %>
+    </div>
+    <div class="mb-6">
+      <%= f.label :password_confirmation, "Passwort bestätigen",
+            class: "block text-gray-400 text-sm mb-1" %>
+      <%= f.password_field :password_confirmation,
+            class: "w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2" %>
+    </div>
+
+    <%= f.submit "Speichern",
+          class: "w-full bg-blue-600 hover:bg-blue-500 py-3 rounded-lg
+                  font-semibold cursor-pointer" %>
+  <% end %>
+</div>

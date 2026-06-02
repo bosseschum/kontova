@@ -57,6 +57,7 @@ Rails.application.routes.draw do
   namespace :member_area do
     root "dashboard#index"
     resources :requests, only: [ :index, :new, :create, :show ]
+    resource :profile, only: [ :show, :edit, :update ]
   end
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.
