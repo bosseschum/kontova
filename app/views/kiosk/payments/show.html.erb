@@ -93,7 +93,7 @@
 
 </div>
 
-<script>
+<script nonce="<%= request.content_security_policy_nonce %>">
 function copyToClipboard(elementId) {
   const text = document.getElementById(elementId).innerText;
   navigator.clipboard.writeText(text).then(() => {
