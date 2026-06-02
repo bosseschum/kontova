@@ -1,4 +1,5 @@
 class Member < ApplicationRecord
+  attr_reader :generated_password
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   before_create :generate_pin
@@ -52,9 +53,5 @@ class Member < ApplicationRecord
       @generated_password = SecureRandom.hex(16)
       self.password = @generated_password
     end
-  end
-
-  def generated_password
-    @generated_password
   end
 end
