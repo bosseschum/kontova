@@ -49,7 +49,7 @@ class Member < ApplicationRecord
 
   def generate_password_if_member
     if password.blank?
-      @generated_password = SecureRandom.hex(16)
+      @generated_password = SecureRandom.hex(8)
       self.password = @generated_password
       self.password_confirmation = @generated_password
     end
