@@ -19,6 +19,7 @@ class Treasurer::TransactionsController < Treasurer::BaseController
 
   def create
     @transaction = Transaction.new(transaction_params)
+    @transaction.organization = current_organization
     if @transaction.save
       redirect_to treasurer_transactions_path, notice: "Transaktion gebucht"
     else
