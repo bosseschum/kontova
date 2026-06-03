@@ -7,7 +7,6 @@ class Member < ApplicationRecord
 
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
-  validates :pin, length: { is: 4 }, allow_nil: true, format: { with: /\A\d+\z/ }
 
   enum :role, { member: 0, treasurer: 1, inventory_manager: 2 }
 
@@ -49,9 +48,10 @@ class Member < ApplicationRecord
   end
 
   def generate_password_if_member
-    if role == "member" && password.blank?
+    if password.blank?
       @generated_password = SecureRandom.hex(16)
       self.password = @generated_password
+      self.password_confirmation = @generated_password
     end
   end
 end
