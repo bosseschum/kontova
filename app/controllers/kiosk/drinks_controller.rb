@@ -2,7 +2,7 @@ class Kiosk::DrinksController < ApplicationController
   skip_before_action :authenticate_member!
 
   def index
-    @members = current_organization.members.order(:display_name)
+    @members = current_organization.members.all.sort_by { |m| m.display_name.split.last.downcase }
     @products = current_organization.products.active.order(:name)
     @selected_member = current_organization.members.find_by(id: params[:member_id])
 
