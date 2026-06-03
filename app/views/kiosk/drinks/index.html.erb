@@ -181,7 +181,7 @@
           <%= f.password_field :pin,
                              maxlength: 4,
                              autofocus: true,
-                             input_mode: "numeric",
+                             inputmode: "numeric",
                              pattern: "[0-9]{4}",
                              class: "w-full text-center text-3xl tracking-widest bg-gray-800
                       border border-gray-700 rounded-xl px-4 py-4 mb-4",
@@ -205,7 +205,7 @@
       </div>
       <h1 class="text-3xl font-bold mb-2 text-center">🍺 Bierkasse</h1>
       <p class="text-gray-400 text-center mb-8">Wer bist du?</p>
-      <div class="grid grid-cols-3 gap-4 sm:grid-cols-2">
+      <div class="grid grid-cols-2 gap-4 sm:grid-cols-3">
         <% @members.each do |member| %>
           <%= link_to(kiosk_root_path(member_id: member.id),
                     class: "bg-gray-800 hover:bg-gray-700 active:scale-95 transition
