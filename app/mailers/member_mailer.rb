@@ -5,7 +5,7 @@ class MemberMailer < ApplicationMailer
   #   en.member_mailer.invoice.subject
   #
 
-  def welcome(member, plain_pin)
+  def welcome(member, plain_pin, plain_password = nil)
     @member = member
     @pin = plain_pin
     @password = plain_password
