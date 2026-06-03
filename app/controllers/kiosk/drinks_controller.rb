@@ -2,16 +2,15 @@ class Kiosk::DrinksController < ApplicationController
   skip_before_action :authenticate_member!
 
   def index
-    @members = current_organization.members.all.sort_by { |m| m.display_name.split.last.downcase }
+    @organization = current_organization
     @products = current_organization.products.active.order(:name)
-    @selected_member = current_organization.members.find_by(id: params[:member_id])
 
-    if @selected_member
-      if params[:pin].present?
-        @pin_verified = @selected_member.pin == params[:pin]
-        flash.now[:alert] = "Falsche PIN" unless @pin_verified
+    if params[:pin].present?
+      @selected_member = current_organization.members.find_by(pin: params[:pin])
+      if @selected_member
+        @pin_verified = true
       else
-        @pin_verified = false
+        flash.now[:alert] = "Unbekannte PIN"
       end
     end
 

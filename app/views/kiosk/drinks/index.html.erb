@@ -171,50 +171,21 @@
         </div>
       <% end %>
 
-    <% elsif @selected_member %>
-      <%# PIN eingeben %>
-      <div class="max-w-sm mx-auto mt-20 text-center">
-        <p class="text-2xl font-bold mb-2">Hallo, <%= @selected_member.display_name %>!</p>
-        <p class="text-gray-400 mb-8">Bitte PIN eingeben</p>
-        <%= form_with url: kiosk_root_path, method: :get do |f| %>
-          <%= hidden_field_tag :member_id, @selected_member.id %>
-          <%= f.password_field :pin,
-                             maxlength: 4,
-                             autofocus: true,
-                             inputmode: "numeric",
-                             pattern: "[0-9]{4}",
-                             class: "w-full text-center text-3xl tracking-widest bg-gray-800
-                      border border-gray-700 rounded-xl px-4 py-4 mb-4",
-                             placeholder: "····" %>
-          <%= f.submit "Weiter",
-                     class: "w-full bg-blue-600 hover:bg-blue-500 py-3 rounded-xl
-                      font-semibold cursor-pointer text-lg" %>
-        <% end %>
-        <%= link_to "Abbrechen", kiosk_root_path,
-                  class: "text-gray-500 text-sm mt-4 block" %>
-      </div>
-
     <% else %>
-      <%# Mitglied wählen %>
-      <div class="mb-8 text-center">
-        <%= link_to new_member_session_path, data: { turbo: false },
-              class: "bg-gray-800 hover:bg-gray-700 transition rounded-xl px-5 py-3
-                      text-gray-300 hover:text-white text-sm inline-flex items-center gap-2" do %>
-          🔑 Mitgliederbereich / Admin
-        <% end %>
-      </div>
-      <h1 class="text-3xl font-bold mb-2 text-center">🍺 Bierkasse</h1>
-      <p class="text-gray-400 text-center mb-8">Wer bist du?</p>
-      <div class="grid grid-cols-2 gap-4 sm:grid-cols-3">
-        <% @members.each do |member| %>
-          <%= link_to(kiosk_root_path(member_id: member.id),
-                    class: "bg-gray-800 hover:bg-gray-700 active:scale-95 transition
-                     rounded-2xl p-6 text-center") do %>
-            <p class="text-xl font-bold"><%= member.display_name %></p>
-            <p class="text-sm <%= member.balance >= 0 ? 'text-green-400' : 'text-red-400' %>">
-              <%= format("%.2f", member.balance) %> €
-            </p>
-          <% end %>
+      <div class="min-h-screen flex flex-col items-baseline">
+        <h1 class="text-3xl font-bold mb-2 text-center"><%= current_organization.name %></h1>
+        <p class="text-gray-400 text-center mb-8">Bitte PIN eingeben</p>
+
+        <%= form_with url: kiosk_root_path, method: :get do |f| %>
+          <%= f.password_field :pin,
+            maxlength: 4,
+            autofocus: true,
+            class: "w-full text-center text-3xl tracking-widest bg-gray-800
+                    border boder-gray-700 rounded-xl px-4 py-4 mb-4",
+            placeholder: "****" %>
+          <%= f.submit "Weiter",
+            class: "w-full bg-blue-600 hover:bg-blue-500 py-3 rounded-xl
+                    font-semibold cursor-pointer text-lg" %>
         <% end %>
       </div>
     <% end %>
