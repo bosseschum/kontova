@@ -38,21 +38,21 @@ class Kiosk::DrinksController < ApplicationController
     product_id = params[:product_id].to_s
     quantity = params[:quantity].to_i
     session[:cart][product_id] = (session[:cart][product_id] || 0) + quantity
-    redirect_to kiosk_root_path(member_id: params[:member_id], pin: params[:pin])
+    redirect_to kiosk_root_path(pin: params[:pin])
   end
 
   def remove_from_cart
     session[:cart] ||= {}
     session[:cart].delete(params[:product_id]).to_s
-    redirect_to kiosk_root_path(member_id: params[:member_id], pin: params[:pin])
+    redirect_to kiosk_root_path(pin: params[:pin])
   end
 
   def checkout
-    @member = current_organization.members.find(params[:member_id])
+    @member = current_organization.members.find(pin: params[:pin])
     cart    = session[:cart] || {}
 
     if cart.empty?
-      redirect_to kiosk_root_path(member_id: @member.id, pin: params[:pin]),
+      redirect_to kiosk_root_path(pin: params[:pin]),
                   alert: "Warenkorb ist leer" and return
     end
 
@@ -66,7 +66,7 @@ class Kiosk::DrinksController < ApplicationController
     end
 
     unless @member.can_purchase?(total)
-      redirect_to kiosk_root_path(member_id: @member.id, pin: params[:pin]),
+      redirect_to kiosk_root_path(pin: params[:pin]),
                   alert: "Saldo zu niedrig (Limit: -50€)" and return
     end
 
@@ -101,7 +101,7 @@ class Kiosk::DrinksController < ApplicationController
 
   def clear_cart
     session[:cart] = {}
-    redirect_to kiosk_root_path(member_id: params[:member_id], pin: params[:pin])
+    redirect_to kiosk_root_path(pin: params[:pin])
   end
 
   def create

@@ -49,7 +49,6 @@
           <% if product.has_crate? %>
             <div class="grid grid-cols-2 sm:grid-cols-2 gap-4">
               <%= form_tag add_to_cart_kiosk_drinks_path, method: :post do %>
-                <%= hidden_field_tag :member_id, @selected_member.id %>
                 <%= hidden_field_tag :pin, params[:pin] %>
                 <%= hidden_field_tag :product_id, product.id %>
                 <%= hidden_field_tag :quantity, 1 %>
@@ -61,7 +60,6 @@
                 </button>
               <% end %>
               <%= form_tag add_to_cart_kiosk_drinks_path, method: :post do %>
-                <%= hidden_field_tag :member_id, @selected_member.id %>
                 <%= hidden_field_tag :pin, params[:pin] %>
                 <%= hidden_field_tag :product_id, product.id %>
                 <%= hidden_field_tag :quantity, product.crate_size %>
@@ -76,7 +74,6 @@
             </div>
           <% else %>
             <%= form_tag add_to_cart_kiosk_drinks_path, method: :post do %>
-              <%= hidden_field_tag :member_id, @selected_member.id %>
               <%= hidden_field_tag :pin, params[:pin] %>
               <%= hidden_field_tag :product_id, product.id %>
               <%= hidden_field_tag :quantity, 1 %>
@@ -111,7 +108,6 @@
                     <%= format("%.2f", item_total / 100.0) %>€
                   </span>
                   <%= form_tag remove_from_cart_kiosk_drinks_path, method: :post do %>
-                    <%= hidden_field_tag :member_id, @selected_member.id %>
                     <%= hidden_field_tag :pin, params[:pin] %>
                     <%= hidden_field_tag :product_id, item[:product].id %>
                     <button type="submit" class="text-red-400 hover:text-red-300 text-sm">
@@ -150,7 +146,6 @@
 
           <div class="flex gap-3">
             <%= form_tag checkout_kiosk_drinks_path, method: :post do %>
-              <%= hidden_field_tag :member_id, @selected_member.id %>
               <%= hidden_field_tag :pin, params[:pin] %>
               <button type="submit"
                     class="flex-1 bg-emerald-600 hover:bg-emerald-500 px-6 py-4 rounded-xl
@@ -159,7 +154,6 @@
               </button>
             <% end %>
             <%= form_tag clear_cart_kiosk_drinks_path, method: :delete do %>
-              <%= hidden_field_tag :member_id, @selected_member.id %>
               <%= hidden_field_tag :pin, params[:pin] %>
               <button type="submit"
                     class="bg-gray-700 hover:bg-gray-600 px-6 py-4 rounded-xl
@@ -176,7 +170,8 @@
         <h1 class="text-3xl font-bold mb-2 text-center"><%= current_organization.name %></h1>
         <p class="text-gray-400 text-center mb-8">Bitte PIN eingeben</p>
 
-        <%= form_with url: kiosk_root_path, method: :get do |f| %>
+        <%= form_with url: kiosk_root_path, method: :get,
+          data: { turbo: false } do |f| %>
           <%= f.password_field :pin,
             maxlength: 4,
             autofocus: true,

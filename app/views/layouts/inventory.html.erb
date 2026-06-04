@@ -12,7 +12,7 @@
 
     <nav class="bg-gray-900 border-b border-gray-800 px-6 py-4 flex gap-6 items-center overflow-auto">
       <span class="font-bold text-lg text-emerald-400"><%= current_organization.name || "KONTOVA" %></span>
-      <%= link_to "🍺 Kiosk", kiosk_root_path, class: "text-gray-300 hover:text-white" %>
+      <%= link_to "Kiosk", kiosk_root_path, class: "text-gray-300 hover:text-white" %>
       <%= link_to "Dashboard", inventory_root_path, class: "text-gray-300 hover:text-white" %>
       <%= link_to "Produkte", inventory_products_path, class: "text-gray-300 hover:text-white" %>
       <%= link_to "Einkäufe", inventory_purchases_path, class: "text-gray-300 hover:text-white" %>
