@@ -48,7 +48,7 @@ class Kiosk::DrinksController < ApplicationController
   end
 
   def checkout
-    @member = current_organization.members.find(pin: params[:pin])
+    @member = current_organization.members.find_by!(pin: params[:pin])
     cart    = session[:cart] || {}
 
     if cart.empty?
