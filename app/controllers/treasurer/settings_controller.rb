@@ -1,5 +1,13 @@
 class Treasurer::SettingsController < Treasurer::BaseController
   def show
+    @settings = {
+      fee_standard_cents: Setting.get("fee_standard_cents", 2500, organization: current_organization).to_i,
+      fee_resident_cents: Setting.get("fee_resident_cents", 2500, organization: current_organization).to_i,
+      bank_name: Setting.get("bank_name", "", organization: current_organization),
+      bank_iban: Setting.get("bank_iban", "", organization: current_organization),
+      bank_bic: Setting.get("bank_bic", "", organization: current_organization),
+      invoice_date: Setting.get("invoice_date", 1, organization: current_organization)
+    }
   end
 
   def update
