@@ -75,7 +75,7 @@
         <div>
           <p class="text-gray-500 text-xs">Verwendungszweck</p>
           <p class="text-white text-sm" id="bank-reference">
-            Vereinskasse <%= @member.display_name %>
+            Bierrechnung <%= Date.current.month %>/<%= Date.current.year %> <%= @member.display_name %>
           </p>
         </div>
         <button onclick="copyToClipboard('bank-reference')"
