@@ -29,7 +29,7 @@
               Saldo: <%= format("%.2f", @selected_member.balance) %> €
             </p>
           </div>
-          <div class="mt-4">
+        <div class="mt-4">
             <%= link_to "💳 Jetzt bezahlen", kiosk_payment_path(@selected_member, pin: params[:pin]),
                       data: { turbo_frame: "_top" },
                       class: "bg-emerald-600 hover:bg-emerald-500 px-4 py-2

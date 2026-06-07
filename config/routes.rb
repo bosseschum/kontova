@@ -25,8 +25,8 @@ Rails.application.routes.draw do
           delete :clear_cart
         end
       end
+      resources :payments, only: [ :show ]
     end
-    resources :payments, only: [ :show ]
     resources :mixed_crates, only: [ :create ]
   end
 
