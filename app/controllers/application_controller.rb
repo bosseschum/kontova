@@ -49,7 +49,7 @@ class ApplicationController < ActionController::Base
     case membership.role
     when "treasurer" then treasurer_root_path
     when "inventory_manager" then inventory_root_path
-    else member_root_path
+    else member_area_root_path
     end
   end
 

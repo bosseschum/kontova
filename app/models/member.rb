@@ -35,11 +35,11 @@ class Member < ApplicationRecord
   end
 
   def treasurer?(organization)
-    admin? || role == "treasurer"
+    role_for(organization) == "treasurer"
   end
 
   def inventory_manager?(organization)
-    admin? || role == "inventory_manager"
+    role_for(organization) == "inventory_manager"
   end
 
   def member?(organization)
