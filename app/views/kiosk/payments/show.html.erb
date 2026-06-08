@@ -4,11 +4,11 @@
   <p class="text-gray-400 mb-2"><%= @member.display_name %></p>
   <% if @member.balance < 0 %>
     <p class="text-3xl font-bold mb-8 text-red-400">
-        <%= format("%.2f", @amount / 100.0).gsub(".", ",") %> € offen
+      <%= format("%.2f", @amount / 100.0).gsub(".", ",") %> € offen
     </p>
   <% else %>
     <p class="text-3xl font-bold mb-8 text-green-400">
-        Keine Außenstände
+      Keine Außenstände
     </p>
   <% end %>
 
@@ -34,22 +34,46 @@
       </p>
 
       <div class="bg-gray-900 rounded-xl p-5 space-y-3">
-        <% [
-          ["Empfänger",        "bank-name",      @bank_name],
-          ["IBAN",             "bank-iban",       @bank_iban],
-          ["Betrag",           "bank-amount",     "#{format("%.2f", @amount / 100.0).gsub(".", ",")} €"],
-          ["Verwendungszweck", "bank-reference",  @reference]
-        ].each do |label, id, value| %>
-          <div class="flex justify-between items-center">
-            <div>
-              <p class="text-gray-500 text-xs"><%= label %></p>
-              <p class="text-white text-sm font-mono" id="<%= id %>"><%= value %></p>
+        <% if @member.balance < 0 %>
+
+          <% [
+            ["Empfänger",        "bank-name",      @bank_name],
+            ["IBAN",             "bank-iban",       @bank_iban],
+            ["Betrag",           "bank-amount",     "#{format("%.2f", @amount / 100.0).gsub(".", ",")} €"],
+            ["Verwendungszweck", "bank-reference",  @reference]
+            ].each do |label, id, value| %>
+            <div class="flex justify-between items-center">
+              <div>
+                <p class="text-gray-500 text-xs"><%= label %></p>
+                <p class="text-white text-sm font-mono" id="<%= id %>"><%= value %></p>
+              </div>
+              <button onclick="copyToClipboard('<%= id %>')"
+                class="text-blue-400 hover:text-blue-300 text-sm px-3 py-1 bg-gray-800 rounded-lg">
+                Kopieren
+              </button>
             </div>
-            <button onclick="copyToClipboard('<%= id %>')"
-              class="text-blue-400 hover:text-blue-300 text-sm px-3 py-1 bg-gray-800 rounded-lg">
-              Kopieren
-            </button>
-          </div>
+          <% end %>
+
+        <% else %>
+
+          <% [
+                ["Empfänger",        "bank-name",      @bank_name],
+                ["IBAN",             "bank-iban",       @bank_iban],
+                ["Betrag",           "bank-amount",     "Keine Außenstände"],
+                ["Verwendungszweck", "bank-reference",  @reference]
+                ].each do |label, id, value| %>
+            <div class="flex justify-between items-center">
+              <div>
+                <p class="text-gray-500 text-xs"><%= label %></p>
+                <p class="text-white text-sm font-mono" id="<%= id %>"><%= value %></p>
+              </div>
+              <button onclick="copyToClipboard('<%= id %>')"
+                    class="text-blue-400 hover:text-blue-300 text-sm px-3 py-1 bg-gray-800 rounded-lg">
+                Kopieren
+              </button>
+            </div>
+          <% end %>
+
         <% end %>
       </div>
     </div>
@@ -109,16 +133,16 @@
 </div>
 
 <script nonce="<%= request.content_security_policy_nonce %>">
-function copyToClipboard(elementId) {
+  function copyToClipboard(elementId) {
   const text = document.getElementById(elementId).innerText;
   navigator.clipboard.writeText(text).then(() => {
-    const btn = event.target;
-    btn.innerText = "✓ Kopiert";
-    btn.classList.add("text-green-400");
-    setTimeout(() => {
-      btn.innerText = "Kopieren";
-      btn.classList.remove("text-green-400");
-    }, 2000);
+  const btn = event.target;
+  btn.innerText = "✓ Kopiert";
+  btn.classList.add("text-green-400");
+  setTimeout(() => {
+  btn.innerText = "Kopieren";
+  btn.classList.remove("text-green-400");
+  }, 2000);
   });
-}
+  }
 </script>
