@@ -33,11 +33,15 @@ class Member < ApplicationRecord
   end
 
   def treasurer?(organization)
-    role_for(organization) == "treasurer"
+    return true if admin?
+    return false unless organization
+    organization_memberships.find_by(organization: organization)&.treasurer?
   end
 
   def inventory_manager?(organization)
-    role_for(organization) == "inventory_manager"
+    return true if admin?
+    return false unless organization
+    organization_memberships.find_by(organization: organization)&.inventory_manager?
   end
 
   def member?(organization)
