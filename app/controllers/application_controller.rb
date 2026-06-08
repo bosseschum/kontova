@@ -37,14 +37,19 @@ class ApplicationController < ActionController::Base
   end
 
   def after_sign_in_path_for(resource)
-    if resource.super_admin?
-      super_admin_root_path
-    elsif resource.treasurer?
-      treasurer_root_path
-    elsif resource.inventory_manager?
-      inventory_root_path
-    else
-      member_area_root_path
+    return super_admin_root_path if resource.super_admin?
+
+    membership = resource.organizations_memberships
+      .joins(:organization)
+      .where(organizations: { active: true })
+      .first
+
+    return root_path unless membership
+
+    case membership.role
+    when "treasurer" then treasurer_root_path
+    when "inventory_manager" then inventory_root_path
+    else member_root_path
     end
   end
 

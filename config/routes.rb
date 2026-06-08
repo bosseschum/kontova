@@ -10,7 +10,9 @@ Rails.application.routes.draw do
   # Super Admin
   namespace :super_admin do
     root "dashboard#index"
-    resources :organizations
+    resources :organizations do
+      resources :memberships, only: [ :new, :create, :destroy ]
+    end
   end
 
   # Kiosk - no login

@@ -6,12 +6,11 @@ class Kiosk::DrinksController < ApplicationController
     @products = current_organization.products.active.order(:name)
 
     if params[:pin].present?
-      @selected_member = current_organization.members.find_by(pin: params[:pin])
-      if @selected_member
-        @pin_verified = true
-      else
-        flash.now[:alert] = "Unbekannte PIN"
-      end
+      membership = current_organization.organization_memberships
+      @selected_member = membership&.member
+      @selected_membership = membership
+      @pin_verified = @selected_member.present?
+      flash.now[:alert] = "Unbekannte PIN" unless @pin_verified
     end
 
     if @selected_member && @pin_verified

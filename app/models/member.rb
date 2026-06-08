@@ -10,7 +10,8 @@ class Member < ApplicationRecord
 
   enum :role, { member: 0, treasurer: 1, inventory_manager: 2 }
 
-  belongs_to :organization, optional: true
+  has_many :organizations, through: :organization_memberships
+  has_many :organization_memberships, dependent: :destroy
   has_many :transactions, dependent: :nullify
   has_many :purchases, dependent: :nullify
   has_many :inventory_counts, dependent: :nullify
@@ -33,12 +34,28 @@ class Member < ApplicationRecord
     lives_on_site? ? Setting.get("fee_resident_cents", 5000).to_i : Setting.get("fee_standard_cents", 2500).to_i
   end
 
-  def treasurer?
+  def treasurer?(organization)
     admin? || role == "treasurer"
   end
 
-  def inventory_manager?
+  def inventory_manager?(organization)
     admin? || role == "inventory_manager"
+  end
+
+  def member?(organization)
+    role_for(organization) == "member"
+  end
+
+  def membership_for(organization)
+    organization_memberships.find_by(organization: organization)
+  end
+
+  def role_for(organization)
+    membership_for(organization)&.role
+  end
+
+  def pin_for(organization)
+    membership_for(organization)&.pin
   end
 
   private
