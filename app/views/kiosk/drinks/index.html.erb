@@ -20,11 +20,6 @@
           <div>
             <p class="text-gray-400 text-sm">Eingeloggt als</p>
             <p class="text-2xl font-bold"><%= @selected_member.display_name %></p>
-            <% if @selected_membership.role == "treasurer" %>
-              <p class="text-sm font-semibold text-gray-400">(Hauptkassenwart)</p>
-            <% elsif @selected_membership.role == "inventory_manager" %>
-              <p class="text-sm font-semibold text-gray-400">(Bierkassenwart)</p>
-            <% end %>
             <p class="text-lg <%= @selected_member.balance >= 0 ? 'text-green-400' : 'text-red-400' %>">
               Saldo: <%= format("%.2f", @selected_member.balance) %> €
             </p>
