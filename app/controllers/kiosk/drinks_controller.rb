@@ -6,7 +6,7 @@ class Kiosk::DrinksController < ApplicationController
     @products = current_organization.products.active.order(:name)
 
     if params[:pin].present?
-      membership = current_organization.organization_memberships
+      membership = current_organization.organization_memberships.find_by!(pin: params[:pin])
       @selected_member = membership&.member
       @selected_membership = membership
       @pin_verified = @selected_member.present?
