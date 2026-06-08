@@ -1,45 +1,42 @@
 class Treasurer::RequestsController < Treasurer::BaseController
   def index
-    @requests = Request.joins(:member)
-      .where(members: { organization: current_organization })
+    @requests = Request.joins(member: :organization_memberships)
+      .where(organization_memberships: { organization: current_organization })
       .includes(:member)
       .order(created_at: :desc)
   end
 
   def show
-    @request = Request.joins(:member)
-      .where(members: { organization: current_organization })
-      .find(params[:id])
+    @request = find_request
   end
 
   def approve
-    @request = Request.joins(:member)
-      .where(members: { organization: current_organization })
-      .find(params[:id])
-
+    @request = find_request
     kind = @request.expense? ? :expense_reimbursement : :deposit
-
     Transaction.create!(
-      member:       @request.member,
+      member: @request.member,
+      organization: current_organization,
       amount_cents: @request.amount_cents,
-      kind:         kind,
-      note:         "Erstattung: #{@request.description}"
+      kind: kind,
+      note: "Erstattung: #{@request.description}"
     )
-
     @request.update!(status: :approved)
     MemberMailer.request_approved(@request).deliver_later
-
     redirect_to treasurer_requests_path, notice: "Antrag genehmigt"
   end
 
   def reject
-    @request = Request.joins(:member)
-      .where(members: { organization: current_organization })
-      .find(params[:id])
-
+    @request = find_request
     @request.update!(status: :rejected, note: params[:note])
     MemberMailer.request_rejected(@request).deliver_later
-
     redirect_to treasurer_requests_path, notice: "Antrag abgelehnt"
+  end
+
+  private
+
+  def find_request
+    Request.joins(member: :organization_memberships)
+      .where(organization_memberships: { organization: current_organization })
+      .find(params[:id])
   end
 end

@@ -1,7 +1,7 @@
 class Treasurer::TransactionsController < Treasurer::BaseController
   def index
-    @transactions = Transaction.joins(:member)
-      .where(members: { organization: current_organization })
+    @transactions = Transaction.joins(member: :organization_memberships)
+      .where(organization_memberships: { organization: current_organization })
       .includes(:member, :product)
       .order(created_at: :desc)
       .limit(100)
@@ -14,7 +14,7 @@ class Treasurer::TransactionsController < Treasurer::BaseController
 
   def new
     @transaction = Transaction.new
-    @members     = current_organization.members.order(:display_name)
+    @members = current_organization.members.order(:display_name)
   end
 
   def create
@@ -29,17 +29,12 @@ class Treasurer::TransactionsController < Treasurer::BaseController
   end
 
   def edit
-    @transaction = Transaction.joins(:member)
-      .where(members: { organization: current_organization })
-      .find(params[:id])
+    @transaction = find_transaction
     @members = current_organization.members.order(:display_name)
   end
 
   def update
-    @transaction = Transaction.joins(:member)
-      .where(members: { organization: current_organization })
-      .find(params[:id])
-
+    @transaction = find_transaction
     if @transaction.update(transaction_params)
       redirect_to treasurer_transactions_path, notice: "Transaktion aktualisiert"
     else
@@ -49,18 +44,19 @@ class Treasurer::TransactionsController < Treasurer::BaseController
   end
 
   def destroy
-    @transaction = Transaction.joins(:member)
-      .where(members: { organization: current_organization })
-      .find(params[:id])
-    @transaction.destroy
+    find_transaction.destroy
     redirect_to treasurer_transactions_path, notice: "Transaktion gelöscht"
   end
 
   private
 
+  def find_transaction
+    Transaction.joins(member: :organization_memberships)
+      .where(organization_memberships: { organization: current_organization })
+      .find(params[:id])
+  end
+
   def transaction_params
-    params.require(:transaction).permit(
-      :member_id, :amount_cents, :kind, :note
-    )
+    params.require(:transaction).permit(:member_id, :amount_cents, :kind, :note)
   end
 end
