@@ -8,8 +8,6 @@ class Member < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
 
-  enum :role, { member: 0, treasurer: 1, inventory_manager: 2 }
-
   has_many :organizations, through: :organization_memberships
   has_many :organization_memberships, dependent: :destroy
   has_many :transactions, dependent: :nullify
