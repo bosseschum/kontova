@@ -47,7 +47,8 @@ class Kiosk::DrinksController < ApplicationController
   end
 
   def checkout
-    @member = current_organization.members.find_by!(pin: params[:pin])
+    membership = current_organization.organization_memberships.find_by!(pin: params[:pin])
+    @member = membership.member
     cart    = session[:cart] || {}
 
     if cart.empty?
@@ -75,6 +76,7 @@ class Kiosk::DrinksController < ApplicationController
       product = current_organization.products.find(product_id)
       Transaction.create!(
         member: @member,
+        organization: current_organization,
         product: product,
         amount_cents: -(product.price_cents * quantity),
         kind: :drink_purchase,
@@ -104,7 +106,8 @@ class Kiosk::DrinksController < ApplicationController
   end
 
   def create
-    @member = current_organization.members.find(params[:member_id])
+    membership = current_organization.organization_memberships.find(params[:member_id])
+    @member = membership.member
     @product = current_organization.products.find(params[:product_id])
     quantity = (params[:quantity] || 1).to_i
     amount_cents = if quantity > 1 && @product.has_crate?

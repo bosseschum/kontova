@@ -39,7 +39,7 @@ class ApplicationController < ActionController::Base
   def after_sign_in_path_for(resource)
     return super_admin_root_path if resource.super_admin?
 
-    membership = resource.organizations_memberships
+    membership = resource.organization_memberships
       .joins(:organization)
       .where(organizations: { active: true })
       .first

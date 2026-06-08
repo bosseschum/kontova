@@ -1,5 +1,6 @@
 class Organization < ApplicationRecord
-  has_many :members
+  has_many :organization_memberships
+  has_many :members, through: :organization_memberships
   has_many :products
   has_many :transactions, through: :members
   has_many :purchases
