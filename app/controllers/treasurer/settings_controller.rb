@@ -6,7 +6,10 @@ class Treasurer::SettingsController < Treasurer::BaseController
       bank_name: Setting.get("bank_name", "", organization: current_organization),
       bank_iban: Setting.get("bank_iban", "", organization: current_organization),
       bank_bic: Setting.get("bank_bic", "", organization: current_organization),
-      invoice_date: Setting.get("invoice_date", 1, organization: current_organization)
+      invoice_date: Setting.get("invoice_date", 1, organization: current_organization),
+      payment_reference: Setting.get("payment_reference", "Bierrechnung {monat}/{jahr} {name}", organization: current_organization),
+      payment_method_paypal: Setting.get("payment_method_paypal", "false", organization: current_organization),
+      paypal_me_username: Setting.get("paypal_me_username", "", organization: current_organization)
     }
   end
 

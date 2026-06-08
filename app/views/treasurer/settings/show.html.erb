@@ -23,10 +23,10 @@
       <p class="text-gray-500 text-xs mt-1">= <%= format("%.2f", @settings[:fee_resident_cents] / 100.0) %> €</p>
     </div>
 
-    <h2 class="text-lg font-semibold mb-4 text-gray-300">Bankverbindung (QR-Code)</h2>
+    <h2 class="text-lg font-semibold mb-4 text-gray-300">Bankverbindung</h2>
 
     <div class="mb-4">
-      <%= label_tag "settings[bank_name]", "Vereinsname",
+      <%= label_tag "settings[bank_name]", "Vereinsname / Empfänger",
             class: "block text-gray-400 text-sm mb-1" %>
       <%= text_field_tag "settings[bank_name]",
             @settings[:bank_name],
@@ -42,13 +42,51 @@
             class: "w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2" %>
     </div>
 
-    <div class="mb-6">
+    <div class="mb-4">
       <%= label_tag "settings[bank_bic]", "BIC",
             class: "block text-gray-400 text-sm mb-1" %>
       <%= text_field_tag "settings[bank_bic]",
             @settings[:bank_bic],
             placeholder: "XXXXXXXX",
             class: "w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2" %>
+    </div>
+
+    <div class="mb-6">
+      <%= label_tag "settings[payment_reference]", "Verwendungszweck",
+            class: "block text-gray-400 text-sm mb-1" %>
+      <%= text_field_tag "settings[payment_reference]",
+            @settings[:payment_reference],
+            placeholder: "Bierrechnung {monat}/{jahr} {name}",
+            class: "w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2" %>
+      <p class="text-gray-500 text-xs mt-1">
+        Platzhalter: <code class="text-gray-400">{name}</code>,
+        <code class="text-gray-400">{monat}</code>,
+        <code class="text-gray-400">{jahr}</code>
+      </p>
+    </div>
+
+    <h2 class="text-lg font-semibold mb-4 text-gray-300">PayPal</h2>
+
+    <div class="mb-4 flex items-center gap-3">
+      <%= hidden_field_tag "settings[payment_method_paypal]", "false" %>
+      <%= check_box_tag "settings[payment_method_paypal]",
+            "true",
+            @settings[:payment_method_paypal] == "true",
+            class: "w-4 h-4 accent-blue-500" %>
+      <%= label_tag "settings[payment_method_paypal]", "PayPal als Zahlungsmethode anbieten",
+            class: "text-gray-300 text-sm" %>
+    </div>
+
+    <div class="mb-6">
+      <%= label_tag "settings[paypal_me_username]", "PayPal.me-Benutzername",
+            class: "block text-gray-400 text-sm mb-1" %>
+      <%= text_field_tag "settings[paypal_me_username]",
+            @settings[:paypal_me_username],
+            placeholder: "vereinsname",
+            class: "w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2" %>
+      <p class="text-gray-500 text-xs mt-1">
+        Ergibt: <span class="text-gray-400">paypal.me/<%= @settings[:paypal_me_username].presence || "vereinsname" %></span>
+      </p>
     </div>
 
     <h2 class="text-lg font-semibold mb-4 text-gray-300">E-Mail</h2>
