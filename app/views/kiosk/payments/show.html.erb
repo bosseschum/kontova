@@ -59,14 +59,18 @@
           <% [
                 ["Empfänger",        "bank-name",      @bank_name],
                 ["IBAN",             "bank-iban",       @bank_iban],
-                ["Betrag",           "bank-amount",     "Keine Außenstände"],
-                ["Verwendungszweck", "bank-reference",  @reference]
+                ["Betrag",           "bank-amount",     ""],
+                ["Verwendungszweck", "bank-reference",  "Spende #{@member.display_name}"]
                 ].each do |label, id, value| %>
             <div class="flex justify-between items-center">
               <div>
                 <p class="text-gray-500 text-xs"><%= label %></p>
                 <p class="text-white text-sm font-mono" id="<%= id %>"><%= value %></p>
               </div>
+              <button onclick="copyToClipboard('<%= id %>')"
+                    class="text-blue-400 hover:text-blue-300 text-sm px-3 py-1 bg-gray-800 rounded-lg">
+                Kopieren
+              </button>
             </div>
           <% end %>
 
