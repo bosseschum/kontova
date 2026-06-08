@@ -10,7 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_05_21_113347) do
+ActiveRecord::Schema[8.1].define(version: 2026_06_08_153915) do
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "pg_catalog.plpgsql"
+
   create_table "active_storage_attachments", force: :cascade do |t|
     t.bigint "blob_id", null: false
     t.datetime "created_at", null: false
@@ -59,18 +62,12 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_21_113347) do
     t.string "display_name", null: false
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
-    t.boolean "lives_on_site"
-    t.integer "organization_id"
-    t.boolean "pays_fee"
-    t.string "pin"
     t.datetime "remember_created_at"
     t.datetime "reset_password_sent_at"
     t.string "reset_password_token"
-    t.integer "role", default: 0, null: false
     t.boolean "super_admin"
     t.datetime "updated_at", null: false
     t.index ["email"], name: "index_members_on_email", unique: true
-    t.index ["organization_id"], name: "index_members_on_organization_id"
     t.index ["reset_password_token"], name: "index_members_on_reset_password_token", unique: true
   end
 
@@ -90,6 +87,20 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_21_113347) do
     t.string "name"
     t.integer "price_cents"
     t.datetime "updated_at", null: false
+  end
+
+  create_table "organization_memberships", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.boolean "lives_on_site", default: false, null: false
+    t.bigint "member_id", null: false
+    t.bigint "organization_id", null: false
+    t.boolean "pays_fee", default: true, null: false
+    t.string "pin"
+    t.integer "role", default: 0, null: false
+    t.datetime "updated_at", null: false
+    t.index ["member_id", "organization_id"], name: "idx_on_member_id_organization_id_f36c6f7100", unique: true
+    t.index ["member_id"], name: "index_organization_memberships_on_member_id"
+    t.index ["organization_id"], name: "index_organization_memberships_on_organization_id"
   end
 
   create_table "organizations", force: :cascade do |t|
@@ -168,9 +179,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_21_113347) do
   add_foreign_key "inventory_counts", "members"
   add_foreign_key "inventory_counts", "organizations"
   add_foreign_key "inventory_counts", "products"
-  add_foreign_key "members", "organizations"
   add_foreign_key "mixed_crate_items", "mixed_crates"
   add_foreign_key "mixed_crate_items", "products"
+  add_foreign_key "organization_memberships", "members"
+  add_foreign_key "organization_memberships", "organizations"
   add_foreign_key "products", "organizations"
   add_foreign_key "purchases", "members"
   add_foreign_key "purchases", "organizations"
