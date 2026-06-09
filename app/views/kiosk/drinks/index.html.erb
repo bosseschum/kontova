@@ -139,9 +139,9 @@
           <% end %>
 
           <div class="flex items-center gap-3 mb-4 p-3 bg-gray-800 rounded-xl">
-            <input type="checkbox" id="sponsored" name="sponsored" value="1" class="w-5 h-5 rounded">
-            <label for="sponsored" class="text-gray-300">Gesponsert - nicht anrechnen</label>
-            <%= form_tag checkout_kiosk_drinks_path, method: :post do %>
+            <%= form_tag checkout_kiosk_drinks_path,
+            method: :post,
+            class: "flex items-center gap-3 flex-1" do %>
               <%= hidden_field_tag :pin, params[:pin] %>
               <%= check_box_tag :sponsored, "1", false, class: "w-5 h-5 rounded", id: "sponsored" %>
               <label for="sponsored" class="text-gray-300 ml-2">Gesponsert - nicht anrechnen</label>
