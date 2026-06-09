@@ -51,7 +51,7 @@ Rails.application.routes.draw do
     root "dashboard#index"
     resources :products
     resources :purchases, only: [ :index, :new, :create ]
-    resources :inventory_counts, only: [ :index, :new, :create ]
+    resources :inventory_counts, only: [ :index, :new, :create, :destroy ]
     resources :mixed_crates
   end
 

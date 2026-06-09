@@ -21,6 +21,12 @@ class Inventory::InventoryCountsController < Inventory::BaseController
     end
   end
 
+  def destroy
+    @inventory_count = current_organization.inventory_counts.find(params[:id])
+    @inventory_count.destroy
+
+    redirect_to inventory_inventory_counts_path, notice: "Inventur glöscht"
+  end
   private
 
   def count_params
