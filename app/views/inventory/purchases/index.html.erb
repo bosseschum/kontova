@@ -27,10 +27,18 @@
           <td class="px-4 py-3 font-medium"><%= purchase.product.name %></td>
           <td class="px-4 py-3 text-right"><%= purchase.quantity %></td>
           <td class="px-4 py-3 text-right font-mono">
-            <%= format("%.2f", purchase.price_per_unit_cents / 100.0) %> €
+            <% if purchase.price_per_unit_cents.present? %>
+              <%= format("%.2f", purchase.price_per_unit_cents / 100.0) %> €
+            <% else %>
+              <span class="text-gray-500">-</span>
+            <% end %>
           </td>
           <td class="px-4 py-3 text-right font-mono">
-            <%= format("%.2f", purchase.quantity * purchase.price_per_unit_cents / 100.0) %> €
+            <% if purchase.price_per_unit_cents.present? %>
+              <%= format("%.2f", purchase.quantity * purchase.price_per_unit_cents / 100.0) %> €
+            <% else %>
+              <span class="text-gray-500">-</span>
+            <% end %>
           </td>
           <td class="px-4 py-3 text-gray-400 text-sm"><%= purchase.note %></td>
           <td class="px-4 py-3 text-gray-400 text-sm"><%= purchase.member&.display_name || "Gelöschtes Mitglied" %></td>
