@@ -34,7 +34,7 @@ class Inventory::PurchasesController < Inventory::BaseController
   end
 
   def destroy
-    @purchase = current_organization.purchases.find(params[:íd])
+    @purchase = current_organization.purchases.find(params[:id])
     @purchase.destroy
 
     redirect_to inventory_purchases_path, notice: "Einkauf gelöscht"
