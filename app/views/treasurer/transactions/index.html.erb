@@ -6,7 +6,7 @@
       Transaktionen
     <% end %>
   </h1>
-  <div class="flex gap-3 mb-4">
+  <div class="flex gap-3 mb-4 mt-4">
   <% if @member %>
     <%= link_to "Alle Transaktionen", treasurer_transactions_path,
       class: "px-3 py-1 rounded-lg text-sm #{params[:sponsored].blank? ? 'bg-blue-600' : 'bg-gray-700'}" %>
