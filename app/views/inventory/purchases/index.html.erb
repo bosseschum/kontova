@@ -43,6 +43,9 @@
           <td class="px-4 py-3 text-gray-400 text-sm"><%= purchase.note %></td>
           <td class="px-4 py-3 text-gray-400 text-sm"><%= purchase.member&.display_name || "Gelöschtes Mitglied" %></td>
           <td class="px-4 py-3 text-right flex justify-end gap-3">
+            <%= link_to "Bearbeiten",
+                  edit_inventory_purchase_path(purchase),
+                  class: "text-blue-400 hover:text-blue-300 text-sm" %>
             <%= button_to "Löschen",
                   inventory_purchase_path(purchase),
                   method: :delete,

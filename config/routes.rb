@@ -50,7 +50,7 @@ Rails.application.routes.draw do
   namespace :inventory do
     root "dashboard#index"
     resources :products
-    resources :purchases, only: [ :index, :new, :create, :destroy ]
+    resources :purchases, only: [ :index, :new, :create, :edit, :update, :destroy ]
     resources :inventory_counts, only: [ :index, :new, :create, :destroy ]
     resources :mixed_crates
   end

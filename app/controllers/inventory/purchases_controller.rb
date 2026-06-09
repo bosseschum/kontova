@@ -17,6 +17,22 @@ class Inventory::PurchasesController < Inventory::BaseController
     end
   end
 
+  def edit
+    @purchase = current_organization.purchases.find(params[:id])
+    @products = current_organization.proucts.active.order(:name)
+  end
+
+  def update
+    @purchase = current_organization.purchases.find(params[:id])
+
+    if @purchase.update(purchase_params)
+      redirect_to inventory_purchases_path, notice: "Einkauf aktualisiert"
+    else
+      @products = current_organization.products.active.order(:name)
+      render :edit, status: :unprocessable_entity
+    end
+  end
+
   def destroy
     @purchase = current_organization.purchases.find(params[:íd])
     @purchase.destroy
