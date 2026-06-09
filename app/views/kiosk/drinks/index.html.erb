@@ -60,7 +60,7 @@
                 <button type="submit" class="bg-gray-600 hover:bg-gray-500 active:scale-95
                 transition rounded-2xl p-5 text-center w-full h-28
                 flex flex-col items-center justify-center gap-1">
-                  <p class="text-base font-bold leading-tight">📦 <%= product.name %></p>
+                  <p class="text-base font-bold leading-tight"><%= product.name %></p>
                   <p class="text-gray-400 text-xs"><%= product.crate_size %> Stk.</p>
                   <p class="text-gray-300 text-sm"><%= format("%.2f", product.crate_price) %> €</p>
                 </button>
