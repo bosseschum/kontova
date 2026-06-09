@@ -172,9 +172,11 @@
           data: { turbo: false } do |f| %>
           <%= f.password_field :pin,
             maxlength: 4,
+            inputmode: "numeric",
+            pattern: "[0-9]*",
             autofocus: true,
             class: "w-full text-center text-3xl tracking-widest bg-gray-800
-                    border boder-gray-700 rounded-xl px-4 py-4 mb-4",
+                    border border-gray-700 rounded-xl px-4 py-4 mb-4",
             placeholder: "****" %>
           <%= f.submit "Weiter",
             class: "w-full bg-blue-600 hover:bg-blue-500 py-3 rounded-xl
