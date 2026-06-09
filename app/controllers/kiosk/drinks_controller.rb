@@ -50,6 +50,7 @@ class Kiosk::DrinksController < ApplicationController
     membership = current_organization.organization_memberships.find_by!(pin: params[:pin])
     @member = membership.member
     cart    = session[:cart] || {}
+    sponsored = params[:sponsored] == "1"
 
     if cart.empty?
       redirect_to kiosk_root_path(pin: params[:pin]),
@@ -74,14 +75,18 @@ class Kiosk::DrinksController < ApplicationController
 
     cart.each do |product_id, quantity|
       product = current_organization.products.find(product_id)
+      actual_amount = product.price_cents * quantity
+
       Transaction.create!(
         member: @member,
         organization: current_organization,
         product: product,
-        amount_cents: -(product.price_cents * quantity),
+        amount_cents: sponsored ? 0 : -actual_amount,
+        original_amount_cents: actual_amount,
         kind: :drink_purchase,
         quantity: quantity,
-        note: "#{quantity} x #{product.name}#{is_mixed_crate ? " (Mischkasten)" : ""}"
+        sponsored: sponsored,
+        note: "#{quantity} x #{product.name}#{is_mixed_crate ? " (Mischkasten)" : ""}#{sponsored ? " (nicht gebucht)" : ""}"
       )
     end
 
@@ -97,7 +102,7 @@ class Kiosk::DrinksController < ApplicationController
 
     session[:cart] = {}
     redirect_to kiosk_root_path,
-                notice: "Einkauf abgeschlossen - #{format("%.2f", total / 100.0)}€ gebucht!"
+                notice: "Einkauf abgeschlossen - #{format("%.2f", total / 100.0)}€ gebucht!#{sponsored ? " (nicht gebucht)" : ""}"
   end
 
   def clear_cart

@@ -6,10 +6,10 @@ class Treasurer::TransactionsController < Treasurer::BaseController
       .order(created_at: :desc)
       .limit(100)
 
-    if params[:member_id].present?
-      @transactions = @transactions.where(member_id: params[:member_id])
-      @member = current_organization.members.find(params[:member_id])
-    end
+    @transactions = @transactions.where(member_id: params[:member_id]) if params[:member_id].present?
+    @transactions = @transactions.sponsored if params[:sponsored] == "1"
+
+    @member = current_organization.members.find(params[:member_id]) if params[:member_id].present?
   end
 
   def new

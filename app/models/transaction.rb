@@ -3,6 +3,9 @@ class Transaction < ApplicationRecord
   belongs_to :member
   belongs_to :product, optional: true
 
+  scope :sponsored, -> { where(sponsored: true) }
+  scope :not_sponsored, -> { where(sponsored: false).or(where(sponsored: nil)) }
+
   enum :kind, {
     drink_purchase: 0,
     deposit: 1,

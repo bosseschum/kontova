@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_06_08_153915) do
+ActiveRecord::Schema[8.1].define(version: 2026_06_09_112336) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -166,8 +166,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_08_153915) do
     t.integer "member_id", null: false
     t.string "note"
     t.integer "organization_id"
+    t.integer "original_amount_cents"
     t.integer "product_id"
     t.integer "quantity", default: 1
+    t.boolean "sponsored"
     t.datetime "updated_at", null: false
     t.index ["member_id"], name: "index_transactions_on_member_id"
     t.index ["organization_id"], name: "index_transactions_on_organization_id"

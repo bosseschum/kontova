@@ -16,7 +16,7 @@ class Member < ApplicationRecord
   has_many :requests, dependent: :nullify
 
   def balance_cents
-    transactions.sum(:amount_cents)
+    transactions.not_sponsored.sum(:amount_cents)
   end
 
   def balance
