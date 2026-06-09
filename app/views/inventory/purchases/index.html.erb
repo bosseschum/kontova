@@ -15,6 +15,7 @@
         <th class="text-right px-4 py-3">Gesamt</th>
         <th class="text-left px-4 py-3">Notiz</th>
         <th class="text-left px-4 py-3">Erfasst von</th>
+        <th class="text-left px-4 py-3">Aktionen</th>
       </tr>
     </thead>
     <tbody>
@@ -33,6 +34,13 @@
           </td>
           <td class="px-4 py-3 text-gray-400 text-sm"><%= purchase.note %></td>
           <td class="px-4 py-3 text-gray-400 text-sm"><%= purchase.member&.display_name || "Gelöschtes Mitglied" %></td>
+          <td class="px-4 py-3 text-right flex justify-end gap-3">
+            <%= button_to "Löschen",
+                  inventory_purchase_path(purchase),
+                  method: :delete,
+                  data: { turbo_confirm: "Einkauf wirklich löschen?" },
+                  class: "text-red-400 hover:text-red-300 text-sm bg-transparent border-0 cursor-pointer p-0" %>
+          </td>
         </tr>
       <% end %>
     </tbody>
