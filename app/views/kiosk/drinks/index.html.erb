@@ -213,7 +213,7 @@
 
         <%= form_with url: kiosk_root_path, method: :get,
           data: { turbo: false } do |f| %>
-          <%= f.password_field :pin,
+          <%= f.telephone_field :pin,
             maxlength: 4,
             inputmode: "numeric",
             pattern: "[0-9]*",
