@@ -171,30 +171,58 @@
               noch <%= CRATE_SIZE - @total_quantity %> bis zum Kastenpreis
             </p>
           <% end %>
-
-          <div class="flex items-center gap-3 mb-4 p-3 bg-gray-800 rounded-xl">
+          <div class="mt-6">
             <%= form_tag checkout_kiosk_drinks_path,
-            method: :post,
-            class: "flex items-center gap-3 flex-1" do %>
+                method: :post do %>
               <%= hidden_field_tag :pin, params[:pin] %>
-              <%= check_box_tag :sponsored, "1", false, class: "w-5 h-5 rounded", id: "sponsored" %>
-              <label for="sponsored" class="text-gray-300 ml-2">Veranstaltung/Couleur</label>
-              <button type="submit"
-                    class="flex-1 bg-emerald-600 hover:bg-emerald-500 px-6 py-4 rounded-xl
-              font-semibold active:scale-95 transition">
-                ✓ Bezahlen
-              </button>
+              <div class="mb-4 p-4 bg-gray-800 rounded-xl">
+                <label for="sponsored" class="flex items-center gap-3 cursor-pointer">
+                  <%= check_box_tag :sponsored,
+                      "1",
+                      false,
+                      class: "w-6 h-6 rounded",
+                      id: "sponsored" %>
+                  <span class="text-gray-300 text-lg">
+                    Veranstaltung / Couleur
+                  </span>
+                </label>
+              </div>
+              <div class="flex gap-3">
+                <button
+                  type="submit"
+                  class="
+                    flex-1
+                    bg-emerald-600
+                    hover:bg-emerald-500
+                    py-5
+                    rounded-xl
+                    text-xl
+                    font-bold
+                    active:scale-95
+                    transition
+                  ">
+                  ✓ Bezahlen
+                </button>
+              </div>
             <% end %>
             <%= form_tag clear_cart_kiosk_drinks_path, method: :delete do %>
               <%= hidden_field_tag :pin, params[:pin] %>
-              <button type="submit"
-                    class="bg-gray-700 hover:bg-gray-600 px-6 py-4 rounded-xl
-              font-semibold active:scale-95 transition">
-                🗑 Leeren
+              <button
+                type="submit"
+                class="
+                  w-20
+                  bg-gray-800
+                  hover:bg-gray-700
+                  rounded-xl
+                  text-2xl
+                  active:scale-95
+                  transition
+                ">
+                🗑
               </button>
             <% end %>
+              </div>
           </div>
-        </div>
       <% end %>
 
     <% else %>
