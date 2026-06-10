@@ -158,16 +158,9 @@
             <span class="text-lg font-semibold">Gesamt</span>
             <span class="text-2xl font-bold font-mono">
               <% if @is_mixed_crate %>
-
-                <p class="text-emerald-400 text-sm mb-2">Kastenrabatt:
-                  <%= (@cart_total - CRATE_PRICE_CENTS) / 100.0 %>€
-                </p>
                 <%= format("%.2f", CRATE_PRICE_CENTS / 100.0) %>
-
               <% else %>
-
                 <%= format("%.2f", @cart_total / 100.0) %> €
-
               <% end %>
             </span>
           </div>
