@@ -1,5 +1,5 @@
 <%= turbo_frame_tag "kiosk" do %>
-  <div class="min-h-screen bg-gray-950 text-white p-6">
+  <div class="min-h-screen bg-gray-950 text-white p-8 max-w-7xl mx-auto">
 
     <%# Flash Messages %>
     <% if notice %>
@@ -37,54 +37,94 @@
       </div>
 
       <%# Produkte %>
-      <h2 class="text-xl font-semibold mb-4 text-gray-300">Getränk wählen</h2>
-      <div class="mb-4 grid grid-cols-2 sm:grid-cols-2 gap-4">
+      <h2 class="text-2xl font-semibold mb-6 text-gray-300">
+        Getränk wählen
+      </h2>
+      <div class="grid grid-cols-2 lg:grid-cols-3 gap-5">
         <% @products.each do |product| %>
-          <% if product.has_crate? %>
-            <div class="grid grid-cols-2 sm:grid-cols-2 gap-4">
+          <div class="bg-gray-900 rounded-2xl p-5 border border-gray-800 flex flex-col justify-between">
+            <div>
+              <h3 class="text-lg font-bold mb-2 leading-tight">
+                <%= product.name %>
+              </h3>
+              <div class="space-y-2 text-sm text-gray-400">
+                <div>
+                  Einzelpreis:
+                  <span class="text-white font-semibold">
+                    <%= format("%.2f", product.price) %> €
+                  </span>
+                </div>
+                <% if product.has_crate? %>
+                  <div>
+                    Kasten:
+                    <span class="text-white font-semibold">
+                      <%= product.crate_size %> Flaschen
+                    </span>
+                  </div>
+                  <div>
+                    Kastenpreis:
+                    <span class="text-emerald-400 font-semibold">
+                      <%= format("%.2f", product.crate_price) %> €
+                    </span>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+            <div class="mt-5 space-y-3">
+
+              <%# Einzelne Flasche %>
               <%= form_tag add_to_cart_kiosk_drinks_path, method: :post do %>
                 <%= hidden_field_tag :pin, params[:pin] %>
                 <%= hidden_field_tag :product_id, product.id %>
                 <%= hidden_field_tag :quantity, 1 %>
-                <button type="submit" class="bg-blue-700 hover:bg-blue-600 active:scale-95
-                transition rounded-2xl p-5 text-center w-full h-28
-                flex flex-col items-center justify-center gap-1">
-                  <p class="text-base font-bold leading-tight"><%= product.name %></p>
-                  <p class="text-gray-300 text-sm"><%= format("%.2f", product.price) %> €</p>
+
+                <button
+                  type="submit"
+                  class="
+                    w-full
+                    bg-blue-700
+                    hover:bg-blue-600
+                    active:scale-95
+                    transition
+                    rounded-xl
+                    py-4
+                    font-semibold
+                  ">
+                  + 1 Flasche
                 </button>
               <% end %>
-              <%= form_tag add_to_cart_kiosk_drinks_path, method: :post do %>
-                <%= hidden_field_tag :pin, params[:pin] %>
-                <%= hidden_field_tag :product_id, product.id %>
-                <%= hidden_field_tag :quantity, product.crate_size %>
-                <button type="submit" class="bg-gray-600 hover:bg-gray-500 active:scale-95
-                transition rounded-2xl p-5 text-center w-full h-28
-                flex flex-col items-center justify-center gap-1">
-                  <p class="text-base font-bold leading-tight"><%= product.name %></p>
-                  <p class="text-gray-400 text-xs"><%= product.crate_size %> Stk.</p>
-                  <p class="text-gray-300 text-sm"><%= format("%.2f", product.crate_price) %> €</p>
-                </button>
+
+              <%# Ganzer Kasten %>
+              <% if product.has_crate? %>
+                <%= form_tag add_to_cart_kiosk_drinks_path, method: :post do %>
+                  <%= hidden_field_tag :pin, params[:pin] %>
+                  <%= hidden_field_tag :product_id, product.id %>
+                  <%= hidden_field_tag :quantity, product.crate_size %>
+
+                  <button
+                    type="submit"
+                    class="
+                      w-full
+                      bg-emerald-700
+                      hover:bg-emerald-600
+                      active:scale-95
+                      transition
+                      rounded-xl
+                      py-4
+                      font-semibold
+                    ">
+                    + 1 Kasten
+                  </button>
+                <% end %>
               <% end %>
             </div>
-          <% else %>
-            <%= form_tag add_to_cart_kiosk_drinks_path, method: :post do %>
-              <%= hidden_field_tag :pin, params[:pin] %>
-              <%= hidden_field_tag :product_id, product.id %>
-              <%= hidden_field_tag :quantity, 1 %>
-              <button type="submit" class="bg-blue-700 hover:bg-blue-600 active:scale-95
-              transition rounded-2xl p-5 text-center w-full h-28
-              flex flex-col items-center justify-center gap-1">
-                <p class="text-base font-bold leading-tight"><%= product.name %></p>
-                <p class="text-gray-300 text-sm"><%= format("%.2f", product.price) %> €</p>
-              </button>
-            <% end %>
-          <% end %>
+          </div>
         <% end %>
       </div>
 
       <%# Warenkorb %>
       <% if @cart_items.any? %>
-        <div class="mt-8 bg-gray-900 rounded-2xl p-6">
+        <div class="mt-10 bg-gray-900 rounded-3xl p-8 border border-gray-800">
           <h2 class="text-xl font-semibold mb-4 text-gray-300">🛒 Warenkorb</h2>
           <div class="space-y-2 mb-4">
             <% @cart_items.each do |item| %>
@@ -104,7 +144,8 @@
                   <%= form_tag remove_from_cart_kiosk_drinks_path, method: :post do %>
                     <%= hidden_field_tag :pin, params[:pin] %>
                     <%= hidden_field_tag :product_id, item[:product].id %>
-                    <button type="submit" class="text-red-400 hover:text-red-300 text-sm">
+                    <button type="submit" class="w-10 h-10 rounded-full text-red-600
+                        hover:text-red-500 flex items-center justify-center font-bold">
                       ✕
                     </button>
                   <% end %>
