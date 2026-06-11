@@ -20,33 +20,35 @@
         class: "w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2" %>
     </div>
 
-    <div class="mb-6">
-      <%= f.label :pin, "PIN (4 Ziffern)", class: "block text-gray-400 text-sm mb-1" %>
-      <%= f.password_field :pin, maxlength: 4, placeholder: "****",
-        class: "w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2
-                tracking-widest text-center text-lg" %>
-    </div>
-
-    <div class="mb-6">
-      <%= f.label :role, "Rolle", class: "block text-gray-400 text-sm mb-1" %>
-      <%= f.select :role,
-        [["Mitglied", "member"],
-         ["Kassenwart", "treasurer"],
-         ["Getränkewart", "inventory_manager"]],
-      {},
-      class: "w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2" %>
-    </div>
-
-    <div class="mb-4 flex-col gap-2">
-      <div class="flex items-center gap-3">
-        <%= f.check_box :pays_fee, class: "w-4 h-4" %>
-        <%= f.label :pays_fee, "Zahlt Aktivenbeitrag", class: "text-gray-300" %>
+    <%= f.fields_for :organization_membership, @membership do |mf| %>
+      <div class="mb-6">
+        <%= mf.label :pin, "PIN (4 Ziffern)", class: "block text-gray-400 text-sm mb-1" %>
+        <%= mf.password_field :pin, maxlength: 4, placeholder: "****",
+          class: "w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2
+                  tracking-widest text-center text-lg" %>
       </div>
-      <div class="flex items-center gap-3">
-        <%= f.check_box :lives_on_site, class: "w-4 h-4" %>
-        <%= f.label :lives_on_site, "Zahlt Hausbewohnerbeitrag", class: "text-gray-300" %>
+
+      <div class="mb-6">
+        <%= mf.label :role, "Rolle", class: "block text-gray-400 text-sm mb-1" %>
+        <%= mf.select :role,
+          [["Mitglied", "member"],
+           ["Kassenwart", "treasurer"],
+           ["Getränkewart", "inventory_manager"]],
+        {},
+        class: "w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2" %>
       </div>
-    </div>
+
+      <div class="mb-4 flex-col gap-2">
+        <div class="flex items-center gap-3">
+          <%= mf.check_box :pays_fee, class: "w-4 h-4" %>
+          <%= mf.label :pays_fee, "Zahlt Aktivenbeitrag", class: "text-gray-300" %>
+        </div>
+        <div class="flex items-center gap-3">
+          <%= mf.check_box :lives_on_site, class: "w-4 h-4" %>
+          <%= mf.label :lives_on_site, "Zahlt Hausbewohnerbeitrag", class: "text-gray-300" %>
+        </div>
+      </div>
+    <% end %>
 
     <div class="mb-4 flex flex-row gap-2">
       <%= f.submit "Speichern",

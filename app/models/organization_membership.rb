@@ -2,6 +2,8 @@ class OrganizationMembership < ApplicationRecord
   belongs_to :member
   belongs_to :organization
 
+  before_validation :generate_pin, on: :create
+
   enum :role, { member: 0, treasurer: 1, inventory_manager: 2 }
 
   validates :pin, length: { is: 4 }, allow_nil: true,
@@ -12,5 +14,11 @@ class OrganizationMembership < ApplicationRecord
     lives_on_site? ?
       Setting.get("fee_resident_cents", "3000", organization: organization).to_i :
       Setting.get("fee_standard_cents", "2500", organization: organization).to_i
+  end
+
+  private
+
+  def generate_pin
+    self.pin ||= rand(1000..9999).to_s
   end
 end

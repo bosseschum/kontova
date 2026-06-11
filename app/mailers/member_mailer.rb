@@ -5,11 +5,11 @@ class MemberMailer < ApplicationMailer
   #   en.member_mailer.invoice.subject
   #
 
-  def welcome(member, plain_pin, plain_password = nil)
+  def welcome(member, plain_pin, plain_password = nil, organization = nil)
     @member = member
     @pin = plain_pin
     @password = plain_password
-    @organization = member.organization
+    @organization = organization
 
     mail(
       to: member.email,
@@ -17,11 +17,13 @@ class MemberMailer < ApplicationMailer
     )
   end
 
-  def invoice(member)
+  def invoice(member, organization)
     @member = member
-    @transactions = member.transactions.order(created_at: :desc).limit(50)
-    @balance = member.balance
-    @organization = member.organization
+    @organization = organization
+    @transactions = member.transactions.where(organization: organization)
+      .order(created_at: :desc).limit(50)
+    @balance = member.transactions.where(organization: organization)
+      .not_sponsored.sum(:amount_cents) / 100.0
 
     mail(
       to: member.email,
@@ -29,10 +31,10 @@ class MemberMailer < ApplicationMailer
     )
   end
 
-  def request_approved(request)
+  def request_approved(request, organization)
     @request = request
     @member = request.member
-    @organization = @member.organization
+    @organization = organization
 
     mail(
       to: @member.email,
@@ -40,10 +42,10 @@ class MemberMailer < ApplicationMailer
     )
   end
 
-  def request_rejected(request)
+  def request_rejected(request, organization)
     @request = request
     @member = request.member
-    @organization = @member.organization
+    @organization = organization
 
     mail(
       to: @member.email,

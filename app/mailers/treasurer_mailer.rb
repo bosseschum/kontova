@@ -1,10 +1,13 @@
 class TreasurerMailer < ApplicationMailer
-  def new_request(request)
+  def new_request(request, organization)
     @request = request
     @member = request.member
-    @organization = @member.organization
+    @organization = organization
 
-    treasurer_emails = @organization.members.where(role: :treasurer).pluck(:email)
+    treasurer_emails = @organization.members
+      .where(organization_memberships: { role: OrganizationMembership.roles[:treasurer] })
+      .pluck(:email)
+
     mail(
       to: treasurer_emails,
       subject: "#{@organization.name} – Neuer Antrag von #{@member.display_name}",

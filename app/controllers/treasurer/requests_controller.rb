@@ -21,14 +21,14 @@ class Treasurer::RequestsController < Treasurer::BaseController
       note: "Erstattung: #{@request.description}"
     )
     @request.update!(status: :approved)
-    MemberMailer.request_approved(@request).deliver_later
+    MemberMailer.request_approved(@request, current_organization).deliver_later
     redirect_to treasurer_requests_path, notice: "Antrag genehmigt"
   end
 
   def reject
     @request = find_request
     @request.update!(status: :rejected, note: params[:note])
-    MemberMailer.request_rejected(@request).deliver_later
+    MemberMailer.request_rejected(@request, current_organization).deliver_later
     redirect_to treasurer_requests_path, notice: "Antrag abgelehnt"
   end
 
