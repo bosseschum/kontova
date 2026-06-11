@@ -46,8 +46,8 @@ class Treasurer::MembersController < Treasurer::BaseController
   end
 
   def destroy
-    @member = current_organization.members.find(params[:id])
-    @member.destroy
+    membership = current_organization.organization_memberships.find_by!(member_id: params[:id])
+    membership.destroy
     redirect_to treasurer_members_path, notice: "Mitglied gelöscht"
   end
 

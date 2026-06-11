@@ -90,10 +90,11 @@ class Kiosk::DrinksController < ApplicationController
       )
     end
 
-    if is_mixed_crate && single_purchase > CRATE_PRICE_CENTS
+    if !sponsored && is_mixed_crate && single_purchase > CRATE_PRICE_CENTS
       discount = single_purchase - CRATE_PRICE_CENTS
       Transaction.create!(
         member: @member,
+        organization: current_organization,
         amount_cents: discount,
         kind: :expense_reimbursement,
         note: "Kastenrabatt (#{total_quantity} Flaschen)"
@@ -127,6 +128,7 @@ class Kiosk::DrinksController < ApplicationController
 
     Transaction.create!(
       member: @member,
+      organization: current_organization,
       product: @product,
       amount_cents: -amount_cents,
       kind: :drink_purchase,
