@@ -1,4 +1,4 @@
-class MemberArea::ProfilesController < ApplicationController
+class MemberArea::ProfilesController < MemberArea::BaseController
   def show
     @member = current_member
   end
