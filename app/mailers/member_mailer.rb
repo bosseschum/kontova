@@ -9,11 +9,11 @@ class MemberMailer < ApplicationMailer
     @member = member
     @pin = plain_pin
     @password = plain_password
-    @organization = organization
+    @organization = organization || member.organization_memberships.first&.organization
 
     mail(
       to: member.email,
-      subject: "Willkommen bei #{@organization.name}!"
+      subject: "Willkommen bei #{@organization&.name || "Kontova"}!"
     )
   end
 
@@ -27,7 +27,7 @@ class MemberMailer < ApplicationMailer
 
     mail(
       to: member.email,
-      subject: "Hauptkasse des #{@organization.name} - Kontoauszug #{Date.today.strftime("%B %Y")}"
+      subject: "Hauptkasse des #{@organization&.name} - Kontoauszug #{Date.today.strftime("%B %Y")}"
     )
   end
 
@@ -38,7 +38,7 @@ class MemberMailer < ApplicationMailer
 
     mail(
       to: @member.email,
-      subject: "#{@organization.name} – Dein Antrag wurde genehmigt"
+      subject: "#{@organization&.name} – Dein Antrag wurde genehmigt"
     )
   end
 
@@ -49,7 +49,7 @@ class MemberMailer < ApplicationMailer
 
     mail(
       to: @member.email,
-      subject: "#{@organization.name} – Dein Antrag wurde abgelehnt"
+      subject: "#{@organization&.name} – Dein Antrag wurde abgelehnt"
     )
   end
 end
