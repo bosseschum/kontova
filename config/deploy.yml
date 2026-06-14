@@ -47,3 +47,5 @@ accessories:
         POSTGRES_USER: kontova
       secret:
         - POSTGRES_PASSWORD
+    volumes:
+      - /var/lib/postgresql/data:/var/lib/postgresql/data
