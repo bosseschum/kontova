@@ -2,8 +2,9 @@ class LandingController < ApplicationController
   skip_before_action :authenticate_member!
   skip_before_action :set_organization
 
+  layout "public"
+
   def index
-    render layout: false
   end
 
   def contact
@@ -13,5 +14,11 @@ class LandingController < ApplicationController
 
     LandingMailer.contact(name, email, message).deliver_later
     redirect_to root_path, notice: "Nachricht gesendet! Wir melden uns bald."
+  end
+
+  def impressum
+  end
+
+  def datenschutz
   end
 end
