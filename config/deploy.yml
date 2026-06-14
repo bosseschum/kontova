@@ -5,9 +5,10 @@ servers:
   web:
     hosts:
       - 62.238.45.187
-    volumes:
-      - /var/storage/kontova:/rails/storage
-      - "kontova-keys:/rails/config/keys"
+
+volumes:
+  - /var/storage/kontova:/rails/storage
+  - "kontova-keys:/rails/config/keys"
 
 proxy:
   ssl: true
