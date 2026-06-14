@@ -7,7 +7,11 @@ module EnableBanking
 
     def call
       @connection.bank_accounts.each do |account|
-        sync_account(account)
+        begin
+          sync_account(account)
+        rescue RuntimeError => e
+          Rails.logger.error("Failed to sync account #{account.uid}: #{e.message}")
+        end
       end
     end
 
@@ -36,14 +40,14 @@ module EnableBanking
       return if external_id.blank?
 
       account.bank_transactions.find_or_create_by!(external_id: external_id) do |t|
-        t.amount_cents    = (txn.dig("transaction_amount", "amount").to_f * 100).round
-        t.currency        = txn.dig("transaction_amount", "currency") || account.currency
-        t.booked_at       = txn["booking_date"]
-        t.value_date      = txn["value_date"]
-        t.description     = txn.dig("remittance_information_unstructured") ||
-                            txn.dig("creditor_name") ||
-                            txn.dig("debtor_name")
-        t.raw             = txn
+        t.amount_cents = (txn.dig("transaction_amount", "amount").to_f * 100).round
+        t.currency     = txn.dig("transaction_amount", "currency") || account.currency
+        t.booked_at    = txn["booking_date"]
+        t.value_date   = txn["value_date"]
+        t.description  = txn["remittance_information_unstructured"] ||
+                         txn["creditor_name"] ||
+                         txn["debtor_name"]
+        t.raw          = txn
       end
     end
   end
