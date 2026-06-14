@@ -1,0 +1,39 @@
+<div class="max-w-2xl mx-auto">
+  <h1 class="text-2xl font-bold mb-6">Bankkonto verbinden</h1>
+
+  <input <%# herb:disable html-input-require-autocomplete %>
+    type="text"
+    id="bank-search"
+    placeholder="Bank suchen..."
+    autofocus
+    class="w-full bg-gray-900 border border-gray-700 rounded-xl px-4 py-3 mb-4 text-white placeholder-gray-500 focus:outline-none focus:border-blue-500"
+  >
+
+  <div class="grid gap-3" id="bank-list">
+    <% @banks.each do |bank| %>
+      <%= button_to treasurer_bank_connection_path,
+            method: :post,
+            params: { bank_name: bank["name"] },
+            class: "bank-item bg-gray-900 hover:bg-gray-800 border border-gray-800 rounded-2xl p-4 text-left flex items-center justify-between w-full",
+            data: { name: bank["name"].downcase } do %>
+        <div>
+          <p class="font-semibold"><%= bank["name"] %></p>
+          <p class="text-xs text-gray-500"><%= bank["bic"] %> · <%= bank["country"] %></p>
+        </div>
+        <span class="text-gray-500">→</span>
+      <% end %>
+    <% end %>
+  </div>
+</div>
+
+<script nonce="<%= request.content_security_policy_nonce %>">
+  document.getElementById("bank-search").addEventListener("input", function() {
+    const query = this.value.toLowerCase();
+    document.querySelectorAll(".bank-item").forEach(function(item) {
+      const name = item.dataset.name || "";
+      item.closest("form") ?
+        item.closest("form").style.display = name.includes(query) ? "" : "none" :
+        item.style.display = name.includes(query) ? "" : "none";
+    });
+  });
+</script>

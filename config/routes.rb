@@ -50,6 +50,8 @@ Rails.application.routes.draw do
         post :reject
       end
     end
+    resource :bank_connection, only: [ :new, :create, :destroy ]
+    resources :bank_transactions, only: [ :index ]
   end
 
   # Bierkassenwart
