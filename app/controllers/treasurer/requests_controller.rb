@@ -13,13 +13,7 @@ class Treasurer::RequestsController < Treasurer::BaseController
   def approve
     @request = find_request
     kind = @request.expense? ? :expense_reimbursement : :deposit
-    Transaction.create!(
-      member: @request.member,
-      organization: current_organization,
-      amount_cents: @request.amount_cents,
-      kind: kind,
-      note: "Erstattung: #{@request.description}"
-    )
+
     @request.update!(status: :approved)
     MemberMailer.request_approved(@request, current_organization).deliver_later
     redirect_to treasurer_requests_path, notice: "Antrag genehmigt"
