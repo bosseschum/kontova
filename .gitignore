@@ -40,3 +40,4 @@
 config/master.key
 .kamal/secrets
 .kamal/secrets
+config/keys/*.pem
