@@ -45,7 +45,7 @@ module Banking
       org = connection.organization
       redirect_to treasurer_bank_transactions_url(
         host: "#{org.subdomain}.#{Rails.application.config.default_url_options[:host]}"
-      ), notice: "Bank verbunden — #{connection.bank_accounts.count} Konten importiert."
+      ), allow_other_host: true, notice: "Bank verbunden — #{connection.bank_accounts.count} Konten importiert."
     end
   end
 end
