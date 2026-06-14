@@ -15,7 +15,7 @@
             method: :post,
             params: { bank_name: bank["name"] },
             class: "bank-item bg-gray-900 hover:bg-gray-800 border border-gray-800 rounded-2xl p-4 text-left flex items-center justify-between w-full",
-            data: { name: bank["name"].downcase } do %>
+            data: { name: bank["name"].downcase, turbo: false } do %>
         <div>
           <p class="font-semibold"><%= bank["name"] %></p>
           <p class="text-xs text-gray-500"><%= bank["bic"] %> · <%= bank["country"] %></p>
