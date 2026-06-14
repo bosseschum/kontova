@@ -3,8 +3,8 @@ module Treasurer
     def new
       begin
         @banks = EnableBanking::Client.new.banks
-      rescue RuntimeError => e
-        Rails.logger.error("Enable Banking banks fetch failed: #{e.message}")
+      rescue => e
+        Rails.logger.error("Enable Banking banks fetch failed: #{e.class}: #{e.message}")
         @banks = []
         flash.now[:alert] = "Bankliste konnte nicht geladen werden: #{e.message}"
       end
