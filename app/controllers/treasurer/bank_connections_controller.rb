@@ -17,10 +17,10 @@ module Treasurer
       result = EnableBanking::AuthorizationService.new(
         organization: current_organization,
         bank: bank,
-        redirect_url: banking_callback_url(host: Rails.application.config.default_url_options[:host])
+        redirect_url: banking_callback_url
       ).call
 
-      redirect_to result["url"], allow_other_host: true
+      redirect_to result["url"], allow_other_host: true, status: :see_other
     end
 
     def destroy
