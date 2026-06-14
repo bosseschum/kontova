@@ -45,3 +45,4 @@ accessories:
         - POSTGRES_PASSWORD
     volumes:
       - /var/storage/kontova:/rails/storage
+      - "kontova-keys:/rails/config/keys"
