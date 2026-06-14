@@ -1,7 +1,13 @@
 module Treasurer
   class BankConnectionsController < Treasurer::BaseController
     def new
-      @banks = EnableBanking::Client.new.banks
+      begin
+        @banks = EnableBanking::Client.new.banks
+      rescue RuntimeError => e
+        Rails.logger.error("Enable Banking banks fetch failed: #{e.message}")
+        @banks = []
+        flash.now[:alert] = "Bankliste konnte nicht geladen werden: #{e.message}"
+      end
     end
 
     def create
