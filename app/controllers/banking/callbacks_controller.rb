@@ -4,8 +4,6 @@ module Banking
     skip_before_action :set_organization
 
     def show
-      Rails.logger.debug("CALLBACK PARAMS: #{params.to_unsafe_h.inspect}")
-
       if params[:error].present?
         Rails.logger.error("Enable Banking callback error: #{params[:error]}")
         return redirect_to root_path, alert: "Bank authorization failed: #{params[:error]}"
@@ -27,7 +25,9 @@ module Banking
         end
       end
 
-      redirect_to root_path, notice: "Bank connected — #{connection.bank_accounts.count} accounts imported."
+      EnableBanking::TransactionSyncService.new(connection).call
+
+      redirect_to root_path, notice: "Bank connected — #{connection.bank_accounts.count} accounts, #{connection.bank_accounts.joins(:bank_transactions).count} transactions imported."
     end
   end
 end
