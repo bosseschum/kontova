@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_06_14_155134) do
+ActiveRecord::Schema[8.1].define(version: 2026_06_14_165141) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -66,6 +66,23 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_14_155134) do
     t.index ["authorization_id"], name: "index_bank_connections_on_authorization_id", unique: true
     t.index ["organization_id"], name: "index_bank_connections_on_organization_id"
     t.index ["session_id"], name: "index_bank_connections_on_session_id", unique: true, where: "(session_id IS NOT NULL)"
+  end
+
+  create_table "bank_transactions", force: :cascade do |t|
+    t.integer "amount_cents", null: false
+    t.bigint "bank_account_id", null: false
+    t.date "booked_at"
+    t.datetime "created_at", null: false
+    t.string "currency", null: false
+    t.string "description"
+    t.string "external_id", null: false
+    t.jsonb "raw", default: {}
+    t.datetime "updated_at", null: false
+    t.date "value_date"
+    t.index ["bank_account_id"], name: "index_bank_transactions_on_bank_account_id"
+    t.index ["booked_at"], name: "index_bank_transactions_on_booked_at"
+    t.index ["external_id"], name: "index_bank_transactions_on_external_id", unique: true
+    t.index ["raw"], name: "index_bank_transactions_on_raw", using: :gin
   end
 
   create_table "inventory_counts", force: :cascade do |t|
@@ -206,6 +223,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_14_155134) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "bank_accounts", "bank_connections"
   add_foreign_key "bank_connections", "organizations"
+  add_foreign_key "bank_transactions", "bank_accounts"
   add_foreign_key "inventory_counts", "members"
   add_foreign_key "inventory_counts", "organizations"
   add_foreign_key "inventory_counts", "products"
