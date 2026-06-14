@@ -1,1006 +1,328 @@
 <!DOCTYPE html>
-<html lang="de">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Kontova – Kassenverwaltung für Vereine</title>
-  <%= csrf_meta_tags %>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=DM+Serif+Display:ital@0;1&display=swap');
-
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --ink:       #0f1117;
-      --ink-2:     #3a3d4a;
-      --ink-3:     #7c8094;
-      --surface:   #f7f7f9;
-      --white:     #ffffff;
-      --accent:    #2563eb;
-      --accent-2:  #1d4ed8;
-      --green:     #16a34a;
-      --border:    #e4e4e8;
-      --dark-bg:   #111318;
-      --dark-card: #1a1d24;
-      --dark-border:#2a2d36;
-    }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      font-family: 'Inter', sans-serif;
-      background: var(--white);
-      color: var(--ink);
-      line-height: 1.6;
-      -webkit-font-smoothing: antialiased;
-    }
-
-    /* NAV */
-    nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 100;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 2rem;
-      height: 60px;
-      background: rgba(255,255,255,0.92);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--border);
-    }
-
-    .nav-logo {
-      font-family: 'DM Serif Display', serif;
-      font-size: 1.4rem;
-      color: var(--ink);
-      text-decoration: none;
-      letter-spacing: -0.02em;
-    }
-
-    .nav-links {
-      display: flex;
-      align-items: center;
-      gap: 2rem;
-      list-style: none;
-    }
-
-    .nav-links a {
-      font-size: 0.875rem;
-      color: var(--ink-2);
-      text-decoration: none;
-      font-weight: 500;
-      transition: color 0.15s;
-    }
-
-    .nav-links a:hover { color: var(--ink); }
-
-    .nav-cta {
-      background: var(--accent) !important;
-      color: white !important;
-      padding: 0.5rem 1.25rem !important;
-      border-radius: 8px;
-      transition: background 0.15s !important;
-    }
-
-    .nav-cta:hover { background: var(--accent-2) !important; }
-
-    /* FLASH */
-    .flash {
-      position: fixed;
-      top: 70px;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 200;
-      background: #dcfce7;
-      color: #166534;
-      border: 1px solid #bbf7d0;
-      padding: 0.75rem 1.5rem;
-      border-radius: 10px;
-      font-size: 0.875rem;
-      font-weight: 500;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.08);
-    }
-
-    /* HERO */
-    .hero {
-      padding: 120px 2rem 80px;
-      max-width: 1100px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 4rem;
-      align-items: center;
-    }
-
-    .hero-eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      font-size: 0.8rem;
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 1.25rem;
-    }
-
-    .hero-eyebrow::before {
-      content: '';
-      display: inline-block;
-      width: 20px;
-      height: 2px;
-      background: var(--accent);
-    }
-
-    .hero h1 {
-      font-family: 'DM Serif Display', serif;
-      font-size: clamp(2.4rem, 4vw, 3.4rem);
-      line-height: 1.15;
-      letter-spacing: -0.03em;
-      color: var(--ink);
-      margin-bottom: 1.25rem;
-    }
-
-    .hero h1 em {
-      font-style: italic;
-      color: var(--accent);
-    }
-
-    .hero p {
-      font-size: 1.05rem;
-      color: var(--ink-2);
-      line-height: 1.7;
-      margin-bottom: 2rem;
-      max-width: 420px;
-    }
-
-    .hero-actions {
-      display: flex;
-      gap: 1rem;
-      align-items: center;
-      flex-wrap: wrap;
-    }
-
-    .btn-primary {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      background: var(--accent);
-      color: white;
-      padding: 0.75rem 1.5rem;
-      border-radius: 10px;
-      font-weight: 600;
-      font-size: 0.9rem;
-      text-decoration: none;
-      transition: background 0.15s, transform 0.1s;
-      border: none;
-      cursor: pointer;
-      font-family: inherit;
-    }
-
-    .btn-primary:hover { background: var(--accent-2); transform: translateY(-1px); }
-
-    .btn-ghost {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      color: var(--ink-2);
-      font-size: 0.9rem;
-      font-weight: 500;
-      text-decoration: none;
-      transition: color 0.15s;
-    }
-
-    .btn-ghost:hover { color: var(--ink); }
-
-    /* BROWSER MOCKUP */
-    .browser-frame {
-      background: var(--dark-bg);
-      border-radius: 16px;
-      overflow: hidden;
-      box-shadow: 0 32px 80px rgba(0,0,0,0.18), 0 4px 16px rgba(0,0,0,0.1);
-      border: 1px solid var(--dark-border);
-    }
-
-    .browser-chrome {
-      background: #1e2130;
-      padding: 10px 14px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
-    .dot-r { background: #ff5f57; }
-    .dot-y { background: #febc2e; }
-    .dot-g { background: #28c840; }
-
-    .browser-url {
-      margin-left: 10px;
-      background: #2a2d3e;
-      border-radius: 6px;
-      padding: 3px 12px;
-      font-size: 0.72rem;
-      color: #6b7080;
-      font-family: monospace;
-      flex: 1;
-      max-width: 240px;
-    }
-
-    .screenshot-body {
-      aspect-ratio: 16/9;
-      background: var(--dark-card);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      gap: 0.75rem;
-    }
-
-    .screenshot-body img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-
-    .screenshot-placeholder {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 0.5rem;
-      color: #3a3d4a;
-      font-size: 0.75rem;
-    }
-
-    /* SOCIAL PROOF */
-    .social-proof {
-      border-top: 1px solid var(--border);
-      border-bottom: 1px solid var(--border);
-      padding: 1.5rem 2rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.75rem;
-      font-size: 0.85rem;
-      color: var(--ink-3);
-    }
-
-    /* SECTION */
-    section { padding: 6rem 2rem; }
-
-    .section-inner {
-      max-width: 1100px;
-      margin: 0 auto;
-    }
-
-    .section-label {
-      font-size: 0.78rem;
-      font-weight: 600;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 0.75rem;
-    }
-
-    .section-title {
-      font-family: 'DM Serif Display', serif;
-      font-size: clamp(1.8rem, 3vw, 2.6rem);
-      line-height: 1.2;
-      letter-spacing: -0.03em;
-      color: var(--ink);
-      margin-bottom: 1rem;
-    }
-
-    .section-sub {
-      font-size: 1rem;
-      color: var(--ink-2);
-      max-width: 520px;
-      line-height: 1.7;
-    }
-
-    /* FEATURE ROWS */
-    .feature-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 5rem;
-      align-items: center;
-      margin-bottom: 5rem;
-    }
-
-    .feature-row.reverse .browser-frame { order: -1; }
-
-    .feature-text h3 {
-      font-family: 'DM Serif Display', serif;
-      font-size: 1.8rem;
-      letter-spacing: -0.02em;
-      margin-bottom: 0.75rem;
-    }
-
-    .feature-text p {
-      color: var(--ink-2);
-      line-height: 1.7;
-      margin-bottom: 1.25rem;
-    }
-
-    .feature-list {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 0.6rem;
-    }
-
-    .feature-list li {
-      display: flex;
-      align-items: flex-start;
-      gap: 0.6rem;
-      font-size: 0.9rem;
-      color: var(--ink-2);
-    }
-
-    .check {
-      flex-shrink: 0;
-      width: 18px;
-      height: 18px;
-      background: #dcfce7;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-top: 2px;
-      font-size: 0.65rem;
-      color: var(--green);
-      font-weight: 700;
-    }
-
-    /* CARDS */
-    .cards-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 1.5rem;
-      margin-top: 3rem;
-    }
-
-    .card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 1.75rem;
-      transition: box-shadow 0.2s, transform 0.2s;
-    }
-
-    .card:hover { box-shadow: 0 8px 32px rgba(0,0,0,0.08); transform: translateY(-2px); }
-
-    .card-icon { font-size: 1.75rem; margin-bottom: 1rem; }
-
-    .card h4 { font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem; }
-
-    .card p { font-size: 0.875rem; color: var(--ink-3); line-height: 1.6; }
-
-    /* DARK SECTION */
-    .dark-section {
-      background: var(--dark-bg);
-      color: white;
-    }
-
-    .dark-section .section-title { color: white; }
-    .dark-section .section-sub { color: #8b8fa8; }
-    .dark-section .section-label { color: #6b8cff; }
-
-    /* WORKFLOW */
-    .workflow {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 0;
-      margin-top: 3rem;
-      position: relative;
-    }
-
-    .workflow::before {
-      content: '';
-      position: absolute;
-      top: 28px;
-      left: calc(12.5% + 14px);
-      right: calc(12.5% + 14px);
-      height: 1px;
-      background: var(--dark-border);
-    }
-
-    .workflow-step {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      padding: 0 1rem;
-    }
-
-    .step-num {
-      width: 56px;
-      height: 56px;
-      border-radius: 50%;
-      background: var(--dark-card);
-      border: 1px solid var(--dark-border);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.1rem;
-      margin-bottom: 1rem;
-      position: relative;
-      z-index: 1;
-    }
-
-    .workflow-step h4 { font-size: 0.9rem; font-weight: 600; margin-bottom: 0.4rem; color: white; }
-    .workflow-step p { font-size: 0.8rem; color: #6b7080; line-height: 1.5; }
-
-    /* PRICING */
-    .pricing-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 1.5rem;
-      max-width: 720px;
-      margin: 3rem auto 0;
-    }
-
-    .pricing-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 2rem;
-    }
-
-    .pricing-card.featured {
-      background: var(--accent);
-      border-color: var(--accent);
-      color: white;
-    }
-
-    .plan-name {
-      font-size: 0.8rem;
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--ink-3);
-      margin-bottom: 0.75rem;
-    }
-
-    .featured .plan-name { color: rgba(255,255,255,0.7); }
-
-    .price {
-      font-family: 'DM Serif Display', serif;
-      font-size: 2.5rem;
-      letter-spacing: -0.03em;
-      line-height: 1;
-      margin-bottom: 0.25rem;
-    }
-
-    .price-note {
-      font-size: 0.8rem;
-      color: var(--ink-3);
-      margin-bottom: 1.5rem;
-    }
-
-    .featured .price-note { color: rgba(255,255,255,0.6); }
-
-    .pricing-features {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 0.6rem;
-      margin-bottom: 1.5rem;
-    }
-
-    .pricing-features li {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      font-size: 0.875rem;
-      color: var(--ink-2);
-    }
-
-    .featured .pricing-features li { color: rgba(255,255,255,0.85); }
-
-    .pricing-features li::before {
-      content: '✓';
-      font-size: 0.75rem;
-      color: var(--green);
-      font-weight: 700;
-    }
-
-    .featured .pricing-features li::before { color: rgba(255,255,255,0.8); }
-
-    .btn-outline {
-      display: block;
-      text-align: center;
-      padding: 0.7rem;
-      border-radius: 10px;
-      font-size: 0.875rem;
-      font-weight: 600;
-      text-decoration: none;
-      border: 1.5px solid var(--border);
-      color: var(--ink);
-      transition: border-color 0.15s, background 0.15s;
-    }
-
-    .btn-outline:hover { border-color: var(--ink-2); }
-
-    .btn-white {
-      display: block;
-      text-align: center;
-      padding: 0.7rem;
-      border-radius: 10px;
-      font-size: 0.875rem;
-      font-weight: 600;
-      text-decoration: none;
-      background: white;
-      color: var(--accent);
-      transition: opacity 0.15s;
-    }
-
-    .btn-white:hover { opacity: 0.9; }
-
-    /* CONTACT */
-    .contact-section {
-      background: var(--surface);
-      border-top: 1px solid var(--border);
-    }
-
-    .contact-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 5rem;
-      align-items: start;
-    }
-
-    .contact-form {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-    }
-
-    .form-group {
-      display: flex;
-      flex-direction: column;
-      gap: 0.4rem;
-    }
-
-    .form-group label {
-      font-size: 0.82rem;
-      font-weight: 500;
-      color: var(--ink-2);
-    }
-
-    .form-group input,
-    .form-group textarea {
-      background: white;
-      border: 1.5px solid var(--border);
-      border-radius: 10px;
-      padding: 0.7rem 1rem;
-      font-size: 0.9rem;
-      font-family: inherit;
-      color: var(--ink);
-      transition: border-color 0.15s;
-      outline: none;
-    }
-
-    .form-group input:focus,
-    .form-group textarea:focus {
-      border-color: var(--accent);
-    }
-
-    .form-group textarea {
-      resize: vertical;
-      min-height: 130px;
-    }
-
-    /* ADMIN LOGIN */
-    .admin-login {
-      background: white;
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 2rem;
-    }
-
-    .admin-login h3 {
-      font-family: 'DM Serif Display', serif;
-      font-size: 1.4rem;
-      margin-bottom: 0.5rem;
-    }
-
-    .admin-login p {
-      font-size: 0.875rem;
-      color: var(--ink-3);
-      margin-bottom: 1.5rem;
-      line-height: 1.6;
-    }
-
-    .admin-login-btn {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background: var(--dark-bg);
-      color: white;
-      padding: 0.85rem 1.25rem;
-      border-radius: 10px;
-      text-decoration: none;
-      font-size: 0.9rem;
-      font-weight: 500;
-      transition: background 0.15s;
-      margin-bottom: 1rem;
-    }
-
-    .admin-login-btn:hover { background: #1a1d24; }
-
-    .admin-hint {
-      font-size: 0.78rem;
-      color: var(--ink-3);
-      text-align: center;
-    }
-
-    .admin-hint a {
-      color: var(--accent);
-      text-decoration: none;
-    }
-
-    /* FOOTER */
-    footer {
-      background: var(--ink);
-      color: #6b7080;
-      padding: 2.5rem 2rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      font-size: 0.8rem;
-      flex-wrap: wrap;
-      gap: 1rem;
-    }
-
-    footer a { color: #6b7080; text-decoration: none; }
-    footer a:hover { color: white; }
-
-    .footer-logo {
-      font-family: 'DM Serif Display', serif;
-      font-size: 1.1rem;
-      color: white;
-    }
-
-    /* RESPONSIVE */
-    @media (max-width: 768px) {
-      .hero { grid-template-columns: 1fr; gap: 2.5rem; padding-top: 90px; }
-      .feature-row { grid-template-columns: 1fr; gap: 2.5rem; }
-      .feature-row.reverse .browser-frame { order: unset; }
-      .cards-grid { grid-template-columns: 1fr; }
-      .workflow { grid-template-columns: 1fr 1fr; gap: 2rem; }
-      .workflow::before { display: none; }
-      .pricing-grid { grid-template-columns: 1fr; }
-      .contact-grid { grid-template-columns: 1fr; gap: 2.5rem; }
-      .nav-links { display: none; }
-      footer { flex-direction: column; text-align: center; }
-    }
-  </style>
-</head>
-<body>
-
-<!-- NAV -->
-<nav>
-  <a href="<%= root_path %>" class="nav-logo">Kontova</a>
-  <ul class="nav-links">
-    <li><a href="#features">Features</a></li>
-    <li><a href="#workflow">So funktioniert's</a></li>
-    <li><a href="#pricing">Preise</a></li>
-    <li><a href="#kontakt">Kontakt</a></li>
-    <li><%= link_to "Einloggen →", new_member_session_path, class: "nav-cta" %></li>
-  </ul>
-</nav>
-
-<% if notice %>
-  <div class="flash"><%= notice %></div>
-<% end %>
-
-<!-- HERO -->
-<div class="hero">
-  <div>
-    <div class="hero-eyebrow">Kassenverwaltung für Vereine</div>
-    <h1>Weniger Papierkram.<br><em>Mehr Verein.</em></h1>
-    <p>Kontova übernimmt die Buchhaltung – von der Getränkekasse bis zum automatischen Kontoabgleich. Für Kassenwarte, die lieber feiern als rechnen.</p>
-    <div class="hero-actions">
-      <a href="#kontakt" class="btn-primary">
-        Jetzt anfragen
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </a>
-      <a href="#features" class="btn-ghost">
-        Features ansehen
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 9l-7 7-7-7"/></svg>
-      </a>
-    </div>
-  </div>
-
-  <div class="browser-frame">
-    <div class="browser-chrome">
-      <div class="dot dot-r"></div>
-      <div class="dot dot-y"></div>
-      <div class="dot dot-g"></div>
-      <div class="browser-url">meinverein.kontova.de</div>
-    </div>
-    <div class="screenshot-body">
-      <%# Screenshot hier einfügen: %>
-      <%# <%= image_tag "screenshots/kiosk.png" %> %>
-      <div class="screenshot-placeholder">
-        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
-        <span>Screenshot: Kiosk-Ansicht</span>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- SOCIAL PROOF -->
-<div class="social-proof">
-  ⭐ Bereits im Einsatz bei deutschen Verbindungen und Vereinen
-</div>
-
-<!-- FEATURES -->
-<section id="features">
-  <div class="section-inner">
-
-    <div style="margin-bottom: 4rem;">
-      <div class="section-label">Features</div>
-      <h2 class="section-title">Alles was ein Verein braucht</h2>
-      <p class="section-sub">Von der Getränkekasse bis zur automatischen Kontoabstimmung – Kontova deckt den kompletten Kassenalltag ab.</p>
-    </div>
-
-    <!-- KIOSK -->
-    <div class="feature-row">
-      <div class="feature-text">
-        <h3>🍺 Kiosk</h3>
-        <p>Mitglieder buchen ihre Getränke selbst – per PIN, ohne Kassierer. Läuft auf jedem Gerät im Browser.</p>
-        <ul class="feature-list">
-          <li><span class="check">✓</span>PIN-geschützter Zugang – kein Name öffentlich sichtbar</li>
-          <li><span class="check">✓</span>Warenkorb mit automatischem Kastenpreis</li>
-          <li><span class="check">✓</span>Mischkästen konfigurierbar</li>
-          <li><span class="check">✓</span>GiroCode QR-Code + Zahlungsdaten zum Kopieren</li>
-          <li><span class="check">✓</span>Gesponserte Buchungen für besondere Anlässe</li>
+<html lang="de" class="scroll-smooth">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Kontova – Kassenverwaltung für Vereine</title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <link rel="icon" href="/icon.png" type="image/png">
+    <link rel="icon" href="/icon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/icon.png">
+
+    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+  </head>
+
+  <body class="min-h-screen bg-gray-950 text-white antialiased">
+
+    <%# NAV %>
+    <nav class="sticky top-0 z-50 bg-gray-950/80 backdrop-blur border-b border-gray-800">
+      <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+        <%= link_to root_path, class: "text-xl font-bold" do %>
+          Kont<span class="text-blue-500">o</span>va
+        <% end %>
+        <ul class="flex items-center gap-6 text-sm text-gray-400">
+          <li class="hidden md:block"><a href="#features" class="hover:text-white transition">Features</a></li>
+          <li class="hidden md:block"><a href="#workflow" class="hover:text-white transition">So funktioniert's</a></li>
+          <li class="hidden md:block"><a href="#pricing" class="hover:text-white transition">Preise</a></li>
+          <li class="hidden md:block"><a href="#kontakt" class="hover:text-white transition">Kontakt</a></li>
+          <li>
+            <%= link_to "Einloggen →", new_member_session_path,
+                  class: "bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg font-semibold transition" %>
+          </li>
         </ul>
       </div>
-      <div class="browser-frame">
-        <div class="browser-chrome">
-          <div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div>
-          <div class="browser-url">meinverein.kontova.de/kiosk</div>
-        </div>
-        <div class="screenshot-body">
-          <%# <%= image_tag "screenshots/kiosk_drinks.png" %> %>
-          <div class="screenshot-placeholder">
-            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.2"><path d="M8 2h8l1 7H7L8 2z"/><path d="M7 9c0 5 2 9 5 9s5-4 5-9"/></svg>
-            <span>Screenshot: Getränkeauswahl</span>
-          </div>
-        </div>
-      </div>
-    </div>
+    </nav>
 
-    <!-- KASSENWART -->
-    <div class="feature-row reverse">
-      <div class="feature-text">
-        <h3>💰 Kassenwart-Dashboard</h3>
-        <p>Volle Übersicht über alle Mitglieder, Transaktionen und Anträge. Einzahlungen, Auslagen und Mitgliedsbeiträge – alles an einem Ort.</p>
-        <ul class="feature-list">
-          <li><span class="check">✓</span>Mitgliederverwaltung mit Rollenmodell</li>
-          <li><span class="check">✓</span>Transaktionshistorie pro Mitglied</li>
-          <li><span class="check">✓</span>Automatischer Mitgliedsbeitrag per Cronjob</li>
-          <li><span class="check">✓</span>Antragsbearbeitung mit Belegprüfung</li>
-          <li><span class="check">✓</span>Automatischer Bankabgleich via GoCardless</li>
-        </ul>
+    <% if notice %>
+      <div class="max-w-6xl mx-auto px-6 mt-4">
+        <div class="p-3 bg-green-700 rounded-lg text-center font-semibold"><%= notice %></div>
       </div>
-      <div class="browser-frame">
-        <div class="browser-chrome">
-          <div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div>
-          <div class="browser-url">meinverein.kontova.de/treasurer</div>
-        </div>
-        <div class="screenshot-body">
-          <%# <%= image_tag "screenshots/treasurer.png" %> %>
-          <div class="screenshot-placeholder">
-            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 3v18"/></svg>
-            <span>Screenshot: Kassenwart-Dashboard</span>
-          </div>
-        </div>
-      </div>
-    </div>
+    <% end %>
 
-    <!-- MITGLIEDER -->
-    <div class="feature-row">
-      <div class="feature-text">
-        <h3>👤 Mitgliederbereich</h3>
-        <p>Jedes Mitglied hat einen eigenen Bereich – mit Saldo, Transaktionshistorie und der Möglichkeit Auslagen einzureichen.</p>
-        <ul class="feature-list">
-          <li><span class="check">✓</span>Eigener Saldo und Buchungshistorie</li>
-          <li><span class="check">✓</span>Auslagenerstattung mit Belegupload</li>
-          <li><span class="check">✓</span>E-Mail-Benachrichtigungen bei Entscheidungen</li>
-          <li><span class="check">✓</span>PIN und Passwort selbst ändern</li>
-          <li><span class="check">✓</span>Monatlicher Kontoauszug per E-Mail</li>
-        </ul>
-      </div>
-      <div class="browser-frame">
-        <div class="browser-chrome">
-          <div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div>
-          <div class="browser-url">meinverein.kontova.de/member_area</div>
-        </div>
-        <div class="screenshot-body">
-          <%# <%= image_tag "screenshots/member_area.png" %> %>
-          <div class="screenshot-placeholder">
-            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.2"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
-            <span>Screenshot: Mitgliederbereich</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- FEATURE CARDS -->
-    <div class="cards-grid">
-      <div class="card">
-        <div class="card-icon">📦</div>
-        <h4>Inventurverwaltung</h4>
-        <p>Einkäufe erfassen, Inventur machen, Schwund analysieren. Mit Soll/Ist-Vergleich und Mischkästen.</p>
-      </div>
-      <div class="card">
-        <div class="card-icon">🏢</div>
-        <h4>Multi-Tenancy</h4>
-        <p>Jeder Verein bekommt seine eigene Subdomain. Daten sind vollständig voneinander getrennt.</p>
-      </div>
-      <div class="card">
-        <div class="card-icon">🔄</div>
-        <h4>Automatischer Bankabgleich</h4>
-        <p>GoCardless Open Banking gleicht Überweisungen automatisch mit Mitgliedern ab.</p>
-      </div>
-      <div class="card">
-        <div class="card-icon">📧</div>
-        <h4>Automatische E-Mails</h4>
-        <p>Willkommensmail mit PIN, monatlicher Kontoauszug, Benachrichtigungen bei Anträgen.</p>
-      </div>
-      <div class="card">
-        <div class="card-icon">🔐</div>
-        <h4>Datenschutz by Design</h4>
-        <p>Kein Name im Kiosk sichtbar. PIN-Zugang schützt die Privatsphäre der Mitglieder.</p>
-      </div>
-      <div class="card">
-        <div class="card-icon">📱</div>
-        <h4>Überall nutzbar</h4>
-        <p>Läuft im Browser auf jedem Gerät – Smartphone, Tablet, Desktop. Keine App nötig.</p>
-      </div>
-    </div>
-
-  </div>
-</section>
-
-<!-- WORKFLOW -->
-<section class="dark-section" id="workflow">
-  <div class="section-inner">
-    <div class="section-label">So funktioniert's</div>
-    <h2 class="section-title">In vier Schritten startklar</h2>
-    <p class="section-sub">Kein kompliziertes Setup. Wir richten alles ein – du fängst sofort an.</p>
-
-    <div class="workflow">
-      <div class="workflow-step">
-        <div class="step-num">✉️</div>
-        <h4>Anfragen</h4>
-        <p>Schreib uns kurz – wir richten deinen Verein ein.</p>
-      </div>
-      <div class="workflow-step">
-        <div class="step-num">⚙️</div>
-        <h4>Einrichten</h4>
-        <p>IBAN, Beiträge und Produkte konfigurieren.</p>
-      </div>
-      <div class="workflow-step">
-        <div class="step-num">👥</div>
-        <h4>Mitglieder einladen</h4>
-        <p>Jedes Mitglied bekommt automatisch eine Willkommensmail mit PIN.</p>
-      </div>
-      <div class="workflow-step">
-        <div class="step-num">🎉</div>
-        <h4>Loslegen</h4>
-        <p>Kiosk aufstellen, Beiträge laufen automatisch.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- PRICING -->
-<section id="pricing">
-  <div class="section-inner" style="text-align: center;">
-    <div class="section-label">Preise</div>
-    <h2 class="section-title">Transparent und fair</h2>
-    <p class="section-sub" style="margin: 0 auto;">Monatliche Gebühr pro Verein. Keine versteckten Kosten, keine Einrichtungsgebühr.</p>
-
-    <div class="pricing-grid">
-      <div class="pricing-card">
-        <div class="plan-name">Starter</div>
-        <div class="price">15 €</div>
-        <div class="price-note">pro Monat</div>
-        <ul class="pricing-features">
-          <li>Bis zu 30 Mitglieder</li>
-          <li>Kiosk & Kassenwart-Dashboard</li>
-          <li>Mitgliederbereich</li>
-          <li>Automatische E-Mails</li>
-          <li>E-Mail Support</li>
-        </ul>
-        <a href="#kontakt" class="btn-outline">Anfragen</a>
-      </div>
-
-      <div class="pricing-card featured">
-        <div class="plan-name">Vollständig</div>
-        <div class="price">25 €</div>
-        <div class="price-note">pro Monat</div>
-        <ul class="pricing-features">
-          <li>Unbegrenzte Mitglieder</li>
-          <li>Alle Starter-Features</li>
-          <li>Automatischer Bankabgleich</li>
-          <li>Inventurverwaltung</li>
-          <li>Prioritäts-Support</li>
-        </ul>
-        <a href="#kontakt" class="btn-white">Anfragen</a>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- CONTACT & ADMIN LOGIN -->
-<section class="contact-section" id="kontakt">
-  <div class="section-inner">
-    <div class="section-label">Kontakt</div>
-    <h2 class="section-title" style="margin-bottom: 0.5rem;">Interesse geweckt?</h2>
-    <p class="section-sub" style="margin-bottom: 3rem;">Schreib uns – wir melden uns innerhalb von 24 Stunden.</p>
-
-    <div class="contact-grid">
-
-      <!-- CONTACT FORM -->
-      <%= form_with url: landing_contact_path, method: :post, class: "contact-form" do |f| %>
-        <div class="form-group">
-          <%= f.label :name, "Name" %>
-          <%= f.text_field :name, placeholder: "Max Mustermann", required: true %>
-        </div>
-        <div class="form-group">
-          <%= f.label :email, "E-Mail" %>
-          <%= f.email_field :email, placeholder: "max@musterverein.de", required: true %>
-        </div>
-        <div class="form-group">
-          <%= f.label :message, "Nachricht" %>
-          <%= f.text_area :message,
-                placeholder: "Kurze Beschreibung eures Vereins und wie viele Mitglieder ihr habt...",
-                required: true %>
-        </div>
-        <%= f.submit "Nachricht senden →", class: "btn-primary", style: "align-self: flex-start;" %>
-      <% end %>
-
-      <!-- ADMIN LOGIN -->
+    <%# HERO %>
+    <header class="max-w-6xl mx-auto px-6 pt-16 pb-20 grid lg:grid-cols-2 gap-12 items-center">
       <div>
-        <div class="admin-login">
-          <h3>Bereits Kunde?</h3>
-          <p>Melde dich in deinem Verein an oder wechsle direkt ins Super-Admin-Dashboard.</p>
-
-          <%= link_to new_member_session_path, class: "admin-login-btn" do %>
-            <span>🔑 Zum Vereins-Login</span>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-          <% end %>
-
-          <%= link_to super_admin_root_path, class: "admin-login-btn" do %>
-            <span>⚡ Super Admin</span>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-          <% end %>
-
-          <p class="admin-hint">
-            Du weißt die URL deines Vereins?<br>
-            Gehe direkt auf <strong>deinverein.kontova.de</strong>
-          </p>
+        <div class="inline-flex items-center gap-2 text-xs uppercase tracking-widest text-blue-400 font-semibold bg-blue-500/10 border border-blue-500/20 rounded-full px-3 py-1">
+          Kassenverwaltung für Vereine
+        </div>
+        <h1 class="text-4xl sm:text-5xl font-bold leading-tight mt-6">
+          Weniger Papierkram.<br>
+          <span class="text-blue-400">Mehr Verein.</span>
+        </h1>
+        <p class="text-gray-400 text-lg mt-6 max-w-md">
+          Kontova übernimmt die Buchhaltung – von der Getränkekasse bis zum automatischen
+          Kontoabgleich. Für Kassenwarte, die lieber feiern als rechnen.
+        </p>
+        <div class="flex flex-wrap gap-3 mt-8">
+          <a href="#kontakt"
+             class="bg-blue-600 hover:bg-blue-500 px-6 py-3 rounded-xl font-semibold flex items-center gap-2 transition">
+            Jetzt anfragen
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+          <a href="#features"
+             class="bg-gray-900 hover:bg-gray-800 border border-gray-800 px-6 py-3 rounded-xl font-semibold flex items-center gap-2 transition">
+            Features ansehen
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 9l-7 7-7-7"/></svg>
+          </a>
         </div>
       </div>
 
+      <%= render layout: "browser_frame", locals: { url: "meinverein.kontova.de", label: "Screenshot: Kiosk-Ansicht" } do %>
+        <rect x="3" y="3" width="18" height="18" rx="2"></rect><path d="M3 9h18M9 21V9"></path>
+      <% end %>
+    </header>
+
+    <%# SOCIAL PROOF %>
+    <div class="border-y border-gray-800 bg-gray-900/40">
+      <p class="max-w-6xl mx-auto px-6 py-5 text-center text-gray-400 text-sm">
+        ⭐ Bereits im Einsatz bei deutschen Verbindungen und Vereinen
+      </p>
     </div>
-  </div>
-</section>
 
-<!-- FOOTER -->
-<footer>
-  <span class="footer-logo">Kontova</span>
-  <span>© 2026 Bosse Schumacher &nbsp;·&nbsp; <a href="#">Impressum</a> &nbsp;·&nbsp; <a href="#">Datenschutz</a></span>
-  <a href="mailto:contact@kontova.de">contact@kontova.de</a>
-</footer>
+    <%# FEATURES %>
+    <section id="features" class="max-w-6xl mx-auto px-6 py-24">
+      <div class="mb-16">
+        <div class="text-xs uppercase tracking-widest text-blue-400 font-semibold mb-3">Features</div>
+        <h2 class="text-3xl sm:text-4xl font-bold">Alles was ein Verein braucht</h2>
+        <p class="text-gray-400 mt-4 max-w-2xl">
+          Von der Getränkekasse bis zur automatischen Kontoabstimmung – Kontova deckt den
+          kompletten Kassenalltag ab.
+        </p>
+      </div>
 
-</body>
+      <%# KIOSK %>
+      <div class="grid lg:grid-cols-2 gap-10 items-center mb-20">
+        <div>
+          <h3 class="text-2xl font-bold mb-3">🍺 Kiosk</h3>
+          <p class="text-gray-400 mb-6">
+            Mitglieder buchen ihre Getränke selbst – per PIN, ohne Kassierer.
+            Läuft auf jedem Gerät im Browser.
+          </p>
+          <%= render "feature_list", items: [
+                "PIN-geschützter Zugang – kein Name öffentlich sichtbar",
+                "Warenkorb mit automatischem Kastenpreis",
+                "Mischkästen konfigurierbar",
+                "GiroCode QR-Code + Zahlungsdaten zum Kopieren",
+                "Gesponserte Buchungen für besondere Anlässe"
+              ] %>
+        </div>
+        <%= render layout: "browser_frame", locals: { url: "meinverein.kontova.de/kiosk", label: "Screenshot: Getränkeauswahl" } do %>
+          <path d="M8 2h8l1 7H7L8 2z"></path><path d="M7 9c0 5 2 9 5 9s5-4 5-9"></path>
+        <% end %>
+      </div>
+
+      <%# KASSENWART %>
+      <div class="grid lg:grid-cols-2 gap-10 items-center mb-20">
+        <div class="lg:order-2">
+          <h3 class="text-2xl font-bold mb-3">💰 Kassenwart-Dashboard</h3>
+          <p class="text-gray-400 mb-6">
+            Volle Übersicht über alle Mitglieder, Transaktionen und Anträge. Einzahlungen,
+            Auslagen und Mitgliedsbeiträge – alles an einem Ort.
+          </p>
+          <%= render "feature_list", items: [
+                "Mitgliederverwaltung mit Rollenmodell",
+                "Transaktionshistorie pro Mitglied",
+                "Automatischer Mitgliedsbeitrag per Cronjob",
+                "Antragsbearbeitung mit Belegprüfung",
+                "Automatischer Bankabgleich via GoCardless"
+              ] %>
+        </div>
+        <div class="lg:order-1">
+          <%= render layout: "browser_frame", locals: { url: "meinverein.kontova.de/treasurer", label: "Screenshot: Kassenwart-Dashboard" } do %>
+            <rect x="3" y="3" width="18" height="18" rx="2"></rect><path d="M3 9h18M9 3v18"></path>
+          <% end %>
+        </div>
+      </div>
+
+      <%# MITGLIEDER %>
+      <div class="grid lg:grid-cols-2 gap-10 items-center">
+        <div>
+          <h3 class="text-2xl font-bold mb-3">👤 Mitgliederbereich</h3>
+          <p class="text-gray-400 mb-6">
+            Jedes Mitglied hat einen eigenen Bereich – mit Saldo, Transaktionshistorie und
+            der Möglichkeit Auslagen einzureichen.
+          </p>
+          <%= render "feature_list", items: [
+                "Eigener Saldo und Buchungshistorie",
+                "Auslagenerstattung mit Belegupload",
+                "E-Mail-Benachrichtigungen bei Entscheidungen",
+                "PIN und Passwort selbst ändern",
+                "Monatlicher Kontoauszug per E-Mail"
+              ] %>
+        </div>
+        <%= render layout: "browser_frame", locals: { url: "meinverein.kontova.de/member_area", label: "Screenshot: Mitgliederbereich" } do %>
+          <circle cx="12" cy="8" r="4"></circle><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"></path>
+        <% end %>
+      </div>
+
+      <%# FEATURE CARDS %>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5 mt-20">
+        <% [
+          ["📦", "Inventurverwaltung", "Einkäufe erfassen, Inventur machen, Schwund analysieren. Mit Soll/Ist-Vergleich und Mischkästen."],
+          ["🏢", "Multi-Tenancy", "Jeder Verein bekommt seine eigene Subdomain. Daten sind vollständig voneinander getrennt."],
+          ["🔄", "Automatischer Bankabgleich", "GoCardless Open Banking gleicht Überweisungen automatisch mit Mitgliedern ab."],
+          ["📧", "Automatische E-Mails", "Willkommensmail mit PIN, monatlicher Kontoauszug, Benachrichtigungen bei Anträgen."],
+          ["🔐", "Datenschutz by Design", "Kein Name im Kiosk sichtbar. PIN-Zugang schützt die Privatsphäre der Mitglieder."],
+          ["📱", "Überall nutzbar", "Läuft im Browser auf jedem Gerät – Smartphone, Tablet, Desktop. Keine App nötig."]
+        ].each do |icon, title, text| %>
+          <div class="bg-gray-900 border border-gray-800 rounded-2xl p-6 hover:border-gray-700 transition">
+            <div class="text-3xl mb-4"><%= icon %></div>
+            <h4 class="font-semibold text-lg mb-2"><%= title %></h4>
+            <p class="text-gray-400 text-sm"><%= text %></p>
+          </div>
+        <% end %>
+      </div>
+    </section>
+
+    <%# WORKFLOW %>
+    <section id="workflow" class="bg-gray-900 border-y border-gray-800">
+      <div class="max-w-6xl mx-auto px-6 py-24">
+        <div class="text-xs uppercase tracking-widest text-blue-400 font-semibold mb-3">So funktioniert's</div>
+        <h2 class="text-3xl sm:text-4xl font-bold">In vier Schritten startklar</h2>
+        <p class="text-gray-400 mt-4 max-w-2xl">
+          Kein kompliziertes Setup. Wir richten alles ein – du fängst sofort an.
+        </p>
+
+        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-12">
+          <% [
+            ["✉️", "Anfragen", "Schreib uns kurz – wir richten deinen Verein ein."],
+            ["⚙️", "Einrichten", "IBAN, Beiträge und Produkte konfigurieren."],
+            ["👥", "Mitglieder einladen", "Jedes Mitglied bekommt automatisch eine Willkommensmail mit PIN."],
+            ["🎉", "Loslegen", "Kiosk aufstellen, Beiträge laufen automatisch."]
+          ].each_with_index do |(icon, title, text), i| %>
+            <div class="bg-gray-950 border border-gray-800 rounded-2xl p-6">
+              <div class="w-12 h-12 rounded-xl bg-blue-600/20 text-2xl flex items-center justify-center mb-4">
+                <%= icon %>
+              </div>
+              <div class="text-xs font-mono text-gray-600 mb-1">0<%= i + 1 %></div>
+              <h4 class="font-semibold mb-2"><%= title %></h4>
+              <p class="text-gray-400 text-sm"><%= text %></p>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </section>
+
+    <%# PRICING %>
+    <section id="pricing" class="max-w-6xl mx-auto px-6 py-24 text-center">
+      <div class="text-xs uppercase tracking-widest text-blue-400 font-semibold mb-3">Preise</div>
+      <h2 class="text-3xl sm:text-4xl font-bold">Transparent und fair</h2>
+      <p class="text-gray-400 mt-4 max-w-xl mx-auto">
+        Monatliche Gebühr pro Verein. Keine versteckten Kosten, keine Einrichtungsgebühr.
+      </p>
+
+      <div class="grid md:grid-cols-2 gap-6 max-w-3xl mx-auto mt-12 text-left">
+        <%# Starter %>
+        <div class="bg-gray-900 border border-gray-800 rounded-2xl p-8 flex flex-col">
+          <div class="text-sm uppercase tracking-widest text-gray-500 mb-4">Starter</div>
+          <div class="text-4xl font-bold">
+            15 €<span class="text-base text-gray-500 font-normal"> / Monat</span>
+          </div>
+          <ul class="space-y-3 mt-6 mb-8 text-gray-300 text-sm">
+            <% ["Bis zu 30 Mitglieder", "Kiosk & Kassenwart-Dashboard", "Mitgliederbereich", "Automatische E-Mails", "E-Mail Support"].each do |feat| %>
+              <li class="flex items-center gap-2"><span class="text-blue-400 font-bold">✓</span><%= feat %></li>
+            <% end %>
+          </ul>
+          <a href="#kontakt"
+             class="mt-auto block text-center bg-gray-800 hover:bg-gray-700 border border-gray-700 py-3 rounded-xl font-semibold transition">
+            Anfragen
+          </a>
+        </div>
+
+        <%# Vollständig (featured) %>
+        <div class="bg-gray-900 border-2 border-blue-500 rounded-2xl p-8 flex flex-col relative">
+          <span class="absolute -top-3 left-8 bg-blue-600 text-white text-xs font-semibold uppercase tracking-widest px-3 py-1 rounded-full">
+            Beliebt
+          </span>
+          <div class="text-sm uppercase tracking-widest text-blue-400 mb-4">Vollständig</div>
+          <div class="text-4xl font-bold">
+            25 €<span class="text-base text-gray-500 font-normal"> / Monat</span>
+          </div>
+          <ul class="space-y-3 mt-6 mb-8 text-gray-300 text-sm">
+            <% ["Unbegrenzte Mitglieder", "Alle Starter-Features", "Automatischer Bankabgleich", "Inventurverwaltung", "Prioritäts-Support"].each do |feat| %>
+              <li class="flex items-center gap-2"><span class="text-blue-400 font-bold">✓</span><%= feat %></li>
+            <% end %>
+          </ul>
+          <a href="#kontakt"
+             class="mt-auto block text-center bg-blue-600 hover:bg-blue-500 py-3 rounded-xl font-semibold transition">
+            Anfragen
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <%# CONTACT & ADMIN LOGIN %>
+    <section id="kontakt" class="bg-gray-900 border-t border-gray-800">
+      <div class="max-w-6xl mx-auto px-6 py-24">
+        <div class="text-xs uppercase tracking-widest text-blue-400 font-semibold mb-3">Kontakt</div>
+        <h2 class="text-3xl sm:text-4xl font-bold mb-2">Interesse geweckt?</h2>
+        <p class="text-gray-400 mb-12 max-w-xl">
+          Schreib uns – wir melden uns innerhalb von 24 Stunden.
+        </p>
+
+        <div class="grid lg:grid-cols-2 gap-10">
+          <%# CONTACT FORM %>
+          <%= form_with url: landing_contact_path, method: :post, class: "space-y-4" do |f| %>
+            <div>
+              <%= f.label :name, "Name", class: "block text-gray-400 text-sm mb-1" %>
+              <%= f.text_field :name, placeholder: "Max Mustermann", required: true,
+                    class: "w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 focus:outline-none focus:border-blue-500" %>
+            </div>
+            <div>
+              <%= f.label :email, "E-Mail", class: "block text-gray-400 text-sm mb-1" %>
+              <%= f.email_field :email, placeholder: "max@musterverein.de", required: true,
+                    class: "w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 focus:outline-none focus:border-blue-500" %>
+            </div>
+            <div>
+              <%= f.label :message, "Nachricht", class: "block text-gray-400 text-sm mb-1" %>
+              <%= f.text_area :message, rows: 5,
+                    placeholder: "Kurze Beschreibung eures Vereins und wie viele Mitglieder ihr habt...",
+                    required: true,
+                    class: "w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 focus:outline-none focus:border-blue-500" %>
+            </div>
+            <%= f.submit "Nachricht senden →",
+                  class: "bg-blue-600 hover:bg-blue-500 px-6 py-3 rounded-xl font-semibold cursor-pointer transition" %>
+          <% end %>
+
+          <%# ADMIN LOGIN %>
+          <div class="bg-gray-950 border border-gray-800 rounded-2xl p-8 h-fit">
+            <h3 class="text-xl font-bold mb-2">Bereits Kunde?</h3>
+            <p class="text-gray-400 mb-6">
+              Melde dich in deinem Verein an oder wechsle direkt ins Super-Admin-Dashboard.
+            </p>
+
+            <%= link_to new_member_session_path,
+                  class: "flex items-center justify-between bg-gray-800 hover:bg-gray-700 border border-gray-700 px-5 py-4 rounded-xl font-semibold mb-3 transition" do %>
+              <span>🔑 Zum Vereins-Login</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            <% end %>
+
+            <%= link_to super_admin_root_path,
+                  class: "flex items-center justify-between bg-gray-800 hover:bg-gray-700 border border-gray-700 px-5 py-4 rounded-xl font-semibold transition" do %>
+              <span>⚡ Super Admin</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            <% end %>
+
+            <p class="text-gray-500 text-sm mt-6">
+              Du weißt die URL deines Vereins?<br>
+              Gehe direkt auf <strong class="text-gray-300">deinverein.kontova.de</strong>
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <%# FOOTER %>
+    <footer class="border-t border-gray-800">
+      <div class="max-w-6xl mx-auto px-6 py-10 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-gray-500">
+        <span class="font-bold text-white">Kontova</span>
+        <span>© 2026 Bosse Schumacher &nbsp;·&nbsp; <a href="#" class="hover:text-gray-300">Impressum</a> &nbsp;·&nbsp; <a href="#" class="hover:text-gray-300">Datenschutz</a></span>
+        <a href="mailto:contact@kontova.de" class="hover:text-gray-300">contact@kontova.de</a>
+      </div>
+    </footer>
+
+  </body>
 </html>

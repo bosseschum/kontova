@@ -3,6 +3,7 @@ class LandingController < ApplicationController
   skip_before_action :set_organization
 
   def index
+    render layout: false
   end
 
   def contact
