@@ -14,13 +14,18 @@ module Treasurer
       bank = EnableBanking::Client.new.banks.find { |b| b["name"] == params[:bank_name] }
       return redirect_to treasurer_root_path, alert: "Bank nicht gefunden." unless bank
 
-      result = EnableBanking::AuthorizationService.new(
-        organization: current_organization,
-        bank: bank,
-        redirect_url: banking_callback_url
-      ).call
+      begin
+        result = EnableBanking::AuthorizationService.new(
+          organization: current_organization,
+          bank: bank,
+          redirect_url: "https://kontova.de/banking/callback"
+        ).call
 
-      redirect_to result["url"], allow_other_host: true, status: :see_other
+        redirect_to result["url"], allow_other_host: true, status: :see_other
+      rescue => e
+        Rails.logger.error("Enable Banking authorization failed: #{e.class}: #{e.message}")
+        redirect_to new_treasurer_bank_connection_path, alert: "Autorisierung fehlgeschlagen: #{e.message}"
+      end
     end
 
     def destroy
