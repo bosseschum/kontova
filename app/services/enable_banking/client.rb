@@ -32,5 +32,28 @@ module EnableBanking
 
       JSON.parse(response.body)
     end
+
+    def banks(country: "DE")
+      get("/aspsps?country=#{country}")["aspsps"]
+    end
+
+    def post(path, body)
+      uri = URI("#{BASE_URL}#{path}")
+
+      request = Net::HTTP::Post.new(uri)
+      request["Accept"] = "application/json"
+      request["Content-Type"] = "application/json"
+      request["Authorization"] = "Bearer #{JwtToken.generate}"
+
+      request.body = body.to_json
+
+      response = Net::HTTP.start(uri.hostname, uri.port, use_ssl: true) do |http|
+        http.request(request)
+      end
+
+      raise response.body unless response.is_a?(Net::HTTPSuccess)
+
+      JSON.parse(response.body)
+    end
   end
 end
