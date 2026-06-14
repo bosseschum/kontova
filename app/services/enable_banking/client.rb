@@ -55,5 +55,9 @@ module EnableBanking
 
       JSON.parse(response.body)
     end
+
+    def get_session(code)
+      post("/sessions", { code: code })
+    end
   end
 end

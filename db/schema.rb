@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_06_09_131442) do
+ActiveRecord::Schema[8.1].define(version: 2026_06_14_155134) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -40,6 +40,32 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_09_131442) do
     t.bigint "blob_id", null: false
     t.string "variation_digest", null: false
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
+  end
+
+  create_table "bank_accounts", force: :cascade do |t|
+    t.bigint "bank_connection_id", null: false
+    t.datetime "created_at", null: false
+    t.string "currency", default: "EUR", null: false
+    t.string "iban"
+    t.string "product"
+    t.string "uid", null: false
+    t.datetime "updated_at", null: false
+    t.index ["bank_connection_id"], name: "index_bank_accounts_on_bank_connection_id"
+    t.index ["uid"], name: "index_bank_accounts_on_uid", unique: true
+  end
+
+  create_table "bank_connections", force: :cascade do |t|
+    t.string "authorization_id", null: false
+    t.string "bank_name", null: false
+    t.string "bic"
+    t.datetime "consent_expires_at"
+    t.datetime "created_at", null: false
+    t.bigint "organization_id", null: false
+    t.string "session_id"
+    t.datetime "updated_at", null: false
+    t.index ["authorization_id"], name: "index_bank_connections_on_authorization_id", unique: true
+    t.index ["organization_id"], name: "index_bank_connections_on_organization_id"
+    t.index ["session_id"], name: "index_bank_connections_on_session_id", unique: true, where: "(session_id IS NOT NULL)"
   end
 
   create_table "inventory_counts", force: :cascade do |t|
@@ -178,6 +204,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_09_131442) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "bank_accounts", "bank_connections"
+  add_foreign_key "bank_connections", "organizations"
   add_foreign_key "inventory_counts", "members"
   add_foreign_key "inventory_counts", "organizations"
   add_foreign_key "inventory_counts", "products"

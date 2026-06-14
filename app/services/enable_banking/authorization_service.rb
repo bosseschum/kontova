@@ -1,12 +1,15 @@
 module EnableBanking
   class AuthorizationService
-    def initialize(bank:, redirect_url:)
+    def initialize(organization:, bank:, redirect_url:)
+      @organization = organization
       @bank = bank
       @redirect_url = redirect_url
     end
 
     def call
-      EnableBanking::Client.new.post(
+      state = SecureRandom.uuid
+
+      @result = EnableBanking::Client.new.post(
         "/auth",
         {
           access: {
@@ -16,11 +19,20 @@ module EnableBanking
             name: @bank["name"],
             country: @bank["country"]
           },
-          state: SecureRandom.uuid,
+          state: state,
           redirect_url: @redirect_url,
           psu_type: "business"
         }
       )
+
+      @organization.create_bank_connection!(
+        authorization_id: state,
+        bank_name: @bank["name"],
+        bic: @bank["bic"],
+        consent_expires_at: 90.days.from_now
+      )
+
+      @result
     end
   end
 end
