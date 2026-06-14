@@ -6,15 +6,25 @@ module Banking
     def show
       if params[:error].present?
         Rails.logger.error("Enable Banking callback error: #{params[:error]}")
-        return redirect_to root_path, alert: "Bank authorization failed: #{params[:error]}"
+        return redirect_to root_path, alert: "Bankverbindung fehlgeschlagen: #{params[:error]}"
       end
 
       code = params[:code]
-      return redirect_to root_path, alert: "Missing authorization code." if code.blank?
+      return redirect_to root_path, alert: "Fehlender Autorisierungscode." if code.blank?
 
-      session_data = EnableBanking::Client.new.post("/sessions", { code: code })
+      begin
+        session_data = EnableBanking::Client.new.post("/sessions", { code: code })
+      rescue RuntimeError => e
+        Rails.logger.error("Enable Banking session exchange failed: #{e.message}")
+        return redirect_to root_path, alert: "Bankverbindung konnte nicht hergestellt werden."
+      end
 
-      connection = BankConnection.find_by!(authorization_id: params[:state])
+      connection = BankConnection.find_by(authorization_id: params[:state])
+      unless connection
+        Rails.logger.error("No BankConnection found for state: #{params[:state]}")
+        return redirect_to root_path, alert: "Sitzung nicht gefunden."
+      end
+
       connection.update!(session_id: session_data["session_id"])
 
       session_data["accounts"].each do |account|
@@ -25,9 +35,17 @@ module Banking
         end
       end
 
-      EnableBanking::TransactionSyncService.new(connection).call
+      begin
+        EnableBanking::TransactionSyncService.new(connection).call
+      rescue RuntimeError => e
+        Rails.logger.error("Transaction sync failed after connect: #{e.message}")
+        # Don't fail the whole flow — accounts are saved, sync will retry
+      end
 
-      redirect_to root_path, notice: "Bank connected — #{connection.bank_accounts.count} accounts, #{connection.bank_accounts.joins(:bank_transactions).count} transactions imported."
+      org = connection.organization
+      redirect_to treasurer_bank_transactions_url(
+        host: "#{org.subdomain}.#{Rails.application.config.default_url_options[:host]}"
+      ), notice: "Bank verbunden — #{connection.bank_accounts.count} Konten importiert."
     end
   end
 end
