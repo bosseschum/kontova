@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="de" class="scroll-smooth">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title><%= content_for(:title) || "Kontova – Kassenverwaltung für Vereine" %></title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <link rel="icon" href="/icon.png" type="image/png">
+    <link rel="icon" href="/icon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/icon.png">
+
+    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+  </head>
+
+  <body class="min-h-screen bg-gray-950 text-white antialiased flex flex-col">
+
+    <%# NAV %>
+    <nav class="sticky top-0 z-50 bg-gray-950/80 backdrop-blur border-b border-gray-800">
+      <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+        <%= link_to root_path, class: "text-xl font-bold" do %>
+          Kont<span class="text-blue-500">o</span>va
+        <% end %>
+        <ul class="flex items-center gap-6 text-sm text-gray-400">
+          <li class="hidden md:block"><a href="<%= root_path %>#features" class="hover:text-white transition">Features</a></li>
+          <li class="hidden md:block"><a href="<%= root_path %>#workflow" class="hover:text-white transition">So funktioniert's</a></li>
+          <li class="hidden md:block"><a href="<%= root_path %>#pricing" class="hover:text-white transition">Preise</a></li>
+          <li class="hidden md:block"><a href="<%= root_path %>#kontakt" class="hover:text-white transition">Kontakt</a></li>
+          <li>
+            <%= link_to "Einloggen →", new_member_session_path,
+                  class: "bg-blue-600 hover:bg-blue-500 text-white px-4 py-2 rounded-lg font-semibold transition" %>
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <% if notice %>
+      <div class="max-w-6xl mx-auto px-6 mt-4 w-full">
+        <div class="p-3 bg-green-700 rounded-lg text-center font-semibold"><%= notice %></div>
+      </div>
+    <% end %>
+
+    <main class="flex-1">
+      <%= yield %>
+    </main>
+
+    <%# FOOTER %>
+    <footer class="border-t border-gray-800">
+      <div class="max-w-6xl mx-auto px-6 py-10 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-gray-500">
+        <span class="font-bold text-white">Kontova</span>
+        <span>
+          © 2026 Bosse Schumacher &nbsp;·&nbsp;
+          <%= link_to "Impressum", impressum_path, class: "hover:text-gray-300" %> &nbsp;·&nbsp;
+          <%= link_to "Datenschutz", datenschutz_path, class: "hover:text-gray-300" %>
+        </span>
+        <a href="mailto:contact@kontova.de" class="hover:text-gray-300">contact@kontova.de</a>
+      </div>
+    </footer>
+
+  </body>
+</html>

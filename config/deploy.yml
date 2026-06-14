@@ -3,7 +3,12 @@ image: bosseschumacher/kontova
 
 servers:
   web:
-    - 62.238.45.187
+    hosts:
+      - 62.238.45.187
+
+volumes:
+  - /var/storage/kontova:/rails/storage
+  - "kontova-keys:/rails/config/keys"
 
 proxy:
   ssl: true
@@ -44,4 +49,4 @@ accessories:
       secret:
         - POSTGRES_PASSWORD
     volumes:
-      - /var/storage/kontova:/rails/storage
+      - /var/lib/postgresql/data:/var/lib/postgresql/data

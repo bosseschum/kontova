@@ -1,6 +1,12 @@
 Rails.application.routes.draw do
   root "landing#index", constraints: ->(req) { req.subdomain.blank? || req.subdomain == "www" }
   root "kiosk/drinks#index", constraints: ->(req) { req.subdomain.present? && req.subdomain != "www" }, as: :subdomain_root
+  post "/kontakt", to: "landing#contact", as: :landing_contact,
+    constraints: ->(req) { req.subdomain.blank? || req.subdomain == "www" }
+  get "/impressum", to: "landing#impressum", as: :impressum,
+    constraints: ->(req) { req.subdomain.blank? || req.subdomain == "www" }
+  get "/datenschutz", to: "landing#datenschutz", as: :datenschutz,
+    constraints: ->(req) { req.subdomain.blank? || req.subdomain == "www" }
 
   get "landing/index"
   devise_for :members, controllers: {
@@ -44,6 +50,8 @@ Rails.application.routes.draw do
         post :reject
       end
     end
+    resource :bank_connection, only: [ :new, :create, :destroy ]
+    resources :bank_transactions, only: [ :index ]
   end
 
   # Bierkassenwart
@@ -61,6 +69,11 @@ Rails.application.routes.draw do
     resources :requests, only: [ :index, :new, :create, :show ]
     resource :profile, only: [ :show, :edit, :update ]
   end
+
+  namespace :banking do
+    get "callback", to: "callbacks#show"
+  end
+
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
   # Can be used by load balancers and uptime monitors to verify that the app is live.
   get "up" => "rails/health#show", as: :rails_health_check

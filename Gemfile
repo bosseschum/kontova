@@ -24,6 +24,7 @@ gem "pundit"
 gem "money-rails"
 gem "rqrcode"
 gem "pg", "~> 1.1"
+gem "jwt"
 
 # Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
 # gem "bcrypt", "~> 3.1.7"

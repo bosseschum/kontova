@@ -1,0 +1,131 @@
+<% content_for :title, "Datenschutzerklärung – Kontova" %>
+
+<article class="max-w-3xl mx-auto px-6 py-16">
+  <h1 class="text-3xl sm:text-4xl font-bold mb-2">Datenschutzerklärung</h1>
+  <p class="text-gray-500 text-sm mb-10">Informationen zur Verarbeitung personenbezogener Daten nach Art. 13 DSGVO</p>
+
+  <div class="space-y-10 text-gray-300 leading-relaxed">
+    <section>
+      <h2 class="text-lg font-semibold text-white mb-3">1. Verantwortlicher</h2>
+      <p>
+        Verantwortlich für die Datenverarbeitung auf dieser Website ist:
+      </p>
+      <p class="mt-3">
+        Bosse Schumacher<br>
+        Westbahnhofstraße 44, 72070 Tübingen<br>
+        E-Mail: <a href="mailto:contact@kontova.de" class="text-blue-400 hover:text-blue-300">contact@kontova.de</a>
+      </p>
+    </section>
+
+    <section>
+      <h2 class="text-lg font-semibold text-white mb-3">2. Hosting &amp; Server-Logfiles</h2>
+      <p>
+        Beim Aufruf dieser Website werden durch den Hosting-Provider automatisch Informationen in
+        sogenannten Server-Logfiles gespeichert (IP-Adresse, Datum und Uhrzeit des Zugriffs,
+        aufgerufene Seite, übertragene Datenmenge, Browsertyp und Betriebssystem). Die
+        Verarbeitung erfolgt zur Gewährleistung eines störungsfreien Betriebs sowie zur Sicherheit
+        auf Grundlage unseres berechtigten Interesses (Art. 6 Abs. 1 lit. f DSGVO).
+      </p>
+      <p class="mt-3">
+        <%# TODO: Hosting-Anbieter und ggf. Auftragsverarbeitungsvertrag (AVV) ergänzen %>
+        Hosting-Anbieter: [Anbieter und Anschrift]
+      </p>
+    </section>
+
+    <section>
+      <h2 class="text-lg font-semibold text-white mb-3">3. Kontaktformular</h2>
+      <p>
+        Wenn du uns über das Kontaktformular Anfragen zukommen lässt, werden deine Angaben
+        (Name, E-Mail-Adresse und Nachricht) zwecks Bearbeitung der Anfrage und für den Fall von
+        Anschlussfragen verarbeitet. Rechtsgrundlage ist Art. 6 Abs. 1 lit. b DSGVO
+        (vorvertragliche Maßnahmen) bzw. lit. f DSGVO (berechtigtes Interesse an der Beantwortung).
+        Diese Daten werden gelöscht, sobald sie für die Erreichung des Zwecks nicht mehr
+        erforderlich sind.
+      </p>
+    </section>
+
+    <section>
+      <h2 class="text-lg font-semibold text-white mb-3">4. Mitglieder- und Vereinskonten</h2>
+      <p>
+        Für die Nutzung von Kontova als Kassenverwaltung werden personenbezogene Daten der
+        Vereinsmitglieder verarbeitet (z. B. Name, E-Mail-Adresse, Rolle im Verein, Buchungen,
+        Saldo und Beitragsstatus). Diese Verarbeitung erfolgt im Auftrag des jeweiligen Vereins.
+        Der Verein ist insoweit eigenständig Verantwortlicher; Kontova handelt als
+        Auftragsverarbeiter gemäß Art. 28 DSGVO. Rechtsgrundlage ist Art. 6 Abs. 1 lit. b DSGVO
+        sowie der Auftragsverarbeitungsvertrag mit dem Verein.
+      </p>
+    </section>
+
+    <section>
+      <h2 class="text-lg font-semibold text-white mb-3">5. Automatischer Bankabgleich (GoCardless)</h2>
+      <p>
+        Sofern ein Verein den automatischen Bankabgleich aktiviert, werden Kontoumsätze über den
+        Open-Banking-Dienst GoCardless abgerufen, um Überweisungen den Mitgliedern zuzuordnen.
+        Dabei werden Transaktionsdaten (Betrag, Verwendungszweck, Name des Auftraggebers)
+        verarbeitet. Rechtsgrundlage ist Art. 6 Abs. 1 lit. b und lit. f DSGVO.
+      </p>
+    </section>
+
+    <section>
+      <h2 class="text-lg font-semibold text-white mb-3">6. E-Mail-Versand</h2>
+      <p>
+        Zur Erfüllung des Dienstes versendet Kontova E-Mails (z. B. Willkommensnachrichten,
+        Kontoauszüge und Benachrichtigungen über Anträge). Hierbei werden Name und E-Mail-Adresse
+        der Empfänger verarbeitet. Rechtsgrundlage ist Art. 6 Abs. 1 lit. b DSGVO.
+      </p>
+    </section>
+
+    <section>
+      <h2 class="text-lg font-semibold text-white mb-3">7. Cookies</h2>
+      <p>
+        Diese Website verwendet technisch notwendige Cookies, etwa um deine Sitzung
+        (Login, Warenkorb) zu verwalten. Diese sind für den Betrieb erforderlich; Rechtsgrundlage
+        ist Art. 6 Abs. 1 lit. f DSGVO. Es findet kein Tracking zu Marketingzwecken statt.
+      </p>
+    </section>
+
+    <section>
+      <h2 class="text-lg font-semibold text-white mb-3">8. Deine Rechte</h2>
+      <p>Dir stehen nach der DSGVO folgende Rechte zu:</p>
+      <ul class="mt-3 space-y-2">
+        <% [
+          "Auskunft über die verarbeiteten Daten (Art. 15 DSGVO)",
+          "Berichtigung unrichtiger Daten (Art. 16 DSGVO)",
+          "Löschung (Art. 17 DSGVO)",
+          "Einschränkung der Verarbeitung (Art. 18 DSGVO)",
+          "Datenübertragbarkeit (Art. 20 DSGVO)",
+          "Widerspruch gegen die Verarbeitung (Art. 21 DSGVO)"
+        ].each do |right| %>
+          <li class="flex items-start gap-3">
+            <span class="mt-0.5 w-5 h-5 shrink-0 rounded-full bg-blue-500/20 text-blue-400 flex items-center justify-center text-xs font-bold">✓</span>
+            <%= right %>
+          </li>
+        <% end %>
+      </ul>
+      <p class="mt-3">
+        Zudem hast du das Recht, dich bei einer Datenschutz-Aufsichtsbehörde über die Verarbeitung
+        deiner personenbezogenen Daten zu beschweren.
+      </p>
+    </section>
+
+    <section>
+      <h2 class="text-lg font-semibold text-white mb-3">9. Kontakt zum Datenschutz</h2>
+      <p>
+        Bei Fragen zum Datenschutz erreichst du uns unter
+        <a href="mailto:contact@kontova.de" class="text-blue-400 hover:text-blue-300">contact@kontova.de</a>.
+      </p>
+    </section>
+
+    <p class="text-gray-500 text-sm pt-4 border-t border-gray-800">
+      Stand: <%= Date.current.strftime("%m/%Y") %>.
+      Diese Datenschutzerklärung ist eine Vorlage und sollte vor dem produktiven Einsatz
+      rechtlich geprüft und an die tatsächlichen Verarbeitungen angepasst werden.
+    </p>
+  </div>
+
+  <div class="mt-12">
+    <%= link_to root_path, class: "text-blue-400 hover:text-blue-300 text-sm" do %>
+      ← Zurück zur Startseite
+    <% end %>
+  </div>
+</article>

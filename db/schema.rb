@@ -10,9 +10,28 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_06_09_131442) do
+ActiveRecord::Schema[8.1].define(version: 2026_06_14_171155) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "action_mailbox_inbound_emails", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "message_checksum", null: false
+    t.string "message_id", null: false
+    t.integer "status", default: 0, null: false
+    t.datetime "updated_at", null: false
+    t.index ["message_id", "message_checksum"], name: "index_action_mailbox_inbound_emails_uniqueness", unique: true
+  end
+
+  create_table "action_text_rich_texts", force: :cascade do |t|
+    t.text "body"
+    t.datetime "created_at", null: false
+    t.string "name", null: false
+    t.bigint "record_id", null: false
+    t.string "record_type", null: false
+    t.datetime "updated_at", null: false
+    t.index ["record_type", "record_id", "name"], name: "index_action_text_rich_texts_uniqueness", unique: true
+  end
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.bigint "blob_id", null: false
@@ -40,6 +59,49 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_09_131442) do
     t.bigint "blob_id", null: false
     t.string "variation_digest", null: false
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
+  end
+
+  create_table "bank_accounts", force: :cascade do |t|
+    t.bigint "bank_connection_id", null: false
+    t.datetime "created_at", null: false
+    t.string "currency", default: "EUR", null: false
+    t.string "iban"
+    t.string "product"
+    t.string "uid", null: false
+    t.datetime "updated_at", null: false
+    t.index ["bank_connection_id"], name: "index_bank_accounts_on_bank_connection_id"
+    t.index ["uid"], name: "index_bank_accounts_on_uid", unique: true
+  end
+
+  create_table "bank_connections", force: :cascade do |t|
+    t.string "authorization_id", null: false
+    t.string "bank_name", null: false
+    t.string "bic"
+    t.datetime "consent_expires_at"
+    t.datetime "created_at", null: false
+    t.bigint "organization_id", null: false
+    t.string "session_id"
+    t.datetime "updated_at", null: false
+    t.index ["authorization_id"], name: "index_bank_connections_on_authorization_id", unique: true
+    t.index ["organization_id"], name: "index_bank_connections_on_organization_id"
+    t.index ["session_id"], name: "index_bank_connections_on_session_id", unique: true, where: "(session_id IS NOT NULL)"
+  end
+
+  create_table "bank_transactions", force: :cascade do |t|
+    t.integer "amount_cents", null: false
+    t.bigint "bank_account_id", null: false
+    t.date "booked_at"
+    t.datetime "created_at", null: false
+    t.string "currency", null: false
+    t.string "description"
+    t.string "external_id", null: false
+    t.jsonb "raw", default: {}
+    t.datetime "updated_at", null: false
+    t.date "value_date"
+    t.index ["bank_account_id"], name: "index_bank_transactions_on_bank_account_id"
+    t.index ["booked_at"], name: "index_bank_transactions_on_booked_at"
+    t.index ["external_id"], name: "index_bank_transactions_on_external_id", unique: true
+    t.index ["raw"], name: "index_bank_transactions_on_raw", using: :gin
   end
 
   create_table "inventory_counts", force: :cascade do |t|
@@ -178,6 +240,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_09_131442) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "bank_accounts", "bank_connections"
+  add_foreign_key "bank_connections", "organizations"
+  add_foreign_key "bank_transactions", "bank_accounts"
   add_foreign_key "inventory_counts", "members"
   add_foreign_key "inventory_counts", "organizations"
   add_foreign_key "inventory_counts", "products"

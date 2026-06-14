@@ -48,4 +48,6 @@ Rails.application.configure do
   # Host-Validierung – alle Subdomains erlauben
   config.hosts << /.*\..*/
   config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
+
+  config.default_url_options = { host: ENV["APP_HOST"], protocol: "https" }
 end

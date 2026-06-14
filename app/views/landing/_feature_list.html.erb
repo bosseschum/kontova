@@ -1,0 +1,8 @@
+<ul class="space-y-3">
+  <% items.each do |item| %>
+    <li class="flex items-start gap-3 text-gray-300 text-sm">
+      <span class="mt-0.5 w-5 h-5 shrink-0 rounded-full bg-blue-500/20 text-blue-400 flex items-center justify-center text-xs font-bold">✓</span>
+      <%= item %>
+    </li>
+  <% end %>
+</ul>

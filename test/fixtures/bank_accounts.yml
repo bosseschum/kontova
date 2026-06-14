@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  bank_connection: one
+  uid: MyString
+  iban: MyString
+  product: MyString
+  currency: MyString
+
+two:
+  bank_connection: two
+  uid: MyString
+  iban: MyString
+  product: MyString
+  currency: MyString

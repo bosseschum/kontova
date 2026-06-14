@@ -1,0 +1,17 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  organization: one
+  authorization_id: MyString
+  session_id: MyString
+  bank_name: MyString
+  bic: MyString
+  consent_expires_at: 2026-06-14 17:50:59
+
+two:
+  organization: two
+  authorization_id: MyString
+  session_id: MyString
+  bank_name: MyString
+  bic: MyString
+  consent_expires_at: 2026-06-14 17:50:59
