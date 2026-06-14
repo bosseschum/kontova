@@ -10,7 +10,7 @@
   >
 
   <div class="grid gap-3" id="bank-list">
-    <% @banks.each do |bank| %>
+    <% (@banks || []).each do |bank| %>
       <%= button_to treasurer_bank_connection_path,
             method: :post,
             params: { bank_name: bank["name"] },
