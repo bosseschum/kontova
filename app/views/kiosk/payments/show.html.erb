@@ -47,10 +47,9 @@
                 <p class="text-gray-500 text-xs"><%= label %></p>
                 <p class="text-white text-sm font-mono" id="<%= id %>"><%= value %></p>
               </div>
-              <button onclick="copyToClipboard('<%= id %>')"
-                class="text-blue-400 hover:text-blue-300 text-sm px-3 py-1 bg-gray-800 rounded-lg">
+              <%= tag.button onclick: "copyToClipboard('#{id}')", class: "text-blue-400 hover:text-blue-300 text-sm px-3 py-1 bg-gray-800 rounded-lg" do %>
                 Kopieren
-              </button>
+              <% end %>
             </div>
           <% end %>
 
@@ -67,10 +66,9 @@
                 <p class="text-gray-500 text-xs"><%= label %></p>
                 <p class="text-white text-sm font-mono" id="<%= id %>"><%= value %></p>
               </div>
-              <button onclick="copyToClipboard('<%= id %>')"
-                    class="text-blue-400 hover:text-blue-300 text-sm px-3 py-1 bg-gray-800 rounded-lg">
+              <%= tag.button onclick: "copyToClipboard('#{id}')", class: "text-blue-400 hover:text-blue-300 text-sm px-3 py-1 bg-gray-800 rounded-lg" do %>
                 Kopieren
-              </button>
+              <% end %>
             </div>
           <% end %>
 
