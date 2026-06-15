@@ -15,18 +15,18 @@
 
         <span class="text-xs text-gray-500 uppercase tracking-widest">Admin</span>
         <%= link_to "💰 Kassenwart", treasurer_root_path,
-            class: "text-xs px-3 py-1 rounded-full bg-blue-600 text-white font-semibold" %>
-        <%= link_to "📦 Inventur", inventory_root_path,
             class: "text-xs px-3 py-1 rounded-full bg-gray-700 hover:bg-gray-600 text-gray-300" %>
+        <%= link_to "📦 Inventur", inventory_root_path,
+            class: "text-xs px-3 py-1 rounded-full bg-blue-600 text-white font-semibold" %>
         <%= link_to "🏠 Mitglied", member_area_root_path,
-            class: "text-gray-300 hover:text-white" %>
+            class: "text-xs px-3 py-1 rounded-full text-gray-700 hover:bg-gray-600 text-gray-300" %>
 
       <% else %>
 
         <%= link_to "📦 Inventur", inventory_root_path,
-          class: "text-xs px-3 py-1 rounded-full bg-gray-700 hover:bg-gray-600 text-gray-300" %>
+          class: "text-xs px-3 py-1 rounded-full bg-gray-700 hover:bg-blue-600 text-white font-semibold" %>
         <%= link_to "🏠 Mitglied", member_area_root_path,
-          class: "text-gray-300 hover:text-white" %>
+          class: "text-xs px-3 py-1 rounded-full text-gray-700 hover:bg-gray-600 text-gray-300" %>
 
       <% end %>
     </div>
