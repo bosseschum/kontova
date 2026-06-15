@@ -73,37 +73,44 @@ class Kiosk::DrinksController < ApplicationController
 
     single_purchase = cart.sum { |pid, qty| current_organization.products.find(pid).price_cents * qty }
 
+    # 1. Keep track of how much total money we have allocated so far
+    allocated_total = 0
+    items_processed = 0
+
     cart.each do |product_id, quantity|
       product = current_organization.products.find(product_id)
-      actual_amount = product.price_cents * quantity
+      items_processed += quantity
+
+      actual_amount = if !sponsored && is_mixed_crate && single_purchase > CRATE_PRICE_CENTS
+                        if items_processed == total_quantity
+                          # 2. The last item absorbs any fraction-of-a-cent rounding errors
+                          CRATE_PRICE_CENTS - allocated_total
+                        else
+                          # Proportional split strictly using integer math
+                          item_share = (CRATE_PRICE_CENTS.to_f * quantity / total_quantity).round
+                          allocated_total += item_share
+                          item_share
+                        end
+      else
+                        product.price_cents * quantity
+      end
 
       Transaction.create!(
         member: @member,
         organization: current_organization,
         product: product,
         amount_cents: sponsored ? 0 : -actual_amount,
-        original_amount_cents: actual_amount,
+        original_amount_cents: product.price_cents * quantity,
         kind: :drink_purchase,
         quantity: quantity,
         sponsored: sponsored,
-        note: "#{quantity} x #{product.name}#{is_mixed_crate ? " (Mischkasten)" : ""}#{sponsored ? " (nicht gebucht)" : ""}"
-      )
-    end
-
-    if !sponsored && is_mixed_crate && single_purchase > CRATE_PRICE_CENTS
-      discount = single_purchase - CRATE_PRICE_CENTS
-      Transaction.create!(
-        member: @member,
-        organization: current_organization,
-        amount_cents: discount,
-        kind: :expense_reimbursement,
-        note: "Kastenrabatt (#{total_quantity} Flaschen)"
+        note: "#{quantity} x #{product.name}#{is_mixed_crate ? " (Mischkasten-Anteil)" : ""}#{sponsored ? " (Veranstaltung/Couleur)" : ""}"
       )
     end
 
     session[:cart] = {}
     redirect_to kiosk_root_path,
-                notice: "Einkauf abgeschlossen - #{format("%.2f", total / 100.0)}€ gebucht!#{sponsored ? " (nicht gebucht)" : ""}"
+                notice: "Einkauf abgeschlossen - #{format("%.2f", total / 100.0)}€ gebucht!#{sponsored ? " (Veranstaltung/Couleur)" : ""}"
   end
 
   def clear_cart
