@@ -37,7 +37,7 @@
     <% if @request.receipt.attached? %>
       <div class="mt-4">
         <p class="text-gray-500 text-sm mb-2">Beleg</p>
-        <%= link_to "Beleg anzeigen", rails_blob_url(@request.receipt, disposition: "inline"),
+        <%= link_to "Beleg anzeigen", rails_blob_path(@request.receipt, disposition: "inline"),
               target: "_blank",
               class: "text-blue-400 hover:text-blue-300 text-sm" %>
       </div>
