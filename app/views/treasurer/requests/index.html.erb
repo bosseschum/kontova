@@ -37,8 +37,8 @@
                   class: "text-blue-400 hover:text-blue-300 text-sm" %>
           </td>
           <td class="px-4 py-3 text-right">
-            <%= link_to "Löschen", treasurer_request_path(req), method: :delete,
-                  data: { turbo_confirm: "Antrag wirklich löschen?" },
+            <%= link_to "Löschen", treasurer_request_path(req),
+                  data: { turbo_method: :delete, turbo_confirm: "Antrag wirklich löschen?" },
                   class: "text-red-400 hover:text-red-300 text-sm" %>
           </td>
         </tr>
