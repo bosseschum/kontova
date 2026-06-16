@@ -10,6 +10,12 @@ class Treasurer::RequestsController < Treasurer::BaseController
     @request = find_request
   end
 
+  def destroy
+    @request = find_request
+    @request.destroy!
+    redirect_to treasurer_requests_path, notice: "Antrag gelöscht"
+  end
+
   def approve
     @request = find_request
     kind = @request.expense? ? :expense_reimbursement : :deposit
