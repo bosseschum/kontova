@@ -14,7 +14,7 @@ class MemberArea::RequestsController < MemberArea::BaseController
   def create
     @request = current_member.requests.new(request_params)
     if @request.save
-      TreasurerMailer.new_request(@request, current_organization).deliver_later rescue nil
+      TreasurerMailer.new_request(@request, current_organization).deliver_later
       redirect_to member_area_requests_path, notice: "Antrag eingereicht!"
     else
       render :new, status: :unprocessable_entity

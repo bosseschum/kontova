@@ -5,6 +5,7 @@ class TreasurerMailer < ApplicationMailer
     @organization = organization
 
     treasurer_emails = @organization.members
+      .joins(:organization_memberships)
       .where(organization_memberships: { role: OrganizationMembership.roles[:treasurer] })
       .pluck(:email)
 
