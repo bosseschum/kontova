@@ -20,6 +20,10 @@ class ApplicationController < ActionController::Base
   end
   helper_method :current_member
 
+  def default_url_options
+    { host: ENV["APP_HOST"], protocol: "https" }
+  end
+
   private
 
   def set_organization
