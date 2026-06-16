@@ -20,14 +20,14 @@
         <%= link_to "🏠 Mitglied", member_area_root_path,
             class: "text-xs px-3 py-1 rounded-full bg-blue-600 text-white font-semibold" %>
 
-    <% elsif current_member.treasurer? %>
+    <% elsif current_member.treasurer?(current_organization) %>
 
         <%= link_to "💰 Kassenwart", treasurer_root_path,
             class: "text-xs px-3 py-1 rounded-full bg-gray-700 hover:bg-gray-600 text-white font-semibold" %>
         <%= link_to "🏠 Mitglied", member_area_root_path,
             class: "text-xs px-3 py-1 rounded-full bg-blue-600 text-white font-semibold" %>
 
-    <% elsif current_member.inventory_manager? %>
+    <% elsif current_member.inventory_manager?(current_organization) %>
 
         <%= link_to "📦 Inventur", inventory_root_path,
             class: "text-xs px-3 py-1 rounded-full bg-gray-700 hover:bg-gray-600 text-white font-semibold" %>
