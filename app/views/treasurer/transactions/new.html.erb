@@ -14,9 +14,10 @@
       <%= f.label :kind, "Typ", class: "block text-gray-400 text-sm mb-1" %>
       <%= f.select :kind,
     [["Einzahlung", "deposit"],
-     ["Auslage (Erstattung)", "expense_reimbursement"], 
-     ["Mitgliedsbeitrag", "membership_fee"]],
-      {}, class: "w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2"%>
+     ["Auslage (Erstattung)", "expense_reimbursement"],
+     ["Mitgliedsbeitrag", "membership_fee"],
+     ["Manuelle Ausgabe", "manual_charge"]],
+      {}, class: "w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2" %>
     </div>
 
     <div class="mb-4">
