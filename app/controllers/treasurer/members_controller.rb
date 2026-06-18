@@ -46,16 +46,6 @@ class Treasurer::MembersController < Treasurer::BaseController
     end
   end
 
-
-    if @member.save
-      plain_password = @member.generated_password || member_params[:password]
-      MemberMailer.welcome(@member, @membership.pin, plain_password, current_organization).deliver_later
-      redirect_to treasurer_members_path, notice: "Mitglied angelegt"
-    else
-      render :new, status: :unprocessable_entity
-    end
-  end
-
   def edit
     @member = current_organization.members.find(params[:id])
     @membership = @member.membership_for(current_organization)
