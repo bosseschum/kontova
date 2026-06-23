@@ -1,6 +1,7 @@
 class Transaction < ApplicationRecord
   belongs_to :organization
   belongs_to :member
+  belongs_to :purchaser, polymorphic: true
   belongs_to :product, optional: true
 
   scope :sponsored, -> { where(sponsored: true) }
@@ -29,6 +30,10 @@ class Transaction < ApplicationRecord
 
   def kind_label
     KIND_LABELS[kind] || kind
+  end
+
+  def member
+    purchaser if purchaser_type == "Member"
   end
 
   private

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_06_23_144759) do
+ActiveRecord::Schema[8.1].define(version: 2026_06_23_145808) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -358,17 +358,18 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_23_144759) do
     t.integer "amount_cents", null: false
     t.datetime "created_at", null: false
     t.integer "kind", null: false
-    t.integer "member_id", null: false
     t.string "note"
     t.integer "organization_id"
     t.integer "original_amount_cents"
     t.integer "product_id"
+    t.integer "purchaser_id", null: false
+    t.string "purchaser_type"
     t.integer "quantity", default: 1
     t.boolean "sponsored"
     t.datetime "updated_at", null: false
-    t.index ["member_id"], name: "index_transactions_on_member_id"
     t.index ["organization_id"], name: "index_transactions_on_organization_id"
     t.index ["product_id"], name: "index_transactions_on_product_id"
+    t.index ["purchaser_id"], name: "index_transactions_on_purchaser_id"
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
@@ -396,7 +397,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_06_23_144759) do
   add_foreign_key "solid_queue_ready_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
   add_foreign_key "solid_queue_recurring_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
   add_foreign_key "solid_queue_scheduled_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
-  add_foreign_key "transactions", "members"
+  add_foreign_key "transactions", "members", column: "purchaser_id"
   add_foreign_key "transactions", "organizations"
   add_foreign_key "transactions", "products"
 end

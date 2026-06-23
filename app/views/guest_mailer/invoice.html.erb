@@ -1,0 +1,18 @@
+<h1>Deine Rechnung - <%= @guest.organization.name %></h1>
+<p>Hallo <%= @guest.display_name %>,</p>
+<p>hier ist deine Rechnung für den Zeitraum von <%= @guest.created_at %> bis <%= @guest.expires_at %>:</p>
+<table style="width: 100%; border-collapse: collapse; ">
+<% transactions.each do |tx| %>
+  <tr>
+    <td><%= tx.note %></td>
+    <td style="text-align: right;"><%= format("%.2f", -tx.amount_cents / 100.0) %></td>
+  </tr>
+<% end %>
+<tr style="font-weight: bold; border-top: 2px solid #333;">
+    <td>Gesamt</td>
+    <td style="text-align: right;"><%= format("%.2f", @total / 100.0) %>€</td>
+</tr>
+</table>
+
+
+<p>Bitte überweise den Betrag auf das untenstehende Konto</p>

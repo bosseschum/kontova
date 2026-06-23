@@ -8,8 +8,10 @@ class Kiosk::DrinksController < ApplicationController
     if params[:pin].present?
       membership = current_organization.organization_memberships.find_by!(pin: params[:pin])
       @selected_member = membership&.member
+      @selected_guest = current_organization.guest_accesses.active.find_by!(pin: params[:pin])
+      @purchaser = @selected_member || @selected_guest
       @selected_membership = membership
-      @pin_verified = @selected_member.present?
+      @pin_verified = @purchaser.present?
       flash.now[:alert] = "Unbekannte PIN" unless @pin_verified
     end
 

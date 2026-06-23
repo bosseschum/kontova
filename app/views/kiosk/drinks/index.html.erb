@@ -13,7 +13,7 @@
       </div>
     <% end %>
 
-    <% if @selected_member && @pin_verified %>
+    <% if @purchaser && @pin_verified %>
       <%# Header %>
       <div class="mb-8 bg-gray-900 border border-gray-800 rounded-3xl p-6">
         <div class="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
@@ -22,15 +22,15 @@
               Eingeloggt als
             </p>
             <h1 class="text-3xl font-bold mt-1 wrap-break-words">
-              <%= @selected_member.display_name %>
+              <%= @purchaser.display_name %>
             </h1>
-            <p class="mt-2 text-xl font-semibold <%= @selected_member.balance >= 0 ? 'text-green-400' : 'text-red-400' %>">
-              Saldo: <%= format("%.2f", @selected_member.balance) %> €
+            <p class="mt-2 text-xl font-semibold <%= @purchaser.balance >= 0 ? 'text-green-400' : 'text-red-400' %>">
+              Saldo: <%= format("%.2f", @purchaser.balance) %> €
             </p>
           </div>
           <div class="grid grid-cols-2 gap-3 w-full lg:w-auto">
             <%= link_to "💳 Guthaben aufladen",
-                  kiosk_payment_path(@selected_member, pin: params[:pin]),
+                  kiosk_payment_path(@purchaser, pin: params[:pin]),
                   data: { turbo_frame: "_top" },
                   class: "bg-emerald-600 hover:bg-emerald-500 px-5 py-3 rounded-2xl font-semibold text-center" %>
             <%= link_to "Abmelden",
