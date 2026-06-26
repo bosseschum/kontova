@@ -38,7 +38,12 @@
           <td class="px-4 py-3 text-gray-400 text-sm">
             <%= tx.created_at.strftime("%d.%m.%Y %H:%M") %>
           </td>
-          <td class="px-4 py-3"><%= tx.member&.display_name || "Gelöschtes Mitglied" %></td>
+          <td class="px-4 py-3">
+              <%= tx.purchaser&.display_name || "Gelöschtes Mitglied" %>
+              <% if tx.purchaser_type == "GuestAccess" %>
+                <span class="text-xs text-gray-500">(Gast)</span>
+              <% end %>
+          </td>
           <td class="px-4 py-3 text-gray-400 text-sm">
             <%= { "drink_purchase" => "Getränk", "deposit" => "Einzahlung",
                   "expense_reimbursement" => "Auslage", "membership_fee" => "Beitrag"

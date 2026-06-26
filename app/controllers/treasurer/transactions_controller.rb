@@ -1,15 +1,22 @@
 class Treasurer::TransactionsController < Treasurer::BaseController
   def index
-    @transactions = Transaction.joins(member: :organization_memberships)
-      .where(organization_memberships: { organization: current_organization })
-      .includes(:member, :product)
+    @transactions = Transaction
+      .where(purchaser_type: "Member")
+      .where(purchaser_id: current_organization.members.select(:id))
+      .or(
+        Transaction.where(purchaser_type: "GuestAccess")
+          .where(purchaser_id: current_organization.guest_accesses.select(:id))
+      )
+      .includes(:purchaser, :product)
       .order(created_at: :desc)
       .limit(100)
 
-    @transactions = @transactions.where(member_id: params[:member_id]) if params[:member_id].present?
-    @transactions = @transactions.sponsored if params[:sponsored] == "1"
+    if params[:member_id].present?
+      @transactions = @transactions.where(purchaser_type: "Member", purchaser_id: params[:member_id])
+      @member = current_organization.members.find(params[:member_id])
+    end
 
-    @member = current_organization.members.find(params[:member_id]) if params[:member_id].present?
+    @transactions = @transactions.sponsored if params[:sponsored] == "1"
   end
 
   def new
@@ -51,12 +58,12 @@ class Treasurer::TransactionsController < Treasurer::BaseController
   private
 
   def find_transaction
-    Transaction.joins(member: :organization_memberships)
-      .where(organization_memberships: { organization: current_organization })
+    Transaction.joins(:purchaser)
+      .where(purchaser: { organization: current_organization })
       .find(params[:id])
   end
 
   def transaction_params
-    params.require(:transaction).permit(:member_id, :amount_cents, :kind, :note)
+    params.require(:transaction).permit(:purchaser_type, :purchaser_id, :amount_cents, :kind, :note)
   end
 end

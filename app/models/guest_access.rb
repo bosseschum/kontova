@@ -1,6 +1,6 @@
 class GuestAccess < ApplicationRecord
   belongs_to :organization
-  has_many :transactions, as: :purchaser
+  has_many :transactions, as: :purchaser, dependent: :destroy
 
   validates :display_name, presence: true
   validates :email, presence: true

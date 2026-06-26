@@ -36,6 +36,10 @@ class Transaction < ApplicationRecord
     purchaser if purchaser_type == "Member"
   end
 
+  def guest
+    purchaser if purchaser_type == "GuestAccess"
+  end
+
   private
 
   def set_default_quantity

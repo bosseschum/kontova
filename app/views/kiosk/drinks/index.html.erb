@@ -14,7 +14,6 @@
     <% end %>
 
     <% if @purchaser && @pin_verified %>
-      <%# Header %>
       <div class="mb-8 bg-gray-900 border border-gray-800 rounded-3xl p-6">
         <div class="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
           <div>
@@ -23,19 +22,27 @@
             </p>
             <h1 class="text-3xl font-bold mt-1 wrap-break-words">
               <%= @purchaser.display_name %>
-            </h1>
-            <p class="mt-2 text-xl font-semibold <%= @purchaser.balance >= 0 ? 'text-green-400' : 'text-red-400' %>">
-              Saldo: <%= format("%.2f", @purchaser.balance) %> €
-            </p>
+              <% if @purchaser.is_a?(Member) %>
+                <span class="text-sm text-gray-500">
+                  <p class="mt-2 text-xl font-semibold <%= @purchaser.balance >= 0 ? 'text-green-400' : 'text-red-400' %>">
+                    Saldo: <%= format("%.2f", @purchaser.balance) %> €
+                  </p>
+                </span>
+                <% else %>
+                  <span class="text-sm text-gray-400">Gast - Rechnung folgt</span>
+                <% end %>
+              </h1>
           </div>
           <div class="grid grid-cols-2 gap-3 w-full lg:w-auto">
-            <%= link_to "💳 Guthaben aufladen",
+              <% if @purchaser.is_a?(Member) %>
+                <%= link_to "💳 Guthaben aufladen",
                   kiosk_payment_path(@purchaser, pin: params[:pin]),
                   data: { turbo_frame: "_top" },
                   class: "bg-emerald-600 hover:bg-emerald-500 px-5 py-3 rounded-2xl font-semibold text-center" %>
-            <%= link_to "Abmelden",
+                <%= link_to "Abmelden",
                   kiosk_root_path,
                   class: "bg-gray-700 hover:bg-gray-600 px-5 py-3 rounded-2xl font-semibold text-center" %>
+              <% end %>
           </div>
         </div>
       </div>

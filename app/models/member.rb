@@ -9,7 +9,7 @@ class Member < ApplicationRecord
 
   has_many :organizations, through: :organization_memberships
   has_many :organization_memberships, dependent: :destroy
-  has_many :transactions, dependent: :nullify
+  has_many :transactions, dependent: :destroy, as: :purchaser
   has_many :purchases, dependent: :nullify
   has_many :inventory_counts, dependent: :nullify
   has_many :requests, dependent: :nullify
