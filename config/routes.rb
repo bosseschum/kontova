@@ -41,8 +41,7 @@ Rails.application.routes.draw do
   # Kassenwart
   namespace :treasurer do
     root "dashboard#index"
-    resources :members do
-      only: [ :index, :new, :create, :edit, :update, :destroy ]
+    resources :members, only: [ :index, :new, :create, :edit, :update, :destroy ] do
       post :resend_welcome, on: :member
       post :send_invoice, on: :member
     end
