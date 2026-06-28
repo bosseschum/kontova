@@ -16,6 +16,21 @@ class Treasurer::GuestAccessesController < Treasurer::BaseController
     end
   end
 
+  def send_invoice
+    @guest = current_organization.guest_accesses.find(params[:id])
+
+    if @guest.transactions.empty?
+      redirect_to treasurer_guest_accesses_path,
+        alert: "Keine Buchungen vorhanden" and return
+    end
+
+    GuestMailer.invoice(@guest).deliver_later
+    @guest.update!(invoiced: true)
+
+    redirect_to treasurer_guest_accesses_path,
+      notice: "Rechnung an #{@guest.email} gesendet"
+  end
+
   private
 
   def guest_access_params

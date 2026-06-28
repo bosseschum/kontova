@@ -74,6 +74,26 @@ class Treasurer::MembersController < Treasurer::BaseController
     redirect_to treasurer_members_path, notice: "Mitglied gelöscht"
   end
 
+  def resend_welcome
+    @member = current_organization.members.find(params[:id])
+    membership = current_organization.organization_memberships.find_by!(member: @member)
+
+    new_password = SecureRandom.hex(8)
+    @member.update!(password: new_password)
+
+    MemberMailer.welcome(@member, membership.pin, new_password, current_organization).deliver_later
+
+    redirect_to treasurer_members_path, notice: "Willkommens-E-Mail wurde erneut an #{@member.email} gesendet"
+  end
+
+  def send_invoice
+    @member = current_organization.members.find(params[:id])
+    invoice = Invoice.new(member: @member, organization: current_organization)
+    InvoiceMailer.invoice(invoice).deliver_later
+
+    redirect_to treasurer_members_path, notice: "Rechnung wurde an #{@member.email} gesendet"
+  end
+
   private
 
   def member_params

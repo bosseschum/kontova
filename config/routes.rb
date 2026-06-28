@@ -41,7 +41,11 @@ Rails.application.routes.draw do
   # Kassenwart
   namespace :treasurer do
     root "dashboard#index"
-    resources :members, only: [ :index, :new, :create, :edit, :update, :destroy ]
+    resources :members do
+      only: [ :index, :new, :create, :edit, :update, :destroy ]
+      post :resend_welcome, on: :member
+      post :send_invoice, on: :member
+    end
     resources :transactions, only: [ :index, :new, :create, :edit, :update, :destroy ]
     resource :settings, only: [ :show, :update ]
     resources :requests, only: [ :index, :show, :destroy ] do
@@ -52,7 +56,9 @@ Rails.application.routes.draw do
     end
     resource :bank_connection, only: [ :new, :create, :destroy ]
     resources :bank_transactions, only: [ :index ]
-    resources :guest_accesses, only: [ :index, :new, :create, :destroy ]
+    resources :guest_accesses, only: [ :index, :new, :create, :destroy ] do
+      post :send_invoice, on: :member
+    end
   end
 
   # Bierkassenwart

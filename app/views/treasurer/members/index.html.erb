@@ -35,6 +35,18 @@
             <%= format("%.2f", member.balance) %>€
           </td>
           <td class="px-4 py-3 text-right flex justify-end gap-3">
+            <%= button_to "Rechnung senden",
+              send_invoice_treasurer_member_path(member),
+              method: :post,
+              data: { turbo_confirm: "Rechnung senden?" },
+              class: "text-blue-400 hover:text-blue-300 text-sm
+                      bg-transparent border-0 cursor-pointer p-0" %>
+            <%= button_to "Willkommen-Mail senden",
+              resend_welcome_treasurer_member_path(member),
+              method: :post,
+              data: { turbo_confirm: "Neues Passwort generieren und E-Mail senden?" },
+              class: "text-blue-400 hover:text-blue-300 text-sm
+                      bg-transparent border-0 cursor-pointer p-0" %>
             <%= link_to "Transaktion", new_treasurer_transaction_path(member_id: member.id),
               class: "text-emerald-400 hover:text-emerald-300 text-sm" %>
             <%= link_to "Bearbeiten", edit_treasurer_member_path(member),
