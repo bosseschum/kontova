@@ -52,6 +52,7 @@ Rails.application.routes.draw do
     end
     resource :bank_connection, only: [ :new, :create, :destroy ]
     resources :bank_transactions, only: [ :index ]
+    resources :guest_accesses, only: [ :index, :new, :create, :destroy ]
   end
 
   # Bierkassenwart
