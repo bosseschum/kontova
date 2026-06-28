@@ -4,7 +4,7 @@ class GuestAccess < ApplicationRecord
 
   validates :display_name, presence: true
   validates :email, presence: true
-  validates :pin, lenght: { is: 4 }, format: { with: /\A\d+\z/ }
+  validates :pin, length: { is: 4 }, format: { with: /\A\d+\z/ }
 
   scope :active, -> { where("expires_at > ?", Time.current).where(invoiced: false) }
   scope :expired_uninvoiced, -> { where("expires_at <= ?", Time.current).where(invoiced: false) }
