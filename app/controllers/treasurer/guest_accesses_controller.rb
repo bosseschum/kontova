@@ -1,4 +1,4 @@
-class Treasurer::GuestAccessesController < ApplicationController
+class Treasurer::GuestAccessesController < Treasurer::BaseController
   def index
     @guests = current_organization.guest_accesses.active
   end
