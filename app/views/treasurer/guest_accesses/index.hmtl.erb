@@ -1,0 +1,74 @@
+<div class="flex justify-between items-center mb-6">
+  <h1 class="text-2xl font-bold">Gast-Zugänge</h1>
+  <%= link_to "+ Neuer Gast-Zugang", new_treasurer_guest_access_path,
+        class: "bg-blue-600 hover:bg-blue-500 px-4 py-2 rounded-lg text-sm font-semibold" %>
+</div>
+
+<div class="bg-gray-900 rounded-xl overflow-hidden">
+  <table class="w-full">
+    <thead class="bg-gray-800 text-gray-400 text-sm">
+      <tr>
+        <th class="text-left px-4 py-3">Name</th>
+        <th class="text-left px-4 py-3">E-Mail</th>
+        <th class="text-center px-4 py-3">PIN</th>
+        <th class="text-left px-4 py-3">Gültig bis</th>
+        <th class="text-right px-4 py-3">Verbraucht</th>
+        <th class="text-center px-4 py-3">Status</th>
+        <th class="text-right px-4 py-3">Aktionen</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @guests.each do |guest| %>
+        <tr class="border-t border-gray-800 hover:bg-gray-800/50">
+          <td class="px-4 py-3 font-medium"><%= guest.display_name %></td>
+          <td class="px-4 py-3 text-gray-400 text-sm"><%= guest.email %></td>
+          <td class="px-4 py-3 text-center font-mono tracking-widest">
+            <%= guest.pin %>
+          </td>
+          <td class="px-4 py-3 text-gray-400 text-sm">
+            <%= guest.expires_at.strftime("%d.%m.%Y %H:%M") %>
+          </td>
+          <td class="px-4 py-3 text-right font-mono">
+            <%= format("%.2f", guest.total_spent_cents / 100.0) %> €
+          </td>
+          <td class="px-4 py-3 text-center">
+            <% if guest.invoiced? %>
+              <span class="px-2 py-1 rounded-lg text-xs font-semibold bg-green-700 text-green-200">
+                Abgerechnet
+              </span>
+            <% elsif guest.expires_at < Time.current %>
+              <span class="px-2 py-1 rounded-lg text-xs font-semibold bg-yellow-700 text-yellow-200">
+                Abgelaufen
+              </span>
+            <% else %>
+              <span class="px-2 py-1 rounded-lg text-xs font-semibold bg-blue-700 text-blue-200">
+                Aktiv
+              </span>
+            <% end %>
+          </td>
+          <td class="px-4 py-3 text-right">
+            <div class="flex justify-end gap-3">
+              <% if !guest.invoiced? && guest.transactions.any? %>
+                <%= button_to "📧 Rechnung senden",
+                      send_invoice_treasurer_guest_access_path(guest),
+                      method: :post,
+                      data: { turbo_confirm: "Rechnung jetzt an #{guest.email} senden?" },
+                      class: "text-emerald-400 hover:text-emerald-300 text-sm
+                              bg-transparent border-0 cursor-pointer p-0" %>
+              <% end %>
+              <%= button_to "Löschen", treasurer_guest_access_path(guest),
+                    method: :delete,
+                    data: { turbo_confirm: "Gast-Zugang wirklich löschen?" },
+                    class: "text-red-400 hover:text-red-300 text-sm
+                            bg-transparent border-0 cursor-pointer p-0" %>
+            </div>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<% if @guests.empty? %>
+  <p class="text-gray-400 mt-6 text-center">Noch keine Gast-Zugänge angelegt.</p>
+<% end %>

@@ -1,6 +1,6 @@
 class Treasurer::GuestAccessesController < Treasurer::BaseController
   def index
-    @guests = current_organization.guest_accesses.active
+    @guests = current_organization.guest_accesses.order(created_at: :desc)
   end
 
   def new
