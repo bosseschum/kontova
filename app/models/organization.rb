@@ -1,6 +1,7 @@
 class Organization < ApplicationRecord
   has_many :organization_memberships
   has_many :members, through: :organization_memberships
+  has_many :guest_accesses, dependent: :destroy
   has_many :products
   has_many :transactions, through: :members
   has_many :purchases
