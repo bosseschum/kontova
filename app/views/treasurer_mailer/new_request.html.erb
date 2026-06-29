@@ -33,10 +33,10 @@
       <th>Eingereicht am</th>
       <td><%= @request.created_at.strftime("%d.%m.%Y %H:%M") %></td>
     </tr>
-    <% if @request.receipt.attached? %>
+    <% if @request.receipts.attached? %>
       <tr>
-        <th>Beleg</th>
-        <td>Beleg wurde hochgeladen</td>
+        <th>Belege</th>
+        <td><%= pluralize(@request.receipts.count, "Beleg") %> hochgeladen</td>
       </tr>
     <% end %>
   </table>

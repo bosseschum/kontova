@@ -4,6 +4,6 @@ Art:          <%= { "expense" => "Auslagenerstattung", "other" => "Sonstiges" }[
 Beschreibung: <%= @request.description %>
 Betrag:       <%= @request.amount_cents ? format("%.2f", @request.amount_cents / 100.0) + " €" : "–" %>
 Datum:        <%= @request.created_at.strftime("%d.%m.%Y %H:%M") %>
-Beleg:        <%= @request.receipt.attached? ? "Ja" : "Nein" %>
+Belege:       <%= @request.receipts.attached? ? "#{@request.receipts.count} Beleg(e) hochgeladen" : "Nein" %>
 
 Bitte prüfe den Antrag im Kassenwart-Bereich.

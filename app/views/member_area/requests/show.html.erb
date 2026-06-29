@@ -57,14 +57,20 @@
       </div>
     <% end %>
 
-    <% if @request.receipt.attached? %>
+    <% if @request.receipts.attached? %>
       <div>
-        <dt class="text-gray-500 text-sm">Beleg</dt>
+        <dt class="text-gray-500 text-sm">Belege</dt>
         <dd class="mt-1">
-          <%= link_to "Beleg anzeigen",
-                rails_blob_path(@request.receipt, disposition: "inline"),
-                target: "_blank",
-                class: "text-blue-400 hover:text-blue-300 text-sm" %>
+          <ul class="space-y-1">
+            <% @request.receipts.each_with_index do |receipt, index| %>
+              <li>
+                <%= link_to "Beleg #{index + 1} anzeigen",
+                      rails_blob_path(receipt, disposition: "inline"),
+                      target: "_blank",
+                      class: "text-blue-400 hover:text-blue-300 text-sm" %>
+              </li>
+            <% end %>
+          </ul>
         </dd>
       </div>
     <% end %>
