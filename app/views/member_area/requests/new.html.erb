@@ -25,8 +25,9 @@
     </div>
 
     <div class="mb-6">
-      <%= f.label :receipt, "Beleg (Foto/PDF)", class: "block text-gray-400 text-sm mb-1" %>
-      <%= f.file_field :receipt,
+      <%= f.label :receipts, "Belege (Foto/PDF)", class: "block text-gray-400 text-sm mb-1" %>
+      <%= f.file_field :receipts,
+            multiple: true,
             accept: "image/*,application/pdf",
             class: "w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2
                     text-gray-300 file:mr-4 file:py-2 file:px-4 file:rounded-lg

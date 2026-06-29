@@ -24,6 +24,6 @@ class MemberArea::RequestsController < MemberArea::BaseController
   private
 
   def request_params
-    params.require(:request).permit(:kind, :description, :amount_cents, :receipt)
+    params.require(:request).permit(:kind, :description, :amount_cents, receipts: [])
   end
 end

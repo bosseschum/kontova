@@ -1,6 +1,6 @@
 class Request < ApplicationRecord
   belongs_to :member
-  has_one_attached :receipt
+  has_many_attached :receipts
 
   enum :kind, {
     expense: 0,
