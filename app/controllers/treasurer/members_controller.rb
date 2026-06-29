@@ -89,7 +89,7 @@ class Treasurer::MembersController < Treasurer::BaseController
   def send_invoice
     @member = current_organization.members.find(params[:id])
     invoice = Invoice.new(member: @member, organization: current_organization)
-    InvoiceMailer.invoice(invoice).deliver_later
+    MemberMailer.invoice(@member, current_organization).deliver_later
 
     redirect_to treasurer_members_path, notice: "Rechnung wurde an #{@member.email} gesendet"
   end
