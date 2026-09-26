@@ -25,27 +25,6 @@
     </span>
   </p>
 
-  <table>
-    <thead>
-      <tr>
-        <th>Datum</th>
-        <th>Beschreibung</th>
-        <th style="text-align:right">Betrag</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @transactions.each do |tx| %>
-        <tr>
-          <td><%= tx.created_at.strftime("%d.%m.%Y") %></td>
-          <td><%= tx.note.presence || { "drink_purchase" => "Getränkekauf", "deposit" => "Einzahlung", "expense_reimbursement" => "Auslage", "membership_fee" => "Mitgliedsbeitrag" }[tx.kind] %></td>
-          <td style="text-align:right; color: <%= tx.amount_cents >= 0 ? '#16a34a' : '#dc2626' %>">
-            <%= format("%+.2f", tx.amount_cents / 100.0).gsub(".", ",") %> €
-          </td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
-
   <% if @balance < 0 %>
     <p>Bitte überweise den offenen Betrag auf unser Vereinskonto.</p>
   <% end %>

@@ -4,30 +4,43 @@
 
       <%# Flash – animiertes Overlay beim Kauf %>
       <% if notice %>
-        <div id="flash-notice"
+        <div id="flash-notice" role="status" aria-live="polite"
              class="fixed inset-0 flex items-center justify-center z-50 pointer-events-none">
-          <div class="bg-green-600 text-white px-10 py-8 rounded-2xl shadow-2xl text-center"
+          <div class="bg-green-600 text-white px-10 py-8 rounded-2xl shadow-2xl text-center max-w-md"
                style="animation: checkmark 0.4s ease-out forwards">
             <div class="text-6xl mb-3">✓</div>
             <p class="text-xl font-bold"><%= notice %></p>
           </div>
         </div>
-        <script nonce="<%= request.content_security_policy_nonce %>">
-          setTimeout(() => {
-            const flash = document.getElementById("flash-notice")
-            if (flash) {
-              flash.style.transition = "opacity 0.3s ease-out"
-              flash.style.opacity = "0"
-              setTimeout(() => flash.remove(), 300)
-            }
-          }, 2000)
-        </script>
       <% end %>
 
       <% if alert %>
-        <div class="mb-4 p-4 bg-red-700 rounded-xl text-lg text-center font-semibold">
-          <%= alert %>
+        <div id="flash-alert" role="alert" aria-live="assertive"
+             class="fixed inset-0 flex items-center justify-center z-50 pointer-events-none">
+          <div class="bg-red-700 text-white px-10 py-8 rounded-2xl shadow-2xl text-center max-w-md"
+               style="animation: alert-pop 0.5s ease-out forwards">
+            <div class="text-6xl mb-3">✕</div>
+            <p class="text-xl font-bold"><%= alert %></p>
+          </div>
         </div>
+      <% end %>
+
+      <% if notice || alert %>
+        <script nonce="<%= request.content_security_policy_nonce %>">
+          (() => {
+            const overlay = document.getElementById("flash-notice")
+              || document.getElementById("flash-alert");
+            const hold = <%= notice ? 2200 : 3500 %>;
+
+            if (!overlay) return;
+
+            setTimeout(() => {
+              overlay.style.transition = "opacity 0.3s ease-out";
+              overlay.style.opacity = "0";
+              setTimeout(() => overlay.remove(), 300);
+            }, hold);
+          })();
+        </script>
       <% end %>
 
       <% if @purchaser && @pin_verified %>
@@ -249,6 +262,7 @@
                 </div>
 
                 <button type="submit"
+                        data-action="cart#checkout"
                         class="w-full bg-emerald-600 hover:bg-emerald-500
                                active:scale-95 transition-all duration-150
                                py-5 rounded-xl text-xl font-bold">

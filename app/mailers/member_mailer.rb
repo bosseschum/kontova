@@ -29,7 +29,7 @@ class MemberMailer < ApplicationMailer
 
     mail(
       to: member.email,
-      subject: "Hauptkasse des #{@organization&.name} - Kontoauszug #{Date.today.strftime("%B %Y")}"
+      subject: "Hauptkasse des #{@organization&.name} - Kontostand #{Date.today.strftime("%B %Y")}"
     )
   end
 

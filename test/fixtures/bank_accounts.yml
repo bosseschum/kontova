@@ -2,14 +2,14 @@
 
 one:
   bank_connection: one
-  uid: MyString
+  uid: MyStringOne
   iban: MyString
   product: MyString
   currency: MyString
 
 two:
   bank_connection: two
-  uid: MyString
+  uid: MyStringTwo
   iban: MyString
   product: MyString
   currency: MyString

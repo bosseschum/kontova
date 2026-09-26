@@ -23,7 +23,7 @@ class Member < ApplicationRecord
   end
 
   def can_purchase?(amount_cents)
-    balance_cents - amount_cents >= -5000
+    balance_cents - amount_cents >= -10000
   end
 
   def treasurer?(organization)

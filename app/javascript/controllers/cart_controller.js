@@ -32,9 +32,18 @@ export default class extends Controller {
   checkout(event) {
     const btn = event.currentTarget;
 
-    btn.textContent = "⏳ Wird gebucht...";
-    btn.classList.add("opacity-75", "cursor-not-allowed", "pointer-events-none");
-    btn.classList.remove("hover:bg-green-500", "active:scale-95");
+    if (btn.dataset.checkoutPending === "true") return;
+
+    btn.dataset.checkoutPending = "true";
+    btn.disabled = true;
+    btn.innerHTML = `
+      <span class="inline-block w-6 h-6 border-2 border-white/30
+                   border-t-white rounded-full animate-spin
+                   align-middle mr-2"></span>
+      Wird gebucht…`;
+
+    btn.classList.add("opacity-75", "cursor-not-allowed");
+    btn.classList.remove("hover:bg-emerald-500", "active:scale-95");
   }
 
   remove(event) {

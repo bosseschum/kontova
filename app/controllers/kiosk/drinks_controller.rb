@@ -70,7 +70,7 @@ class Kiosk::DrinksController < ApplicationController
     # Saldo-Check gilt nur für Members, nicht für Gäste (Gäste bekommen Rechnung)
     if @purchaser.is_a?(Member) && !@purchaser.can_purchase?(sponsored ? 0 : total)
       redirect_to kiosk_root_path(pin: params[:pin]),
-        alert: "Saldo zu niedrig (Limit: -50€)" and return
+        alert: "Saldo zu niedrig (Limit: -100€)" and return
     end
 
     cart.each do |product_id, quantity|
@@ -119,14 +119,22 @@ class Kiosk::DrinksController < ApplicationController
             kind:                  :drink_purchase,
             quantity:              single_product_for_product,
             sponsored:             sponsored,
-            note: "#{single_product_for_product}x #{product.name}"
+            note:                  "#{single_product_for_product}x #{product.name}"
           )
         end
       end
     end
+
+    session[:cart] = {}
+
+    notice = if sponsored
+      "Einkauf abgeschlossen – #{total_quantity} Flaschen gebucht (ohne Saldo-Abzug)"
+    else
+      "Einkauf abgeschlossen – #{total_quantity} Flaschen für #{format("%.2f", total / 100.0)} € gebucht!"
+    end
+
+    redirect_to kiosk_root_path(pin: params[:pin]), notice: notice
   end
-
-
 
   def clear_cart
     session[:cart] = {}

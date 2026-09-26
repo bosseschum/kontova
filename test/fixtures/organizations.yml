@@ -1,0 +1,11 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: Verein Eins
+  subdomain: verein-eins
+  active: true
+
+two:
+  name: Verein Zwei
+  subdomain: verein-zwei
+  active: true

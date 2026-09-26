@@ -12,7 +12,7 @@ one:
 
 two:
   bank_account: two
-  external_id: MyString
+  external_id: MyStringTwo
   amount_cents: 1
   currency: MyString
   booked_at: 2026-06-14

@@ -12,3 +12,24 @@
         opacity: 1;
     }
 }
+
+@keyframes alert-pop {
+    0% {
+        transform: scale(0.5);
+        opacity: 0;
+    }
+    55% {
+        transform: scale(1.08);
+        opacity: 1;
+    }
+    70% {
+        transform: scale(0.98);
+    }
+    85% {
+        transform: scale(1.02);
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
