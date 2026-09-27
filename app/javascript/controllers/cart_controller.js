@@ -32,10 +32,13 @@ export default class extends Controller {
   checkout(event) {
     const btn = event.currentTarget;
 
-    if (btn.dataset.checkoutPending === "true") return;
+    // Zweiter Klick während der Buchung: unterdrücken, sonst wird doppelt gebucht.
+    if (btn.dataset.checkoutPending === "true") {
+      event.preventDefault();
+      return;
+    }
 
     btn.dataset.checkoutPending = "true";
-    btn.disabled = true;
     btn.innerHTML = `
       <span class="inline-block w-6 h-6 border-2 border-white/30
                    border-t-white rounded-full animate-spin
@@ -44,6 +47,12 @@ export default class extends Controller {
 
     btn.classList.add("opacity-75", "cursor-not-allowed");
     btn.classList.remove("hover:bg-emerald-500", "active:scale-95");
+
+    // Wichtig: Der Button darf hier NICHT synchron disabled werden. Der Browser
+    // führt die Activation Behavior des Buttons erst nach dem click-Handler aus,
+    // und die bricht bei einem disabled Button sofort ab ("If element is
+    // disabled, then return"). Das Formular würde dann nie abgeschickt.
+    setTimeout(() => { btn.disabled = true; }, 0);
   }
 
   remove(event) {
