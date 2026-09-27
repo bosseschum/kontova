@@ -27,16 +27,13 @@ class ApplicationController < ActionController::Base
   private
 
   def set_organization
-    return if current_member&.super_admin?
-
     subdomain = request.subdomain
-    if subdomain.present? && subdomain != "www"
-      @current_organization = Organization.active.find_by(subdomain: subdomain)
-      unless @current_organization
-        render plain: "Verein nicht gefunden", status: :not_found
-      end
-    else
-      # Root domain
+    return if subdomain.blank? || subdomain == "www"
+
+    @current_organization = Organization.active.find_by(subdomain: subdomain)
+
+    if @current_organization.nil? && !current_member&.super_admin?
+      render plain: "Verein nicht gefunden", status: :not_found
     end
   end
 
