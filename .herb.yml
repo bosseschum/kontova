@@ -1,0 +1,7 @@
+# Herb configuration — https://herb-tools.dev/configuration
+#
+# This project uses Action View, so tell Herb to treat view helpers
+# (turbo_frame_tag, form_with, form_tag, link_to, …) accordingly.
+# Without this, Herb assumes plain Ruby templates and reports false
+# `html-no-nested-forms` errors for forms inside block helpers.
+framework: actionview

@@ -1,6 +1,16 @@
-Willkommen, <%= @member.display_name %>!
+Willkommen bei <%= @organization&.name || "Kontova" %>, <%= @member.display_name %>!
 
-Dein Account wurde angelegt.
-Dein PIN für den Kiosk: <%= @pin %>
+Dein Account wurde erfolgreich angelegt.
 
+Deine Zugangsdaten:
+E-Mail: <%= @member.email %>
+<% if @password %>Passwort: <%= @password %>
+<% end %>Kiosk-PIN: <%= @pin %>
+
+Hier ist dein Zugang:
+https://<%= @organization.subdomain %>.kontova.de
+
+Bitte ändere dein Passwort nach dem ersten Login.
 Du kannst deinen PIN jederzeit beim Kassenwart ändern lassen.
+
+Diese E-Mail wurde automatisch von Kontova generiert.
