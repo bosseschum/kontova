@@ -20,11 +20,24 @@ class KioskCheckoutTest < ActionDispatch::IntegrationTest
       params: { product_id: @product.id, quantity: quantity, pin: pin }
   end
 
-  test "root route opens the kiosk" do
-    get root_path
+  test "root route opens the showcase kiosk on the local base host" do
+    showcase = Organization.create!(
+      name: "Showcase", subdomain: "showcase", active: true
+    )
+    showcase.products.create!(
+      name: "Showcase Helles", price_cents: 250,
+      crate_size: 20, crate_price_cents: 3000
+    )
+    OrganizationMembership.create!(
+      member: members(:one), organization: showcase, pin: "1234"
+    )
+    host! "example.com"
+
+    get root_path, params: { pin: "1234" }
 
     assert_response :success
     assert_select "h2", "Getränk wählen"
+    assert_select "h3", "Showcase Helles"
   end
 
   test "successful checkout renders the success animation, books the cart and empties it" do

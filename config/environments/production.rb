@@ -45,9 +45,8 @@ Rails.application.configure do
   # Fehler bei fehlenden Master-Key
   config.require_master_key = true
 
-  # Host validation for the main domain and the active Vercel deployment.
+  # Host validation for the production domain.
   config.hosts << "kontova.de"
-  config.hosts << ENV["VERCEL_URL"] if ENV["VERCEL_URL"].present?
   config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
 
   config.default_url_options = { host: ENV["APP_HOST"], protocol: "https" }

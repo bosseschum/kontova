@@ -1,39 +1,36 @@
-default: &default
+default: &sqlite
+  adapter: sqlite3
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  timeout: 5000
+
+development:
+  <<: *sqlite
+  database: storage/development.sqlite3
+  schema_dump: schema.sqlite.rb
+
+test:
+  <<: *sqlite
+  database: storage/test.sqlite3
+  schema_dump: schema.sqlite.rb
+
+default: &postgres
   adapter: postgresql
   encoding: unicode
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
 
-development:
-  primary:
-    <<: *default
-    database: kontova_development
-  cable:
-    <<: *default
-    database: kontova_development_cable
-    migrations_paths: db/cable_migrate
-
-test:
-  primary:
-    <<: *default
-    database: kontova_test
-  cable:
-    <<: *default
-    database: kontova_test_cable
-    migrations_paths: db/cable_migrate
-
 production:
   primary:
-    <<: *default
+    <<: *postgres
     url: <%= ENV["DATABASE_URL"] %>
   cache:
-    <<: *default
+    <<: *postgres
     url: <%= ENV["DATABASE_URL"] %>
     migrations_paths: db/cable_migrate
   cable:
-    <<: *default
+    <<: *postgres
     url: <%= ENV["DATABASE_URL"] %>
     migrations_paths: db/cable_migrate
   queue:
-    <<: *default
+    <<: *postgres
     url: <%= ENV["DATABASE_URL"] %>
     migrations_paths: db/queue_migrate

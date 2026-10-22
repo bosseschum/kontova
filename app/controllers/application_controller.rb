@@ -27,7 +27,11 @@ class ApplicationController < ActionController::Base
   private
 
   def set_organization
-    subdomain = Rails.env.production? ? "showcase" : request.subdomain
+    subdomain = if Rails.env.production? || request.subdomain.blank?
+      "showcase"
+    else
+      request.subdomain
+    end
     return if subdomain.blank? || subdomain == "www"
 
     @current_organization = Organization.active.find_by(subdomain: subdomain)

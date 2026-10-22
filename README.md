@@ -44,7 +44,7 @@ Eine webbasierte Kassenverwaltung für Vereine – gebaut mit Ruby on Rails.
 | Komponente | Technologie |
 |---|---|
 | Framework | Ruby on Rails 8.1 |
-| Datenbank | PostgreSQL (Production), SQLite (Development) |
+| Datenbank | PostgreSQL (Production), SQLite (Development + Test) |
 | Styling | Tailwind CSS – Dark Theme |
 | Authentifizierung | Devise |
 | Autorisierung | Pundit |
@@ -68,8 +68,7 @@ Eine webbasierte Kassenverwaltung für Vereine – gebaut mit Ruby on Rails.
 ## Multi-Tenancy
 
 Mitglieder, Produkte, Transaktionen und Einstellungen sind einer Organisation
-zugeordnet. Die Portfolio-/Production-Bereitstellung zeigt ausschließlich die
-Organisation `showcase` auf `/`; Organisations-Subdomains sind dort deaktiviert.
+zugeordnet. Auf `/` wird die Organisation `showcase` angezeigt.
 
 ---
 
@@ -85,58 +84,38 @@ Organisation `showcase` auf `/`; Organisations-Subdomains sind dort deaktiviert.
 
 ```bash
 # Repository klonen
-git clone https://github.com/deinname/kontova.git
+git clone https://github.com/bosseschum/kontova.git
 cd kontova
 
 # Abhängigkeiten
 bundle install
 
-# Umgebungsvariablen
-cp .env.example .env
-# .env bearbeiten
-
-# Datenbank
-rails db:migrate
+# SQLite-Datenbank, Migrationen und Showcase-Daten einrichten
+bin/rails db:prepare
+bin/rails db:seed
 
 # CSS bauen
-rails tailwindcss:build
+bin/rails tailwindcss:build
 
 # Server starten
 bin/dev
 ```
 
----
+Der Seed ist idempotent und legt lokale Demo-Daten in der Development-Umgebung an.
 
-## Erste Organisation und Accounts anlegen
+### Demo-Zugänge
 
-```ruby
-rails console
+- Kassenwart: `kasse@example.com` / `password`
+- Mitglied: `mitglied@example.com` / `password`, Kiosk-PIN `1234`
+- Super-Admin: `admin@example.com` / `password`
 
-org = Organization.create!(
-  name: "Showcase",
-  subdomain: "showcase",
-  active: true
-)
+Diese Demo-Konten werden ausschließlich in der Development-Umgebung angelegt.
+Ändere die Passwörter, bevor du die Anwendung öffentlich zugänglich machst.
 
-# Super-Admin (ohne Organisation)
-Member.create!(
-  display_name: "Admin",
-  email: "admin@example.com",
-  password: "sicherespasswort",
-  super_admin: true,
-  pin: "1234"
-)
+### Tests ausführen
 
-# Kassenwart für die Organisation
-Member.create!(
-  display_name: "Kassenwart",
-  email: "kasse@example.com",
-  password: "sicherespasswort",
-  role: :treasurer,
-  organization: org,
-  pin: "5678",
-  pays_fee: false
-)
+```bash
+bin/rails test
 ```
 
 ---
@@ -180,7 +159,7 @@ Crontab-Beispiel:
 ### Voraussetzungen
 
 - VPS (z.B. Hetzner CX22)
-- Domain `kontova.de` oder Vercel-Deployment-Hostname (`VERCEL_URL`)
+- Domain `kontova.de`
 - Docker auf dem VPS
 - Kamal (`gem install kamal`)
 
@@ -193,7 +172,7 @@ DATABASE_URL=postgresql://user:password@localhost/kontova_production
 MAIL_USERNAME=kasse@mailbox.org
 MAIL_PASSWORD=apppasswort
 APP_HOST=kontova.de
-VERCEL_URL=kontova-<deployment>.vercel.app
+RAILS_MASTER_KEY=<Inhalt von config/master.key>
 ```
 
 ### Deployment
@@ -211,7 +190,9 @@ kamal deploy
 
 ## Lokale Entwicklung mit Subdomains
 
-Um Multi-Tenancy lokal zu testen, `/etc/hosts` anpassen:
+Auf `http://localhost:3000` wird die Seed-Organisation `showcase` geöffnet.
+Um weitere Organisationen lokal per Subdomain zu testen, `/etc/hosts` anpassen
+und die Organisationen mit passenden Subdomains in der Datenbank anlegen:
 
 ```
 127.0.0.1 vereina.localhost

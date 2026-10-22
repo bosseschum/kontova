@@ -8,13 +8,17 @@ class CreateBankTransactions < ActiveRecord::Migration[8.1]
       t.date :booked_at
       t.date :value_date
       t.string :description
-      t.jsonb :raw, default: {}
+      if connection.adapter_name == "PostgreSQL"
+        t.jsonb :raw, default: {}
+      else
+        t.json :raw, default: {}
+      end
 
       t.timestamps
     end
 
     add_index :bank_transactions, :external_id, unique: true
     add_index :bank_transactions, :booked_at
-    add_index :bank_transactions, :raw, using: :gin
+    add_index :bank_transactions, :raw, using: :gin if connection.adapter_name == "PostgreSQL"
   end
 end
