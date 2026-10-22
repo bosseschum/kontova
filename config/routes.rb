@@ -1,6 +1,5 @@
 Rails.application.routes.draw do
-  root "landing#index", constraints: ->(req) { req.subdomain.blank? || req.subdomain == "www" }
-  root "kiosk/drinks#index", constraints: ->(req) { req.subdomain.present? && req.subdomain != "www" }, as: :subdomain_root
+  root "kiosk/drinks#index"
   post "/kontakt", to: "landing#contact", as: :landing_contact,
     constraints: ->(req) { req.subdomain.blank? || req.subdomain == "www" }
   get "/impressum", to: "landing#impressum", as: :impressum,
@@ -22,20 +21,18 @@ Rails.application.routes.draw do
   end
 
   # Kiosk - no login
-  constraints subdomain: /\A(?!www|super_admin)\w[\w-]*\z/ do
-    namespace :kiosk do
-      root "drinks#index"
-      resources :drinks, only: [ :index ] do
-        collection do
-          post :add_to_cart
-          post :checkout
-          post :remove_from_cart
-          post :clear_cart
-        end
+  namespace :kiosk do
+    root "drinks#index"
+    resources :drinks, only: [ :index ] do
+      collection do
+        post :add_to_cart
+        post :checkout
+        post :remove_from_cart
+        post :clear_cart
       end
-      resources :payments, only: [ :show ]
-      resources :mixed_crates, only: [ :create ]
     end
+    resources :payments, only: [ :show ]
+    resources :mixed_crates, only: [ :create ]
   end
 
   # Kassenwart

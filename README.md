@@ -67,15 +67,9 @@ Eine webbasierte Kassenverwaltung für Vereine – gebaut mit Ruby on Rails.
 
 ## Multi-Tenancy
 
-Jeder Verein erhält eine eigene Subdomain:
-
-```
-vereina.kontova.de
-vereinb.kontova.de
-```
-
-Daten sind vollständig getrennt – Mitglieder, Produkte, Transaktionen
-und Einstellungen gehören immer zu einer Organisation.
+Mitglieder, Produkte, Transaktionen und Einstellungen sind einer Organisation
+zugeordnet. Die Portfolio-/Production-Bereitstellung zeigt ausschließlich die
+Organisation `showcase` auf `/`; Organisations-Subdomains sind dort deaktiviert.
 
 ---
 
@@ -119,8 +113,8 @@ bin/dev
 rails console
 
 org = Organization.create!(
-  name: "Mein Verein",
-  subdomain: "meinverein",
+  name: "Showcase",
+  subdomain: "showcase",
   active: true
 )
 
@@ -186,7 +180,7 @@ Crontab-Beispiel:
 ### Voraussetzungen
 
 - VPS (z.B. Hetzner CX22)
-- Domain mit Wildcard-DNS (`*.kontova.de`)
+- Domain `kontova.de` oder Vercel-Deployment-Hostname (`VERCEL_URL`)
 - Docker auf dem VPS
 - Kamal (`gem install kamal`)
 
@@ -199,6 +193,7 @@ DATABASE_URL=postgresql://user:password@localhost/kontova_production
 MAIL_USERNAME=kasse@mailbox.org
 MAIL_PASSWORD=apppasswort
 APP_HOST=kontova.de
+VERCEL_URL=kontova-<deployment>.vercel.app
 ```
 
 ### Deployment
@@ -210,28 +205,6 @@ kamal deploy
 
 # Updates einspielen
 kamal deploy
-```
-
-### Neue Organisation anlegen
-
-```ruby
-kamal console
-
-org = Organization.create!(
-  name: "Neuer Verein",
-  subdomain: "neuerverein",
-  active: true
-)
-
-Member.create!(
-  display_name: "Kassenwart",
-  email: "kasse@neuerverein.de",
-  password: SecureRandom.hex(8),
-  role: :treasurer,
-  organization: org,
-  pin: rand(1000..9999).to_s,
-  pays_fee: false
-)
 ```
 
 ---

@@ -14,8 +14,6 @@ proxy:
   ssl: true
   hosts:
     - kontova.de
-    - tuebingerwingolf.kontova.de
-    - showcase.kontova.de
 
 registry:
   username: bosseschumacher

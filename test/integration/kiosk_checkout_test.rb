@@ -20,6 +20,13 @@ class KioskCheckoutTest < ActionDispatch::IntegrationTest
       params: { product_id: @product.id, quantity: quantity, pin: pin }
   end
 
+  test "root route opens the kiosk" do
+    get root_path
+
+    assert_response :success
+    assert_select "h2", "Getränk wählen"
+  end
+
   test "successful checkout renders the success animation, books the cart and empties it" do
     add_to_cart 2
 
